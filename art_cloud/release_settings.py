@@ -1,4 +1,4 @@
-DEVEL_ROOT = '/webapp/art-cloud/art_cloud'
+DEVEL_ROOT = '/webapp/art-cloud/art_cloud/'
 
 PRODUCTION = True
 DEBUG = True
