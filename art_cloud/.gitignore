@@ -1,2 +1,4 @@
 local_settings.py
 *.pyc
+media/photo/
+media/resized_image/

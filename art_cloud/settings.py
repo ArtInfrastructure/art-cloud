@@ -6,6 +6,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+AUTH_PROFILE_MODULE = "front.UserProfile"
+
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 TIME_ZONE = 'America/Vancouver'
 
@@ -35,6 +37,14 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+)
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'django.core.context_processors.media',
+    'django.core.context_processors.request',
 )
 
 ROOT_URLCONF = 'urls'

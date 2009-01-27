@@ -1,0 +1,39 @@
+{% extends "art_cloud/base.html" %}
+{% load imagetags %}
+
+{% block content%}
+<h1>Site: {{ installation.name }}</h1>
+<table>
+	<tr>
+		<th>location:</th>
+		<td>{{ site.location }}</td>
+	</tr>
+	<tr>
+		<th>notes:</th>
+		<td>{{ site.notes }}</td>
+	</tr>
+	<tr>
+		<th>equipment:</th>
+		<td>
+			{% for equipment in site.equipment.all %}
+				{{ equipment }}
+			{% endfor %}
+		</td>
+	</tr>
+	<tr>
+		<th>photos:</th>
+		<td>
+			{% for photo in site.photos.all %}
+				<img src="{{ photo.image.url|thumbnail:"300w" }}" />
+			{% endfor %}
+		</td>
+	</tr>
+	<tr>
+		<th>installations:</th>
+		<td>
+			{% for installation in site.installation_set.all %}
+				<a href="{{ installation.get_absolute_url }}">{{ installation }}</a>
+			{% endfor %}
+		</td>
+</table>
+{% endblock %}

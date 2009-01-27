@@ -1,0 +1,36 @@
+{% extends "art_cloud/base.html" %}
+{% load imagetags %}
+
+{% block content%}
+<h1>Installation: {{ installation.name }}</h1>
+<table>
+	<tr>
+		<th>artists:</th>
+		<td>
+			{% for artist in installation.artists.all %}
+				{{ artist }}
+			{% endfor %}
+		</td>
+	</tr>
+	<tr>
+		<th>site:</th>
+		<td><a href="{{ installation.site.get_absolute_url }}">{{ installation.site }}</a></td>
+	</tr>
+	<tr>
+		<th>opened:</th>
+		<td>{{ installation.opened }}</td>
+	</tr>
+	<tr>
+		<th>notes:</th>
+		<td>{{ installation.notes }}</td>
+	</tr>
+	<tr>
+		<th>photos:</th>
+		<td>
+			{% for photo in installation.photos.all %}
+				<img src="{{ photo.image.url|thumbnail:"300w" }}" />
+			{% endfor %}
+		</td>
+	</tr>
+</table>
+{% endblock %}

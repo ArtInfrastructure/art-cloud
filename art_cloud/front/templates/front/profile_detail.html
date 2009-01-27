@@ -1,0 +1,28 @@
+{% extends "art_cloud/base.html" %}
+{% load imagetags %}
+
+{% block content%}
+<h1>Profile: {{ profile.display_name }}</h1>
+<table>
+	<tr>
+		<th>username:</th>
+		<td>{{ profile.username }}</td>
+	</tr>
+	<tr>
+		<th>bio:</th>
+		<td>{{ profile.bio }}</td>
+	</tr>
+	<tr>
+		<th>url:</th>
+		<td>{{ profile.url }}</td>
+	</tr>
+</table>
+
+<table>
+{% if request.user.is_staff %}
+{{ user_form }}
+
+{{ user_profile_form }}
+{% endif %}
+</table>
+{% endblock %}

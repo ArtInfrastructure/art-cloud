@@ -23,6 +23,38 @@ from django.template.loader import render_to_string
 from django.utils import feedgenerator
 
 from models import *
+from forms import *
 
+@staff_member_required
 def index(request):
 	return render_to_response('front/index.html', {}, context_instance=RequestContext(request))
+
+@staff_member_required
+def profile_detail(request, username):
+	profile = get_object_or_404(UserProfile, user__username=username)
+	user_form = UserForm()
+	user_profile_form = UserProfileForm()
+	return render_to_response('front/profile_detail.html', { 'profile':profile, 'user_form':user_form, 'user_profile_form':user_profile_form }, context_instance=RequestContext(request))
+
+@staff_member_required
+def photo_detail(request, id):
+	return render_to_response('front/photo_detail.html', {}, context_instance=RequestContext(request))
+
+@staff_member_required
+def equipment_type_detail(request, id):
+	return render_to_response('front/equipment_type_detail.html', {}, context_instance=RequestContext(request))
+
+@staff_member_required
+def equipment_detail(request, id):
+	return render_to_response('front/equipment_detail.html', {}, context_instance=RequestContext(request))
+
+@staff_member_required
+def installation_site_detail(request, id):
+	site = get_object_or_404(InstallationSite, pk=id)
+	print dir(site)
+	return render_to_response('front/installation_site_detail.html', { 'site':site }, context_instance=RequestContext(request))
+
+@staff_member_required
+def installation_detail(request, id):
+	installation = get_object_or_404(Installation, pk=id)
+	return render_to_response('front/installation_detail.html', { 'installation':installation }, context_instance=RequestContext(request))
