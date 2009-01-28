@@ -29,7 +29,7 @@ class Photo(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 	@models.permalink
 	def get_absolute_url(self):
-		return (views.photo_detail, (), { 'id':self.id })
+		return ('art_cloud.front.views.photo_detail', (), { 'id':self.id })
 	class Meta:
 		ordering = ['-created']
 	def __unicode__(self):
@@ -64,7 +64,7 @@ class Equipment(models.Model):
 
 class InstallationSite(models.Model):
 	name = models.CharField(max_length=1024, null=False, blank=False)
-	location = models.CharField(max_length=1024, null=False, blank=False)
+	location = models.CharField(max_length=1024, null=True, blank=True)
 	notes = models.TextField(blank=True, null=True)
 	photos = models.ManyToManyField(Photo, null=True, blank=True)
 	equipment = models.ManyToManyField(Equipment, null=True, blank=True)

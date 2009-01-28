@@ -1,6 +1,41 @@
 {% extends "art_cloud/base.html" %}
+{% load imagetags %}
+
+{% block style %}
+#content { width: 900px;  }
+#right-column { float: right;  width: 30%;}
+#center-column { float: right;  width: 52%; }
+#left-column { width: 45%; }
+#left-center-wrapper { position: relative; width: 68%;  }
+{% endblock %}
 
 {% block content%}
-<h1>Front</h1>
-<p>This is a piece of text.</p>
+<h1>Front:</h1>
+
+<div id="right-column">
+	<h2>Sites:</h2>
+	<ul>
+		{% for site in sites %}
+			<li><a href="{{ site.get_absolute_url }}">{{ site.name }}</a></li>
+		{% endfor %}
+	</ul>
+</div>
+<div id="left-center-wrapper">
+	<div id="center-column">
+		<h2>Installations:</h2>
+		<ul>
+			{% for installation in installations %}
+				<li><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+	<div id="left-column">
+		<h2>People:</h2>
+		<ul>
+			{% for profile in profiles %}
+			<li><a href="{{ profile.get_absolute_url }}">{{ profile.display_name }}</a></li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>
 {% endblock %}

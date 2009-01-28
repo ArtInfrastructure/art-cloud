@@ -27,13 +27,25 @@ from forms import *
 
 @staff_member_required
 def index(request):
-	return render_to_response('front/index.html', {}, context_instance=RequestContext(request))
+	return render_to_response('front/index.html', { 'profiles':UserProfile.objects.all(), 
+													'sites':InstallationSite.objects.all(), 
+													'installations':Installation.objects.all(),
+													}, context_instance=RequestContext(request))
 
 @staff_member_required
 def profile_detail(request, username):
 	profile = get_object_or_404(UserProfile, user__username=username)
-	user_form = UserForm()
-	user_profile_form = UserProfileForm()
+	if request.method == 'POST':
+		user_form = UserForm(request.POST, instance=profile.user)
+		user_profile_form = UserProfileForm(request.POST, instance=profile)
+		if user_form.is_valid():
+			user_form.save()
+		if user_profile_form.is_valid():
+			user_profile_form.save()
+
+	profile = get_object_or_404(UserProfile, user__username=username)
+	user_form = UserForm(instance=profile.user)
+	user_profile_form = UserProfileForm(instance=profile)
 	return render_to_response('front/profile_detail.html', { 'profile':profile, 'user_form':user_form, 'user_profile_form':user_profile_form }, context_instance=RequestContext(request))
 
 @staff_member_required

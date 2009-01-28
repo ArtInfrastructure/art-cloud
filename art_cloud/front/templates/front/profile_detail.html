@@ -3,26 +3,37 @@
 
 {% block content%}
 <h1>Profile: {{ profile.display_name }}</h1>
-<table>
-	<tr>
-		<th>username:</th>
-		<td>{{ profile.username }}</td>
-	</tr>
-	<tr>
-		<th>bio:</th>
-		<td>{{ profile.bio }}</td>
-	</tr>
-	<tr>
-		<th>url:</th>
-		<td>{{ profile.url }}</td>
-	</tr>
-</table>
-
-<table>
 {% if request.user.is_staff %}
-{{ user_form }}
+	<form method="post">
+		<table>
+		{{ user_form }}
 
-{{ user_profile_form }}
+		{{ user_profile_form }}
+		</table>
+		<input type="submit" value="update profile" />
+	</form>
+{% else %}
+	<table>
+		<tr>
+			<th>username:</th>
+			<td>{{ profile.user.username }}</td>
+		</tr>
+		<tr>
+			<th>bio:</th>
+			<td>{{ profile.bio }}</td>
+		</tr>
+		<tr>
+			<th>url:</th>
+			<td>{{ profile.url }}</td>
+		</tr>
+	</table>
 {% endif %}
-</table>
+
+<h2>Installations:</h2>
+<ul>
+	{% for installation in profile.user.installation_set.all %}
+	<li><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></li>
+	{% endfor %}
+</ul>
 {% endblock %}
+

@@ -2,15 +2,19 @@
 {% load imagetags %}
 
 {% block content%}
-<h1>Site: {{ installation.name }}</h1>
+<h1>Site: {{ site.name }}</h1>
 <table>
 	<tr>
 		<th>location:</th>
 		<td>{{ site.location }}</td>
 	</tr>
 	<tr>
-		<th>notes:</th>
-		<td>{{ site.notes }}</td>
+		<th>installations:</th>
+		<td>
+			{% for installation in site.installation_set.all %}
+				<a href="{{ installation.get_absolute_url }}">{{ installation }}</a>
+			{% endfor %}
+		</td>
 	</tr>
 	<tr>
 		<th>equipment:</th>
@@ -21,6 +25,10 @@
 		</td>
 	</tr>
 	<tr>
+		<th>notes:</th>
+		<td>{{ site.notes }}</td>
+	</tr>
+	<tr>
 		<th>photos:</th>
 		<td>
 			{% for photo in site.photos.all %}
@@ -28,12 +36,5 @@
 			{% endfor %}
 		</td>
 	</tr>
-	<tr>
-		<th>installations:</th>
-		<td>
-			{% for installation in site.installation_set.all %}
-				<a href="{{ installation.get_absolute_url }}">{{ installation }}</a>
-			{% endfor %}
-		</td>
 </table>
 {% endblock %}

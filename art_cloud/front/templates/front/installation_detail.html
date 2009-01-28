@@ -8,7 +8,7 @@
 		<th>artists:</th>
 		<td>
 			{% for artist in installation.artists.all %}
-				{{ artist }}
+				<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>
 			{% endfor %}
 		</td>
 	</tr>
