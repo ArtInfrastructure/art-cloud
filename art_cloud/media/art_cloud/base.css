@@ -6,6 +6,8 @@ body {
 	color:#000;
 	background:#FFF;
 	margin: 10px 10px 10px 10px;
+	width: 900px;
+	position: relative;
 }
 
 a:link, a:visited { color: #666699; text-decoration:none; }
@@ -31,3 +33,4 @@ li { list-style: disc; margin: 0 0 10px 15px; }
 table, td, tr { text-align: left; }
 th, td { padding-bottom: 5px; vertical-align: top; }
 th { text-align: right; vertical-align: top; padding-right: 8px; }
+

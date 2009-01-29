@@ -6,6 +6,7 @@
 	<title>{% block title %}art cloud{% endblock %}</title>
 	<link href="/media/art_cloud/base.css" rel="stylesheet" type="text/css" />
 	<style type="text/css">
+	#header-links { position: absolute; right: 10px; top: 10px;}
 	{% block style %}{% endblock %}
 	</style>
 </head>
@@ -13,6 +14,14 @@
 <div id="header">
 {% block header %}
 	<h2><a href="/">Art Cloud</a></h2>
+	<div id="header-links">
+		{% if request.user.is_staff %}
+			<a href="/admin/">admin</a> |
+		{% endif %}
+		{% if request.user.is_authenticated %}
+			<a href="/accounts/logout/">logout</a>
+		{% endif %}
+	</div>
 {% endblock %}
 </div>
 <div id="content">{% block content %}{% endblock %}</div>

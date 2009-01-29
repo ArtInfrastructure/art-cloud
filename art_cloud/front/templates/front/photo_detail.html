@@ -1,0 +1,23 @@
+{% extends "art_cloud/base.html" %}
+{% load imagetags %}
+
+{% block content%}
+<h1>Photo: {{ photo.title }}</h1>
+
+<img style="margin-bottom: 20px; " src="{{ photo.image.url|thumbnail:"600w" }}" />
+
+<table>
+	<tr>
+		<th>caption:</th>
+		<td>{{ photo.caption }}</td>
+	</tr>
+	<tr>
+		<th>description:</th>
+		<td>{{ photo.description }}</td>
+	</tr>
+	<tr>
+		<th>created:</th>
+		<td>{{ photo.created }}</td>
+	</tr>
+</table>
+{% endblock %}

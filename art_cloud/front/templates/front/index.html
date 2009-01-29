@@ -2,7 +2,6 @@
 {% load imagetags %}
 
 {% block style %}
-#content { width: 900px;  }
 #right-column { float: right;  width: 30%;}
 #center-column { float: right;  width: 52%; }
 #left-column { width: 45%; }
@@ -10,7 +9,6 @@
 {% endblock %}
 
 {% block content%}
-<h1>Front:</h1>
 
 <div id="right-column">
 	<h2>Sites:</h2>
@@ -30,7 +28,7 @@
 		</ul>
 	</div>
 	<div id="left-column">
-		<h2>People:</h2>
+		<h2>Artists:</h2>
 		<ul>
 			{% for profile in profiles %}
 			<li><a href="{{ profile.get_absolute_url }}">{{ profile.display_name }}</a></li>
