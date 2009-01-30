@@ -18,11 +18,23 @@
 	</tr>
 	<tr>
 		<th>opened:</th>
-		<td>{{ installation.opened }}</td>
+		<td>{{ installation.opened|date:"F j, Y \a\t g:i A" }}</td>
+	</tr>
+	<tr>
+		<th>closed:</th>
+		<td>{{ installation.closed|date:"F j, Y \a\t g:i A" }}</td>
 	</tr>
 	<tr>
 		<th>notes:</th>
 		<td>{{ installation.notes }}</td>
+	</tr>
+	<tr>
+		<th>last heartbeat:</th>
+		<td>
+			{% with installation.heartbeat_set.all|first as heartbeat %}
+				{{ heartbeat.created|date:"F j, Y \a\t g:i A" }}
+			{% endwith %}
+		</td>
 	</tr>
 	<tr>
 		<th>photos:</th>

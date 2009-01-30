@@ -1,5 +1,7 @@
 # Django settings for art cloud project.
 
+HEARTBEAT_TIMEOUT = 10 # in seconds
+
 ADMINS = (
     ('Trevor F. Smith', 'trevor@trevor.smith.name'),
 )

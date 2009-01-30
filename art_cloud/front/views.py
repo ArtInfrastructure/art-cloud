@@ -26,12 +26,26 @@ from django.utils import feedgenerator
 from models import *
 from forms import *
 
+INSTALLATION_ID_PARAMETER = 'installation_id'
+
 @login_required
 def index(request):
 	return render_to_response('front/index.html', { 'profiles':UserProfile.objects.filter(user__groups__name="artists"), 
 													'sites':InstallationSite.objects.all(), 
 													'installations':Installation.objects.all(),
 													}, context_instance=RequestContext(request))
+
+def heartbeats(request):
+	if request.GET.has_key(INSTALLATION_ID_PARAMETER):
+		id = int(request.GET[INSTALLATION_ID_PARAMETER])
+		try:
+			installation = Installation.objects.get(pk=id)
+			heartbeat = Heartbeat(installation=installation)
+			heartbeat.save()
+			print "Created heartbeat"
+		except:
+			print "Received heartbeat for unknown installation id: %s" % id
+	return render_to_response('front/heartbeats.html', { 'installations':Installation.objects.all_open(), 'heartbeats':Heartbeat.objects.all() }, context_instance=RequestContext(request))
 
 @login_required
 def profile_detail(request, username):

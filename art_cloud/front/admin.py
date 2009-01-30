@@ -9,6 +9,10 @@ class StyledModelAdmin(admin.ModelAdmin):
 	class Media:
 		css = { "all": ('art_cloud/admin.css', )}
 
+class HeartbeatAdmin(StyledModelAdmin):
+	pass
+admin.site.register(Heartbeat, HeartbeatAdmin)	
+
 class UserProfileAdmin(StyledModelAdmin):
 	pass
 admin.site.register(UserProfile, UserProfileAdmin)	
@@ -32,6 +36,7 @@ class InstallationSiteAdmin(StyledModelAdmin):
 admin.site.register(InstallationSite, InstallationSiteAdmin)
 
 class InstallationAdmin(StyledModelAdmin):
+	list_display = ('name', 'site', 'is_opened')
 	filter_horizontal = ('artists', 'photos')
 	pass
 admin.site.register(Installation, InstallationAdmin)

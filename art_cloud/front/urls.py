@@ -11,6 +11,7 @@ urlpatterns = patterns('',
 	(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'front/login.html'}),
 	(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
 	(r'^accounts/profile/$', 'django.views.generic.simple.redirect_to', {'url': '/'}),
+    (r'^heartbeat/$', 'art_cloud.front.views.heartbeats'),
 
     (r'^$', 'art_cloud.front.views.index'),
 

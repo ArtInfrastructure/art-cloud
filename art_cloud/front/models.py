@@ -76,13 +76,31 @@ class InstallationSite(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class InstallationManager(models.Manager):
+	def all_open(self):
+		return self.filter(closed=None) | self.filter(closed__gt=datetime.datetime.now())
+
 class Installation(models.Model):
 	name = models.CharField(max_length=1024, null=False, blank=False)
 	artists = models.ManyToManyField(User, null=False, blank=False)
 	site = models.ForeignKey(InstallationSite, null=True, blank=True)
 	opened = models.DateTimeField(null=True, blank=True)
+	closed = models.DateTimeField(null=True, blank=True)
 	notes = models.TextField(blank=True, null=True)
 	photos = models.ManyToManyField(Photo, null=True, blank=True)
+	
+	objects = InstallationManager()
+
+	def is_opened(self):
+		if self.is_closed(): return False
+		if self.opened == None: return False
+		return self.opened < datetime.datetime.now()
+	is_opened.boolean = True
+
+	def is_closed(self):
+		if self.closed == None: return False
+		return self.closed < datetime.datetime.now()
+	
 	@models.permalink
 	def get_absolute_url(self):
 		return ('art_cloud.front.views.installation_detail', (), { 'id':self.id })
@@ -91,6 +109,15 @@ class Installation(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class Heartbeat(models.Model):
+	installation = models.ForeignKey(Installation, null=False, blank=False)
+	created = models.DateTimeField(auto_now_add=True)
+	def timed_out(self):
+		return self.created + datetime.timedelta(seconds=settings.HEARTBEAT_TIMEOUT) < datetime.datetime.now() 
+	class Meta:
+		ordering = ['-created']
+	def __unicode__(self):
+		return "%s: %s" % (self.installation, self.created)
 class UserProfile(models.Model):
 	"""Extends the django.contrib.auth User model"""
 	user = models.ForeignKey(User, unique=True)

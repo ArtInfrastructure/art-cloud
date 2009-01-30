@@ -20,10 +20,30 @@
 </div>
 <div id="left-center-wrapper">
 	<div id="center-column">
-		<h2>Installations:</h2>
+		<h2>Open Installations:</h2>
 		<ul>
 			{% for installation in installations %}
+				{% if installation.is_opened %}
 				<li><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+
+		<h2>Upcoming Installations:</h2>
+		<ul>
+			{% for installation in installations %}
+				{% if not installation.is_opened and not installation.is_closed %}
+				<li><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></li>
+				{% endif %}
+			{% endfor %}
+		</ul>
+
+		<h2>Closed Installations:</h2>
+		<ul>
+			{% for installation in installations %}
+				{% if installation.is_closed %}
+				<li><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></li>
+				{% endif %}
 			{% endfor %}
 		</ul>
 	</div>

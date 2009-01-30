@@ -1,0 +1,37 @@
+{% extends "art_cloud/base.html" %}
+{% load imagetags %}
+
+{% block style %}
+.expired-td { background-color: #FF6666; }
+.unexpired-td { background-color: #66FF66; }
+#heartbeat-table tr {  border: solid 5px #FFF; }
+#heartbeat-table td { padding: 0px 10px; }
+{% endblock %}
+
+{% block content%}
+<h1>Heartbeats:</h1>
+
+<h2>Latest:</h2>
+<table id="heartbeat-table">
+{% for installation in installations %}
+	{% if not installation.is_closed %}
+	<tr>
+		<th><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></th>
+		{% with installation.heartbeat_set.all|first as heartbeat %}
+		<td {% if not heartbeat or heartbeat.timed_out %}class="expired-td"{% else %}class="unexpired-td"{% endif %}>
+			{{ heartbeat.created|date:"F j, Y \a\t g:i A" }}
+		</td>
+		{% endwith %}
+	</tr>
+	{% endif %}
+{% endfor %}	
+</table>
+
+<h2>Stream:</h2>
+<ul>
+{% for heartbeat in heartbeats|slice:":20" %}
+	<li><a href="{{ heartbeat.get_absolute_url }}">{{ heartbeat.installation }}</a>: {{ heartbeat.created|date:"F j, Y \a\t g:i A" }}</li>
+{% endfor %}
+</ul>
+
+{% endblock %}
