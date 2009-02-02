@@ -1,3 +1,4 @@
+# Copyright 2009 Trevor F. Smith Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 import datetime
 import calendar
 import pprint
@@ -27,6 +28,8 @@ from models import *
 from forms import *
 
 INSTALLATION_ID_PARAMETER = 'installation_id'
+CLEAN_HEARTBEATS_PARAMETER = 'clean_heartbeats'
+CHECK_HEARTBEATS_PARAMETER = 'check_heartbeats'
 
 @login_required
 def index(request):
@@ -42,9 +45,22 @@ def heartbeats(request):
 			installation = Installation.objects.get(pk=id)
 			heartbeat = Heartbeat(installation=installation)
 			heartbeat.save()
-			print "Created heartbeat"
 		except:
-			print "Received heartbeat for unknown installation id: %s" % id
+			print "Received heartbeat for unknown installation id: %s from IP# %s" % (id, request.META['REMOTE_ADDR'])
+	if request.GET.has_key(CLEAN_HEARTBEATS_PARAMETER):
+		Heartbeat.objects.delete_old_heartbeats()
+	if request.GET.has_key(CHECK_HEARTBEATS_PARAMETER):
+		message = ""
+		should_send = False
+		for installation in Installation.objects.all():
+			if installation.is_opened():
+				heartbeats = Heartbeat.objects.filter(installation=installation)
+				if len(heartbeats) == 0: continue #no heartbeat in days?  ignoring
+				if heartbeats[0].timed_out():
+					message += 'No heartbeat for %s since %s.\n' % (installation.name, heartbeats[0].created)
+					should_send = True
+		if should_send:
+			UserProfile.objects.notify_art_technician('Art Infrastructure Heartbeat Notice', message)
 	return render_to_response('front/heartbeats.html', { 'installations':Installation.objects.all_open(), 'heartbeats':Heartbeat.objects.all() }, context_instance=RequestContext(request))
 
 @login_required
@@ -80,7 +96,6 @@ def equipment_detail(request, id):
 @login_required
 def installation_site_detail(request, id):
 	site = get_object_or_404(InstallationSite, pk=id)
-	print dir(site)
 	return render_to_response('front/installation_site_detail.html', { 'site':site }, context_instance=RequestContext(request))
 
 @login_required

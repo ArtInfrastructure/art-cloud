@@ -1,3 +1,4 @@
+# Copyright 2009 Trevor F. Smith Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 import os
 import Image
 import urllib
@@ -11,6 +12,7 @@ import traceback
 import logging
 import pprint
 
+from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.db import models
 from django.db.models import signals
@@ -109,21 +111,40 @@ class Installation(models.Model):
 	def __unicode__(self):
 		return self.name
 
+class HeartbeatManager(models.Manager):
+	def delete_old_heartbeats(self):
+		deadline = datetime.datetime.now() - datetime.timedelta(days=2)
+		for heartbeat in self.filter(created__lt=deadline):
+			heartbeat.delete()
+
 class Heartbeat(models.Model):
 	installation = models.ForeignKey(Installation, null=False, blank=False)
 	created = models.DateTimeField(auto_now_add=True)
+	
+	objects = HeartbeatManager()
+	
 	def timed_out(self):
 		return self.created + datetime.timedelta(seconds=settings.HEARTBEAT_TIMEOUT) < datetime.datetime.now() 
 	class Meta:
 		ordering = ['-created']
 	def __unicode__(self):
 		return "%s: %s" % (self.installation, self.created)
+
+class UserProfileManager(models.Manager):
+	def notify_art_technician(self, subject, message_text):
+		message = render_to_string('front/email/tech_notification.txt', { 'message': message_text })
+		for user in User.objects.filter(groups__name="technicians"):
+			user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+
 class UserProfile(models.Model):
 	"""Extends the django.contrib.auth User model"""
 	user = models.ForeignKey(User, unique=True)
 	display_name = models.CharField(max_length=1024)
 	bio = models.TextField(null=True, blank=True)
 	url = models.URLField(verify_exists=False, null=True, blank=True, max_length=300)
+	
+	objects = UserProfileManager()
+	
 	@models.permalink
 	def get_absolute_url(self):
 		return ('art_cloud.front.views.profile_detail', (), { 'username':urllib.quote(self.user.username) })

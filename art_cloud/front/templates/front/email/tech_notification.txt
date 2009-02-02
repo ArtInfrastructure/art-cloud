@@ -1,0 +1,3 @@
+There has been a notification event on the art infrastructure:
+
+{{ message }}
