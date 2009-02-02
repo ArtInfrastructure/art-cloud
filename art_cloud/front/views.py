@@ -96,10 +96,27 @@ def equipment_detail(request, id):
 @login_required
 def installation_site_detail(request, id):
 	site = get_object_or_404(InstallationSite, pk=id)
-	return render_to_response('front/installation_site_detail.html', { 'site':site }, context_instance=RequestContext(request))
+	if request.method == 'POST':
+		photo_form = PhotoForm(request.POST, request.FILES)
+		if photo_form.is_valid():
+			photo = photo_form.save()
+			site.photos.add(photo)
+			site.save()
+	else:
+		photo_form = PhotoForm()
+	return render_to_response('front/installation_site_detail.html', { 'photo_form':photo_form, 'site':site }, context_instance=RequestContext(request))
 
 @login_required
 def installation_detail(request, id):
 	installation = get_object_or_404(Installation, pk=id)
-	return render_to_response('front/installation_detail.html', { 'installation':installation }, context_instance=RequestContext(request))
+	if request.method == 'POST':
+		photo_form = PhotoForm(request.POST, request.FILES)
+		if photo_form.is_valid():
+			photo = photo_form.save()
+			installation.photos.add(photo)
+			installation.save()
+	else:
+		photo_form = PhotoForm()
+
+	return render_to_response('front/installation_detail.html', { 'installation':installation, 'photo_form':photo_form }, context_instance=RequestContext(request))
 

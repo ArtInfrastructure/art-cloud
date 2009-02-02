@@ -15,10 +15,13 @@ class HeartbeatAdmin(StyledModelAdmin):
 admin.site.register(Heartbeat, HeartbeatAdmin)	
 
 class UserProfileAdmin(StyledModelAdmin):
+	list_display = ('user', 'display_name')
 	pass
 admin.site.register(UserProfile, UserProfileAdmin)	
 
 class PhotoAdmin(StyledModelAdmin):
+	list_display = ('title', 'image', 'thumb')
+	search_fields = ('title', 'image')
 	pass
 admin.site.register(Photo, PhotoAdmin)	
 

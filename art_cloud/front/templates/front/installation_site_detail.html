@@ -1,6 +1,9 @@
 {% extends "art_cloud/base.html" %}
 {% load imagetags %}
 
+{% block style %}
+{% endblock %}
+
 {% block content%}
 <h1>Site: {{ site.name }}</h1>
 <table>
@@ -29,13 +32,21 @@
 		<td>{{ site.notes }}</td>
 	</tr>
 	<tr>
-		<th>photos:</th>
+		<th>images:</th>
 		<td>
 			{% for photo in site.photos.all %}
-				<img src="{{ photo.image.url|thumbnail:"300w" }}" />
+				<a href="{{ photo.get_absolute_url }}"><img alt="{{ photo.title }}" title="{{ photo.title }}" src="{{ photo.image.url|fit_image:"150x150" }}" /></a>
 			{% endfor %}
 		</td>
 	</tr>
+</table>
+
+
+<table style="margin-top: 40px;">
+<form enctype="multipart/form-data" action='.' method='post'>
+	{{ photo_form }}
+	<tr><th></th><td><input type="submit" value="add photo"></td></tr>
+</form>
 </table>
 {% endblock %}
 

@@ -14,3 +14,7 @@ class UserForm(forms.ModelForm):
 	class Meta:
 		model = User
 		fields = ('email',)
+
+class PhotoForm(forms.ModelForm):
+	class Meta:
+		model = Photo
