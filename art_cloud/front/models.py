@@ -116,6 +116,7 @@ class InstallationManager(models.Manager):
 
 class Installation(models.Model):
 	name = models.CharField(max_length=1024, null=False, blank=False)
+	slug = models.SlugField(blank=True, null=True)
 	groups = models.ManyToManyField(ArtistGroup, null=True, blank=True)
 	artists = models.ManyToManyField(User, null=True, blank=True)
 	site = models.ForeignKey(InstallationSite, null=True, blank=True)
@@ -138,7 +139,10 @@ class Installation(models.Model):
 	
 	@models.permalink
 	def get_absolute_url(self):
-		return ('art_cloud.front.views.installation_detail', (), { 'id':self.id })
+		if self.slug:
+			return ('art_cloud.front.views.installation_detail_slug', (), { 'slug':self.slug })
+		else:
+			return ('art_cloud.front.views.installation_detail', (), { 'id':self.id })
 	class Meta:
 		ordering = ['name']
 	def __unicode__(self):

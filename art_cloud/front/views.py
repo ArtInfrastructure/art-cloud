@@ -115,8 +115,16 @@ def installation_site_detail(request, id):
 	return render_to_response('front/installation_site_detail.html', { 'photo_form':photo_form, 'installation_site':site }, context_instance=RequestContext(request))
 
 @login_required
+def installation_detail_slug(request, slug):
+	installation = get_object_or_404(Installation, slug=slug)
+	return common_installation_detail(request, installation)
+	
+@login_required
 def installation_detail(request, id):
 	installation = get_object_or_404(Installation, pk=id)
+	return common_installation_detail(request, installation)
+	
+def common_installation_detail(request, installation):
 	if request.method == 'POST':
 		photo_form = PhotoForm(request.POST, request.FILES)
 		if photo_form.is_valid():
