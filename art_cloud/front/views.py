@@ -112,7 +112,7 @@ def installation_site_detail(request, id):
 			site.save()
 	else:
 		photo_form = PhotoForm()
-	return render_to_response('front/installation_site_detail.html', { 'photo_form':photo_form, 'site':site }, context_instance=RequestContext(request))
+	return render_to_response('front/installation_site_detail.html', { 'photo_form':photo_form, 'installation_site':site }, context_instance=RequestContext(request))
 
 @login_required
 def installation_detail(request, id):
