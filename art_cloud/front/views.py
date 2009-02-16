@@ -37,7 +37,13 @@ def index(request):
 	return render_to_response('front/index.html', { 'profiles':UserProfile.objects.filter(user__groups__name="artists"), 
 													'sites':InstallationSite.objects.all(), 
 													'installations':Installation.objects.all(),
+													'artist_groups':ArtistGroup.objects.all(),
 													}, context_instance=RequestContext(request))
+
+@login_required
+def artist_group_detail(request, id):
+	artist_group = get_object_or_404(ArtistGroup, pk=id)
+	return render_to_response('front/artist_group_detail.html', { 'artist_group':artist_group }, context_instance=RequestContext(request))
 
 def heartbeats(request):
 	if request.GET.has_key(INSTALLATION_ID_PARAMETER):

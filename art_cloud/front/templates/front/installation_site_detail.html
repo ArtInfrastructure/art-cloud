@@ -1,6 +1,6 @@
 {% extends "art_cloud/base.html" %}
 {% load imagetags %}
-
+{% load listtags %}
 {% block style %}
 {% endblock %}
 
@@ -15,7 +15,7 @@
 		<th>installations:</th>
 		<td>
 			{% for installation in site.installation_set.all %}
-				<a href="{{ installation.get_absolute_url }}">{{ installation }}</a>
+				<a href="{{ installation.get_absolute_url }}">{{ installation }}</a>{% loop_comma %}
 			{% endfor %}
 		</td>
 	</tr>
@@ -23,7 +23,7 @@
 		<th>equipment:</th>
 		<td>
 			{% for equipment in site.equipment.all %}
-				{{ equipment }}
+				{{ equipment }}{% loop_comma %}
 			{% endfor %}
 		</td>
 	</tr>

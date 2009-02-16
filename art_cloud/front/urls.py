@@ -13,6 +13,7 @@ urlpatterns = patterns('',
 	(r'^accounts/logout/$', 'django.contrib.auth.views.logout_then_login'),
 	(r'^accounts/profile/$', 'django.views.generic.simple.redirect_to', {'url': '/'}),
     (r'^heartbeat/$', 'art_cloud.front.views.heartbeats'),
+    (r'^group/(?P<id>[\d]+)$', 'art_cloud.front.views.artist_group_detail'),
 
     (r'^$', 'art_cloud.front.views.index'),
 

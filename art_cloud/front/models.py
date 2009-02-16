@@ -23,6 +23,19 @@ from django.dispatch import dispatcher
 from django.core.mail import send_mail
 from django.utils.encoding import force_unicode
 
+class ArtistGroup(models.Model):
+	"""A group of artists who collectively create installations, perhaps also with individual artists."""
+	name = models.CharField(max_length=1024, blank=False, null=False)
+	artists = models.ManyToManyField(User, blank=False, null=False)
+#	url = models.URLField(verify_exists=False, blank=True, null=True, max_length=1024)
+	class Meta:
+		ordering = ['name']
+	@models.permalink
+	def get_absolute_url(self):
+		return ('art_cloud.front.views.artist_group_detail', (), { 'id':self.id })
+	def __unicode__(self):
+		return self.name
+
 class ThumbnailedModel(models.Model):
 	"""An abstract base class for models with an ImageField named "image" """
 	def thumb(self):
@@ -103,7 +116,8 @@ class InstallationManager(models.Manager):
 
 class Installation(models.Model):
 	name = models.CharField(max_length=1024, null=False, blank=False)
-	artists = models.ManyToManyField(User, null=False, blank=False)
+	groups = models.ManyToManyField(ArtistGroup, null=True, blank=True)
+	artists = models.ManyToManyField(User, null=True, blank=True)
 	site = models.ForeignKey(InstallationSite, null=True, blank=True)
 	opened = models.DateTimeField(null=True, blank=True)
 	closed = models.DateTimeField(null=True, blank=True)

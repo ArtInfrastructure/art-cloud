@@ -14,6 +14,10 @@ class HeartbeatAdmin(StyledModelAdmin):
 	pass
 admin.site.register(Heartbeat, HeartbeatAdmin)	
 
+class ArtistGroupAdmin(StyledModelAdmin):
+	filter_horizontal = ('artists',)
+admin.site.register(ArtistGroup, ArtistGroupAdmin)	
+
 class UserProfileAdmin(StyledModelAdmin):
 	list_display = ('user', 'display_name')
 	pass
@@ -41,6 +45,6 @@ admin.site.register(InstallationSite, InstallationSiteAdmin)
 
 class InstallationAdmin(StyledModelAdmin):
 	list_display = ('name', 'site', 'is_opened')
-	filter_horizontal = ('artists', 'photos')
+	filter_horizontal = ('artists', 'groups', 'photos')
 	pass
 admin.site.register(Installation, InstallationAdmin)

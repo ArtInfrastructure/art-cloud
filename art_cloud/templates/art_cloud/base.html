@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<title>{% block title %}art cloud{% endblock %}</title>
+	<title>{% block title %}{{ site.name }}{% endblock %}</title>
 	<link href="/media/art_cloud/base.css" rel="stylesheet" type="text/css" />
 	<style type="text/css">
 	#header-links { position: absolute; right: 10px; top: 10px;}
@@ -13,7 +13,7 @@
 <body>{% block body %}
 <div id="header">
 {% block header %}
-	<h2><a href="/">Art Cloud</a></h2>
+	<h2><a href="/">{{ site.name }}</a></h2>
 	<div id="header-links">
 		{% if request.user.is_staff %}
 			<a href="/admin/">admin</a> |

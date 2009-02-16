@@ -49,6 +49,13 @@
 		</ul>
 	</div>
 	<div id="left-column">
+		<h2>Artist Groups:</h2>
+		<ul>
+		{% for artist_group in artist_groups %}
+			<li><a href="{{ artist_group.get_absolute_url }}">{{ artist_group }}</a></li>
+		{% endfor %}
+		</ul>
+		
 		<h2>Artists:</h2>
 		<ul>
 			{% for profile in profiles %}
