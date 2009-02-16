@@ -27,7 +27,7 @@ class ArtistGroup(models.Model):
 	"""A group of artists who collectively create installations, perhaps also with individual artists."""
 	name = models.CharField(max_length=1024, blank=False, null=False)
 	artists = models.ManyToManyField(User, blank=False, null=False)
-#	url = models.URLField(verify_exists=False, blank=True, null=True, max_length=1024)
+	url = models.URLField(verify_exists=False, blank=True, null=True, max_length=1024)
 	class Meta:
 		ordering = ['name']
 	@models.permalink

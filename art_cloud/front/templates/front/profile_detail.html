@@ -1,9 +1,49 @@
 {% extends "art_cloud/base.html" %}
 {% load imagetags %}
+{% load listtags %}
 
 {% block content%}
 <h1>Profile: {{ profile.display_name }}</h1>
+	<table>
+		{% ifnotequal profile.user.artistgroup_set.all.count 0 %}
+		<tr>
+			<th>groups:</th>
+			<td>
+				{% for artist_group in profile.user.artistgroup_set.all %}
+					<a href="{{ artist_group.get_absolute_url }}">{{ artist_group }}</a>{% loop_comma %}
+				{% endfor %}
+			</td>
+		</tr>
+		{% endifnotequal %}
+		{% if profile.bio %}
+		<tr>
+			<th>bio:</th>
+			<td>{{ profile.bio }}</td>
+		</tr>
+		{% endif %}
+		{% if profile.url %}
+		<tr>
+			<th>url:</th>
+			<td><a href="{{ profile.url }}">{{ profile.url }}</a></td>
+		</tr>
+		{% endif %}
+	</table>
+
+<h2>Installations:</h2>
+<ul>
+	{% for installation in profile.user.installation_set.all %}
+	<li><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></li>
+	{% endfor %}
+	{% for artist_group in profile.user.artistgroup_set.all %}
+		{% for installation in artist_group.installation_set.all %}
+			<li><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></li>
+		{% endfor %}
+	{% endfor %}
+</ul>
+
+
 {% if request.user.is_staff %}
+<h2>Edit:</h2>
 	<form method="post">
 		<table>
 		{{ user_form }}
@@ -12,29 +52,8 @@
 		</table>
 		<input type="submit" value="update profile" />
 	</form>
-{% else %}
-	<table>
-		<tr>
-			<th>username:</th>
-			<td>{{ profile.user.username }}</td>
-		</tr>
-		<tr>
-			<th>bio:</th>
-			<td>{{ profile.bio }}</td>
-		</tr>
-		<tr>
-			<th>url:</th>
-			<td><a href="{{ profile.url }}">{{ profile.url }}</a></td>
-		</tr>
-	</table>
 {% endif %}
 
-<h2>Installations:</h2>
-<ul>
-	{% for installation in profile.user.installation_set.all %}
-	<li><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></li>
-	{% endfor %}
-</ul>
 {% endblock %}
 
 /* Copyright 2009 Trevor F. Smith Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */

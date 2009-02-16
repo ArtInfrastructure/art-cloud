@@ -11,6 +11,14 @@
 			{% for artist in artist_group.artists.all %}<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>{% loop_comma %}{% endfor %}
 		</td>
 	</tr>
+	{% if artist_group.url %}
+	<tr>
+		<th>url:</th>
+		<td>
+			<a href="{{ artist_group.url }}">{{ artist_group.url }}</a>
+		</td>
+	</tr>
+	{% endif %}
 </table>
 
 <h2>Installations:</h2>
