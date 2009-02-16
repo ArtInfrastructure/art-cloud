@@ -138,6 +138,7 @@ class HeartbeatManager(models.Manager):
 
 class Heartbeat(models.Model):
 	installation = models.ForeignKey(Installation, null=False, blank=False)
+	info = models.TextField(blank=True, null=True)
 	created = models.DateTimeField(auto_now_add=True)
 	
 	objects = HeartbeatManager()

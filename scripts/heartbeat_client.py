@@ -2,7 +2,7 @@
 
 # BEFORE RUNNING: Set this to your installation id, as provided by the art technician.
 
-INSTALLATION_ID = 14
+INSTALLATION_ID = 17
 
 # This is a script which will generate a heartbeat call to the art infrastructure.
 # If your piece does not send heartbeats the art technicial will be notified.
@@ -30,7 +30,11 @@ INSTALLATION_ID = 14
 # The installation id should be provided by the art technician.
 # Have your program GET that URL once a minute and the art infrastructure will handle the rest.
 
-# Alternatively, you could load the heartbeat URL in your browser and hit reload every minute or so.
+# OPTIONALLY, you can add an info parameter which will be included in the database for easy access
+# via the art cloud web UI
+# For example: http://<hostname>/heartbeat/?installation_id=101&info=my%20art%20is%20faboo
+
+# Alternatively, you could load the heartbeat URL in your browser and manually hit reload every minute or so.
 
 import urllib
 import pprint
@@ -38,7 +42,7 @@ import traceback
 import time
 
 INSTALLATION_ID_PARAMETER = 'installation_id'
-
+INFO_PARAMETER = "info"
 PRODUCTION_HOST = "174.129.242.90"
 PRODUCTION_HEARTBEAT_URL = "http://%s/heartbeat/?%s=%s" % (PRODUCTION_HOST, INSTALLATION_ID_PARAMETER, INSTALLATION_ID)
 DEBUG_HOST = "127.0.0.1:8000"

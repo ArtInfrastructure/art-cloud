@@ -28,6 +28,7 @@ from models import *
 from forms import *
 
 INSTALLATION_ID_PARAMETER = 'installation_id'
+INFO_PARAMETER = 'info'
 CLEAN_HEARTBEATS_PARAMETER = 'clean_heartbeats'
 CHECK_HEARTBEATS_PARAMETER = 'check_heartbeats'
 
@@ -41,9 +42,10 @@ def index(request):
 def heartbeats(request):
 	if request.GET.has_key(INSTALLATION_ID_PARAMETER):
 		id = int(request.GET[INSTALLATION_ID_PARAMETER])
+		info = request.GET.get(INFO_PARAMETER, None)
 		try:
 			installation = Installation.objects.get(pk=id)
-			heartbeat = Heartbeat(installation=installation)
+			heartbeat = Heartbeat(installation=installation, info=info)
 			heartbeat.save()
 		except:
 			print "Received heartbeat for unknown installation id: %s from IP# %s" % (id, request.META['REMOTE_ADDR'])

@@ -19,7 +19,7 @@
 		<th><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></th>
 		{% with installation.heartbeat_set.all|first as heartbeat %}
 		<td {% if not heartbeat or heartbeat.timed_out %}class="expired-td"{% else %}class="unexpired-td"{% endif %}>
-			{{ heartbeat.created|date:"F j, Y \a\t g:i A" }}
+			{{ heartbeat.created|date:"F j \a\t g:i A" }}
 		</td>
 		{% endwith %}
 	</tr>
@@ -29,8 +29,10 @@
 
 <h2>Stream:</h2>
 <ul>
-{% for heartbeat in heartbeats|slice:":20" %}
-	<li><a href="{{ heartbeat.get_absolute_url }}">{{ heartbeat.installation }}</a>: {{ heartbeat.created|date:"F j, Y \a\t g:i A" }}</li>
+{% for heartbeat in heartbeats|slice:":40" %}
+	<li><a href="{{ heartbeat.installation.get_absolute_url }}">{{ heartbeat.installation }}</a>: {{ heartbeat.created|date:"F j \a\t g:i A" }}
+				{% if heartbeat.info %}<p>{{ heartbeat.info }}</p>{% endif %}
+	</li>
 {% endfor %}
 </ul>
 
