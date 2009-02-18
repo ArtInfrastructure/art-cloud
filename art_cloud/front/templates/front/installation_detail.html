@@ -5,12 +5,14 @@
 {% block content%}
 <h1>Installation: {{ installation.name }}</h1>
 <table>
-	{% if installation.artists.all %}
+	{% if installation.artists.all or installation.groups.all %}
 	<tr>
 		<th>artists:</th>
 		<td>
 			{% for artist in installation.artists.all %}
-				<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>{% loop_comma %}
+				<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>{% loop_comma %}{% endfor %}{% ifnotequal installation.artists.all.count 0 %}{% ifnotequal installation.groups.all.count 0 %},{%endifnotequal%}{%endifnotequal%}
+			{% for artist_group in installation.groups.all %}
+				{% for artist in artist_group.artists.all %}<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>{% loop_comma %}{% endfor %}
 			{% endfor %}
 		</td>
 	</tr>
@@ -20,7 +22,7 @@
 		<th>groups:</th>
 		<td>
 			{% for artist_group in installation.groups.all %}
-				<a href="{{ artist_group.get_absolute_url }}">{{ artist_group }}</a>{% loop_comma %}
+					<a href="{{ artist_group.get_absolute_url }}">{{ artist_group }}</a>{% loop_comma %}
 			{% endfor %}
 		</td>
 	</tr>
