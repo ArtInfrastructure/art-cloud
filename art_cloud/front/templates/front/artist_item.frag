@@ -3,6 +3,18 @@
 <div class="artist-item {% cycle 'even-row' 'odd-row' %}">
 	{% if not hide_name %}<h3><a href="{{ profile.get_absolute_url }}">{{ profile.display_name }}</a></h3>{% endif %}
 	<table>
+		{% if profile.user.email %}
+		<tr>
+			<th>email:</th>
+			<td>{{ profile.user.email }}</td>
+		</tr>
+		{% endif %}
+		{% if profile.phone_number %}
+		<tr>
+			<th>phone:</th>
+			<td>{{ profile.phone_number }}</td>
+		</tr>
+		{% endif %}
 		{% ifnotequal profile.user.artistgroup_set.all.count 0 %}
 		<tr>
 			<th>groups:</th>
@@ -25,7 +37,6 @@
 			<td><a href="{{ profile.url }}">{{ profile.url }}</a></td>
 		</tr>
 		{% endif %}
-	
 		<tr><th>artwork:</th>
 		<td>
 			{% for installation in profile.user.installation_set.all %}

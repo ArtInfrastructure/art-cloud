@@ -2,7 +2,7 @@
 
 # BEFORE RUNNING: Set this to your installation id, as provided by the art technician.
 
-INSTALLATION_ID = 17
+INSTALLATION_ID = 15
 
 # This is a script which will generate a heartbeat call to the art infrastructure.
 # If your piece does not send heartbeats the art technicial will be notified.

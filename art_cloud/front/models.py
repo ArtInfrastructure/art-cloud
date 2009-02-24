@@ -106,6 +106,8 @@ class InstallationSite(models.Model):
 	def get_absolute_url(self):
 		return ('art_cloud.front.views.installation_site_detail', (), { 'id':self.id })
 	class Meta:
+		verbose_name =  'location'
+		verbose_name_plural = 'locations'
 		ordering = ['name']
 	def __unicode__(self):
 		return self.name
@@ -144,6 +146,8 @@ class Installation(models.Model):
 		else:
 			return ('art_cloud.front.views.installation_detail', (), { 'id':self.id })
 	class Meta:
+		verbose_name =  'artwork'
+		verbose_name_plural = 'works of art'
 		ordering = ['name']
 	def __unicode__(self):
 		return self.name
@@ -180,7 +184,7 @@ class UserProfile(models.Model):
 	display_name = models.CharField(max_length=1024)
 	bio = models.TextField(null=True, blank=True)
 	url = models.URLField(verify_exists=False, null=True, blank=True, max_length=300)
-	
+	phone_number = models.CharField(max_length=20, null=True, blank=True)
 	objects = UserProfileManager()
 	
 	@models.permalink
@@ -193,6 +197,8 @@ class UserProfile(models.Model):
 	def __unicode__(self):
 		return self.user.username
 	class Meta:
+		verbose_name = 'artist profile'
+		verbose_name_plural = 'artist profiles'
 		ordering = ['user__username']
 
 def user_post_save(sender, instance, signal, *args, **kwargs):

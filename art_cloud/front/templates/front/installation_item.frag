@@ -27,7 +27,7 @@
 		{% endifnotequal %}
 		{% if installation.site %}
 		<tr>
-			<th>site:</th>
+			<th>location:</th>
 			<td><a href="{{ installation.site.get_absolute_url }}">{{ installation.site }}</a></td>
 		</tr>
 		{% endif %}
