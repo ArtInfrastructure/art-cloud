@@ -16,7 +16,9 @@ urlpatterns = patterns('',
     (r'^heartbeat/$', 'art_cloud.front.views.heartbeats'),
     (r'^group/(?P<id>[\d]+)$', 'art_cloud.front.views.artist_group_detail'),
 
-    (r'^$', 'art_cloud.front.views.index'),
+    (r'^$', 'art_cloud.front.views.installation_slice'),
+    (r'^artist-slice/$', 'art_cloud.front.views.artist_slice'),
+    (r'^site-slice/$', 'art_cloud.front.views.site_slice'),
 
 	(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
 	

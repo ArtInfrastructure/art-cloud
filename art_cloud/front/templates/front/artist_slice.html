@@ -1,22 +1,14 @@
-{% extends "art_cloud/base.html" %}
+{% extends "front/base-index.html" %}
 {% load imagetags %}
-{% load listtags %}
 
-{% block style %}
-h4 { margin-top: 20px; }
+{% block sub-style %}
+#slice-tabs #artist-tab { background-color: #EEE; }
 {% endblock %}
 
-{% block content%}
-<h1>Artwork: {{ installation.name }}</h1>
-{% with "true" as hide_title %}{% include "front/installation_item.frag" %}{% endwith %}
-
-<h4>Add a photo:</h4>
-<table>
-<form enctype="multipart/form-data" action='.' method='post'>
-	{{ photo_form }}
-	<tr><th></th><td><input type="submit" value="add photo"></td></tr>
-</form>
-</table>
+{% block slice %}
+{% for profile in profiles %}
+{% include "front/artist_item.frag" %}
+{% endfor %}
 
 {% endblock %}
 

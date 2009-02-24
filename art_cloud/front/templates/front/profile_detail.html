@@ -3,44 +3,8 @@
 {% load listtags %}
 
 {% block content%}
-<h1>Profile: {{ profile.display_name }}</h1>
-	<table>
-		{% ifnotequal profile.user.artistgroup_set.all.count 0 %}
-		<tr>
-			<th>groups:</th>
-			<td>
-				{% for artist_group in profile.user.artistgroup_set.all %}
-					<a href="{{ artist_group.get_absolute_url }}">{{ artist_group }}</a>{% loop_comma %}
-				{% endfor %}
-			</td>
-		</tr>
-		{% endifnotequal %}
-		{% if profile.bio %}
-		<tr>
-			<th>bio:</th>
-			<td>{{ profile.bio }}</td>
-		</tr>
-		{% endif %}
-		{% if profile.url %}
-		<tr>
-			<th>url:</th>
-			<td><a href="{{ profile.url }}">{{ profile.url }}</a></td>
-		</tr>
-		{% endif %}
-	</table>
-
-<h2>Installations:</h2>
-<ul>
-	{% for installation in profile.user.installation_set.all %}
-	<li><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></li>
-	{% endfor %}
-	{% for artist_group in profile.user.artistgroup_set.all %}
-		{% for installation in artist_group.installation_set.all %}
-			<li><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></li>
-		{% endfor %}
-	{% endfor %}
-</ul>
-
+<h1>Artist: {{ profile.display_name }}</h1>
+{% with "true" as hide_name %}{% include "front/artist_item.frag" %}{% endwith %}
 
 {% if request.user.is_staff %}
 <h2>Edit:</h2>

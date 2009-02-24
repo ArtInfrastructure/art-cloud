@@ -1,0 +1,41 @@
+{% extends "art_cloud/base.html" %}
+{% load imagetags %}
+
+{% block style %}
+#slice-tabs {
+	z-index: 2;
+	padding: 10px;
+	position: relative; top: 10px;
+}
+#slice-tabs li {
+	list-style: none;
+	display: inline;
+	padding: 10px; 
+	margin: 0px 10px;
+	border-top: solid 1px #999;
+	border-left: solid 1px #999;
+	border-right: solid 1px #999;
+	background-color: #FFF;
+}
+#slice-tabs li:hover { background-color: #DDD; }
+#slice { z-index: 1; border: solid 1px #999; position: relative; top: -5px;  background-color: #FFF; padding: 10px; }
+
+#slice .even-row { padding: 20px 10px; }
+#slice .odd-row { background-color: #EEE; padding: 10px 10px; }
+{% block sub-style %}{% endblock %}
+{% endblock %}
+
+{% block content%}
+
+<div id="slice-tabs"><ul>
+	<li id="installation-tab"><a href="{% url front.views.installation_slice %}" >artwork</a></li>
+	<li id="artist-tab"><a href="{% url front.views.artist_slice %}" >artists</a></li>
+	<li id="site-tab"><a href="{% url front.views.site_slice %}" >sites</a></li>
+</ul></div>
+
+<div id="slice">{% block slice %}{% endblock %}</div>
+
+
+{% endblock %}
+
+/* Copyright 2009 Trevor F. Smith Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */
