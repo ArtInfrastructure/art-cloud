@@ -23,6 +23,8 @@ from django.dispatch import dispatcher
 from django.core.mail import send_mail
 from django.utils.encoding import force_unicode
 
+from tagging.models import Tag
+
 class ArtistGroup(models.Model):
 	"""A group of artists who collectively create installations, perhaps also with individual artists."""
 	name = models.CharField(max_length=1024, blank=False, null=False)
@@ -128,6 +130,15 @@ class Installation(models.Model):
 	photos = models.ManyToManyField(Photo, null=True, blank=True)
 	
 	objects = InstallationManager()
+
+	def _get_tags(self):
+		return Tag.objects.get_for_object(self)
+	def _set_tags(self, tag_list):
+		Tag.objects.update_tags(self, tag_list)
+	tags = property(_get_tags, _set_tags)
+	def _get_tag_names(self):
+		return " ".join([tag.name for tag in self.tags])
+	tag_names = property(_get_tag_names, _set_tags)
 
 	def is_opened(self):
 		if self.is_closed(): return False

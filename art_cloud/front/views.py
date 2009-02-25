@@ -24,6 +24,8 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.template.loader import render_to_string
 from django.utils import feedgenerator
 
+from tagging.models import Tag, TaggedItem
+
 from models import *
 from forms import *
 
@@ -47,6 +49,15 @@ def common_slice(request, template):
 													'installations':Installation.objects.all(),
 													'artist_groups':ArtistGroup.objects.all(),
 													}, context_instance=RequestContext(request))
+
+@login_required
+def tags(request):
+	return render_to_response('front/tags.html', { }, context_instance=RequestContext(request))
+
+@login_required
+def tag(request, name):
+	tag = get_object_or_404(Tag, name=name)
+	return render_to_response('front/tag.html', { 'tag':tag, 'installations':TaggedItem.objects.get_by_model(Installation, tag) }, context_instance=RequestContext(request))
 
 @login_required
 def artist_group_detail(request, id):
@@ -150,14 +161,23 @@ def installation_detail(request, id):
 	return common_installation_detail(request, installation)
 	
 def common_installation_detail(request, installation):
+	tag_default_data = {'tags': installation.tag_names }
 	if request.method == 'POST':
 		photo_form = PhotoForm(request.POST, request.FILES)
+		tags_form = TagsForm(request.POST)
 		if photo_form.is_valid():
+			tags_form = TagsForm(tag_default_data)
 			photo = photo_form.save()
 			installation.photos.add(photo)
 			installation.save()
+		elif tags_form.is_valid():
+			photo_form = PhotoForm()
+			installation.tags = tags_form.cleaned_data['tags']
+			installation.save()
+			tag_form = TagsForm({'tags': installation.tag_names })
 	else:
+		tags_form = TagsForm(tag_default_data)
 		photo_form = PhotoForm()
 
-	return render_to_response('front/installation_detail.html', { 'installation':installation, 'photo_form':photo_form }, context_instance=RequestContext(request))
+	return render_to_response('front/installation_detail.html', { 'installation':installation, 'tags_form': tags_form, 'photo_form':photo_form }, context_instance=RequestContext(request))
 

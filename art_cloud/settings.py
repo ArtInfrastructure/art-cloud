@@ -25,6 +25,8 @@ MEDIA_URL = '/media/'
 
 ADMIN_MEDIA_PREFIX = '/admin-media/'
 
+FORCE_LOWERCASE_TAGS = True
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = 'p=$i77rnyk76a!_7o1@a)5341k5$r#hddee68(wvog_ozjyc^%'
 
@@ -64,6 +66,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
 	'django.contrib.admin',
 	'pagination',
+	'tagging',
 	'art_cloud.front',
 )
 

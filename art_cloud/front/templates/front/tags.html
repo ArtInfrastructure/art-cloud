@@ -1,23 +1,16 @@
 {% extends "art_cloud/base.html" %}
 {% load imagetags %}
 {% load listtags %}
-
-{% block style %}
-h4 { margin-top: 20px; }
-#id_tags { width: 400px; }
-{% endblock %}
+{% load tagging_tags %}
 
 {% block content%}
-<h1>Artwork: {{ installation.name }}</h1>
-{% with request.user.is_staff as edit_tags %}{% with "true" as hide_title %}{% include "front/installation_item.frag" %}{% endwith %}{% endwith %}
+<h1>Tag Cloud</h1>
 
-<h4>Add a photo:</h4>
-<table>
-<form enctype="multipart/form-data" action='.' method='post'>
-	{{ photo_form }}
-	<tr><th></th><td><input type="submit" value="add photo"></td></tr>
-</form>
-</table>
+{% tag_cloud_for_model front.Installation as tags %}
+
+{% for tag in tags %}
+	<span style="font-size: {{ tag.font_size }}em;"><a href="{% url front.views.tag tag.name %}">{{ tag.name }}</a></span>{% loop_comma %}
+{% endfor %}
 
 {% endblock %}
 

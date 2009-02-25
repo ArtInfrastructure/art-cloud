@@ -54,10 +54,23 @@
 			<th>heartbeat:</th>
 			<td>
 				{% with installation.heartbeat_set.all|first as heartbeat %}
-					{{ heartbeat.created|date:"F j, Y \a\t g:i A" }}
+					{{ heartbeat.created|date:"F j \a\t g:i A" }}
 					{% if heartbeat.info %}<p>{{ heartbeat.trimmed_info }}</p>{% endif %}
 				{% endwith %}
 				[<a href="{% url front.views.installation_heartbeats installation.id %}">all</a>]
+			</td>
+		</tr>
+		{% endif %}
+		{% if installation.tags or edit_tags %}
+		<tr>
+			<th>tags:</th>
+			<td>
+				{% for tag in installation.tags %}
+				<a href="{% url front.views.tag tag.name %}">{{ tag.name }}</a>{% loop_comma %}
+				{% endfor %}
+				{% if edit_tags and tags_form %}
+				<form action="." method="post">{% for field in tags_form %}{{ field }}{% endfor %}</form>
+				{% endif %}
 			</td>
 		</tr>
 		{% endif %}

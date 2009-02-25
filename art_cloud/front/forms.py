@@ -18,3 +18,6 @@ class UserForm(forms.ModelForm):
 class PhotoForm(forms.ModelForm):
 	class Meta:
 		model = Photo
+
+class TagsForm(forms.Form):
+	tags = forms.CharField(required=False)
