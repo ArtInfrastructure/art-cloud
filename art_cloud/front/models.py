@@ -165,6 +165,12 @@ class Heartbeat(models.Model):
 	
 	objects = HeartbeatManager()
 	
+	def trimmed_info(self):
+		if self.info: 
+			if len(self.info) > 60:
+				return self.info[:60] + '...'
+			return self.info
+		return None
 	def timed_out(self):
 		return self.created + datetime.timedelta(seconds=settings.HEARTBEAT_TIMEOUT) < datetime.datetime.now() 
 	class Meta:

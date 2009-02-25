@@ -9,7 +9,7 @@
 
 {% block content%}
 <h1>Heartbeats from <a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></h1>
-
+<p>[<a href="{% url front.views.installation_heartbeats_csv installation.id %}">export to CSV</a>]</p>
 {% with installation.heartbeat_set.all as heartbeats %}
 	{% autopaginate heartbeats 100 %}
 		{% for heartbeat in heartbeats %}

@@ -55,7 +55,7 @@
 			<td>
 				{% with installation.heartbeat_set.all|first as heartbeat %}
 					{{ heartbeat.created|date:"F j, Y \a\t g:i A" }}
-					{% if heartbeat.info %}<p>{{ heartbeat.info }}</p>{% endif %}
+					{% if heartbeat.info %}<p>{{ heartbeat.trimmed_info }}</p>{% endif %}
 				{% endwith %}
 				[<a href="{% url front.views.installation_heartbeats installation.id %}">all</a>]
 			</td>

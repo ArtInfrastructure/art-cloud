@@ -31,7 +31,7 @@
 <h2>Stream:</h2>
 {% for heartbeat in heartbeats|slice:":60" %}
 	{% ifchanged heartbeat.created.day %}<h3>{{ heartbeat.created|date:"F j" }}</h3>{% endifchanged %}
-	{% include "front/heartbeat_item.frag" %}
+	{% with "true" as trim_info %}{% include "front/heartbeat_item.frag" %}{% endwith %}
 {% endfor %}
 
 {% endblock %}

@@ -39,6 +39,7 @@ INSTALLATION_ID = 15
 import urllib
 import pprint
 import traceback
+import datetime
 import time
 
 INSTALLATION_ID_PARAMETER = 'installation_id'
@@ -48,6 +49,8 @@ PRODUCTION_HEARTBEAT_URL = "http://%s/heartbeat/?%s=%s" % (PRODUCTION_HOST, INST
 DEBUG_HOST = "127.0.0.1:8000"
 DEBUG_HEARTBEAT_URL = "http://%s/heartbeat/?%s=%s" % (DEBUG_HOST, INSTALLATION_ID_PARAMETER, INSTALLATION_ID)
 
+#HEARTBEAT_URL = PRODUCTION_HEARTBEAT_URL
+#HOST = PRODUCTION_HOST
 HOST = DEBUG_HOST
 HEARTBEAT_URL = DEBUG_HEARTBEAT_URL
 
@@ -64,7 +67,8 @@ if __name__ == "__main__":
 		try:
 			send_heartbeat();
 		except:
-			print pprint.pformat(traceback.format_exc())
+			print "Could not send heartbeat: %s" % datetime.datetime.now()
+			#print pprint.pformat(traceback.format_exc())
 		time.sleep(HEARTBEAT_PERIOD)
 
 # Copyright 2009 Trevor F. Smith Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.

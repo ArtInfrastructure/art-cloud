@@ -11,6 +11,8 @@ class StyledModelAdmin(admin.ModelAdmin):
 		css = { "all": ('art_cloud/admin.css', )}
 
 class HeartbeatAdmin(StyledModelAdmin):
+	list_display = ('installation', 'created', 'trimmed_info')
+	date_hierarchy = 'created'
 	search_fields = ('installation__name', )
 	pass
 admin.site.register(Heartbeat, HeartbeatAdmin)	

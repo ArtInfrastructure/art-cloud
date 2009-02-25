@@ -1,0 +1,2 @@
+{% for heartbeat in installation.heartbeat_set.all %}{{ heartbeat.created|addslashes }},{% if heartbeat.info %}{{ heartbeat.info|addslashes }}{% endif %}
+{% endfor %}

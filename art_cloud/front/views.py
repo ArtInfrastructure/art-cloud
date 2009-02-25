@@ -85,6 +85,18 @@ def installation_heartbeats(request, id):
 	return render_to_response('front/installation_heartbeats.html', { 'installation':installation }, context_instance=RequestContext(request))
 
 @login_required
+def installation_heartbeats_csv(request, id):
+	import csv
+	installation = get_object_or_404(Installation, pk=id)
+
+	response = HttpResponse(mimetype='text/csv')
+	response['Content-Disposition'] = 'attachment; filename=heartbeats.csv'
+	writer = csv.writer(response)
+	for heartbeat in installation.heartbeat_set.all(): writer.writerow([heartbeat.created, heartbeat.info])
+
+	return response
+
+@login_required
 def profile_detail(request, username):
 	profile = get_object_or_404(UserProfile, user__username=username)
 	if request.method == 'POST' and request.user.is_staff:
