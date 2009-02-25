@@ -40,7 +40,7 @@ def artist_slice(request): return common_slice(request, 'front/artist_slice.html
 
 @login_required
 def site_slice(request): return common_slice(request, 'front/site_slice.html')
-	
+
 def common_slice(request, template):
 	return render_to_response(template, { 'profiles':UserProfile.objects.filter(user__groups__name="artists"), 
 													'sites':InstallationSite.objects.all(), 
@@ -78,6 +78,11 @@ def heartbeats(request):
 		if should_send:
 			UserProfile.objects.notify_art_technician('Art Infrastructure Heartbeat Notice', message)
 	return render_to_response('front/heartbeats.html', { 'installations':Installation.objects.all_open(), 'heartbeats':Heartbeat.objects.all() }, context_instance=RequestContext(request))
+
+@login_required
+def installation_heartbeats(request, id):
+	installation = get_object_or_404(Installation, pk=id)
+	return render_to_response('front/installation_heartbeats.html', { 'installation':installation }, context_instance=RequestContext(request))
 
 @login_required
 def profile_detail(request, username):

@@ -39,6 +39,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+	'pagination.middleware.PaginationMiddleware',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -62,6 +63,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
 	'django.contrib.admin',
+	'pagination',
 	'art_cloud.front',
 )
 

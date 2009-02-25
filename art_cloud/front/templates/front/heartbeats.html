@@ -6,6 +6,7 @@
 .unexpired-td { background-color: #66FF66; }
 #heartbeat-table tr {  border: solid 5px #FFF; }
 #heartbeat-table td { padding: 0px 10px; }
+.heartbeat-item { margin: 10px 10px; }
 {% endblock %}
 
 {% block content%}
@@ -16,7 +17,7 @@
 {% for installation in installations %}
 	{% if not installation.is_closed %}
 	<tr>
-		<th><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></th>
+		<th><a href="{% url front.views.installation_heartbeats installation.id %}">{{ installation.name }}</a></th>
 		{% with installation.heartbeat_set.all|first as heartbeat %}
 		<td {% if not heartbeat or heartbeat.timed_out %}class="expired-td"{% else %}class="unexpired-td"{% endif %}>
 			{{ heartbeat.created|date:"F j \a\t g:i A" }}
@@ -28,13 +29,10 @@
 </table>
 
 <h2>Stream:</h2>
-<ul>
-{% for heartbeat in heartbeats|slice:":40" %}
-	<li><a href="{{ heartbeat.installation.get_absolute_url }}">{{ heartbeat.installation }}</a>: {{ heartbeat.created|date:"F j \a\t g:i A" }}
-				{% if heartbeat.info %}<p>{{ heartbeat.info }}</p>{% endif %}
-	</li>
+{% for heartbeat in heartbeats|slice:":60" %}
+	{% ifchanged heartbeat.created.day %}<h3>{{ heartbeat.created|date:"F j" }}</h3>{% endifchanged %}
+	{% include "front/heartbeat_item.frag" %}
 {% endfor %}
-</ul>
 
 {% endblock %}
 

@@ -57,6 +57,7 @@
 					{{ heartbeat.created|date:"F j, Y \a\t g:i A" }}
 					{% if heartbeat.info %}<p>{{ heartbeat.info }}</p>{% endif %}
 				{% endwith %}
+				[<a href="{% url front.views.installation_heartbeats installation.id %}">all</a>]
 			</td>
 		</tr>
 		{% endif %}
