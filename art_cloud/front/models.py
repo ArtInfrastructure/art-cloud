@@ -23,6 +23,7 @@ from django.dispatch import dispatcher
 from django.core.mail import send_mail
 from django.utils.encoding import force_unicode
 
+from art_cloud.abstract_models import ThumbnailedModel
 from tagging.models import Tag
 
 class ArtistGroup(models.Model):
@@ -37,25 +38,6 @@ class ArtistGroup(models.Model):
 		return ('art_cloud.front.views.artist_group_detail', (), { 'id':self.id })
 	def __unicode__(self):
 		return self.name
-
-class ThumbnailedModel(models.Model):
-	"""An abstract base class for models with an ImageField named "image" """
-	def thumb(self):
-		if not self.image: return ""
-		import art_cloud.front.templatetags.imagetags as imagetags
-		import art_cloud.imaging as imaging
-		try:
-			file = settings.MEDIA_URL + self.image.path[len(settings.MEDIA_ROOT):]
-			filename, miniature_filename, miniature_dir, miniature_url = imagetags.determine_resized_image_paths(file, "admin_thumb")
-			if not os.path.exists(miniature_dir): os.makedirs(miniature_dir)
-			if not os.path.exists(miniature_filename): imaging.fit_crop(filename, 100, 100, miniature_filename)
-			return """<img src="%s" /></a>""" % miniature_url
-		except:
-			traceback.print_exc()
-			return None
-	thumb.allow_tags = True
-	class Meta:
-		abstract = True
 
 class Photo(ThumbnailedModel):
 	image = models.ImageField(upload_to='photo', blank=False)

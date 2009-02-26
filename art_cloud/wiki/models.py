@@ -16,6 +16,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 
+from art_cloud.abstract_models import ThumbnailedModel
 from templatetags.wikitags import wiki
 
 class WikiPageManager(models.Manager):
@@ -54,3 +55,32 @@ class WikiPageLog(models.Model):
 		return '%s: %s' % (self.wiki_page.name, self.created)
 	class Meta:
 		ordering = ('-created',)
+
+class WikiFile(models.Model):
+	file = models.FileField(upload_to='wiki_file', blank=False)
+	wiki_page = models.ForeignKey(WikiPage, blank=False, null=False)
+	title = models.CharField(max_length=1024, null=False, blank=False)
+	description = models.TextField(blank=True, null=True)
+	created = models.DateTimeField(auto_now_add=True)
+	@models.permalink
+	def get_absolute_url(self):
+		return ('wiki.views.file', (), { 'name':self.wiki_page.name, 'id':self.id })
+	class Meta:
+		ordering = ['-created']
+	def __unicode__(self):
+		return str(self.file)
+
+class WikiPhoto(ThumbnailedModel):
+	image = models.ImageField(upload_to='wiki_photo', blank=False)
+	wiki_page = models.ForeignKey(WikiPage, blank=False, null=False)
+	title = models.CharField(max_length=1024, null=False, blank=False)
+	caption = models.CharField(max_length=1024, null=True, blank=True)
+	description = models.TextField(blank=True, null=True)
+	created = models.DateTimeField(auto_now_add=True)
+	@models.permalink
+	def get_absolute_url(self):
+		return ('wiki.views.photo', (), { 'name':self.wiki_page.name, 'id':self.id })
+	class Meta:
+		ordering = ['-created']
+	def __unicode__(self):
+		return str(self.image)

@@ -1,0 +1,27 @@
+{% extends "wiki/base.html" %}
+
+{% block style %}
+#wiki-file-form, #wiki-photo-form { width: 400px; margin-bottom: 40px; }
+#wiki-file-form input[type=submit], #wiki-photo-form input[type=submit] { float: right; }
+{% endblock %}
+
+{% block content %}
+<h1>Add Files or Photos to <a href="{{ page.get_absolute_url }}">{{ page.name }}</a>:</h1>
+
+<h2>Add a file:</h2>
+<form id="wiki-file-form" enctype="multipart/form-data" action="" method="post">
+	<table>
+	{{ wiki_file_form }}
+	</table>
+	<input type="submit" value="add file" />
+</form>
+
+<h2>Add a photo:</h2>
+<form id="wiki-photo-form" enctype="multipart/form-data" action="" method="post">
+	<table>
+	{{ wiki_photo_form }}
+	</table>
+	<input type="submit" value="add photo" />
+</form>
+
+{% endblock %}

@@ -31,14 +31,47 @@ from forms import *
 @login_required
 def index(request):
 	page = WikiPage.objects.get_or_create(name='SplashPage')
+	print dir(page)
 	return render_to_response('wiki/index.html', { 'wiki_pages':WikiPage.objects.all(), 'page':page }, context_instance=RequestContext(request))
+
+@login_required
+def photo(request, name, id):
+	photo = get_object_or_404(WikiPhoto, wiki_page__name=name, pk=id)
+	return render_to_response('wiki/photo.html', { 'photo':photo }, context_instance=RequestContext(request))
+
+@login_required
+def file(request, name, id):
+	file = get_object_or_404(WikiFile, wiki_page__name=name, pk=id)
+	return render_to_response('wiki/file.html', { 'file':file }, context_instance=RequestContext(request))
 
 @login_required
 def wiki(request, name):
 	page = WikiPage.objects.get_or_create(name=name)
-	if not page.id:
-		return HttpResponseRedirect(page.get_edit_url())
+	if not page.id: return HttpResponseRedirect(page.get_edit_url())
 	return render_to_response('wiki/wiki.html', { 'page':page }, context_instance=RequestContext(request))
+
+@login_required
+def wiki_add(request, name):
+	page = WikiPage.objects.get_or_create(name=name)
+	if request.method == 'POST':
+		wiki_photo_form = WikiPhotoForm(request.POST, request.FILES)
+		wiki_file_form = WikiFileForm(request.POST, request.FILES)
+		if wiki_photo_form.is_valid():
+			photo = wiki_photo_form.save(commit=False)
+			if not page.id: page.save()
+			photo.wiki_page = page
+			photo.save()
+			return HttpResponseRedirect(page.get_absolute_url())
+		elif wiki_file_form.is_valid():
+			file = wiki_file_form.save(commit=False)
+			if not page.id: page.save()
+			file.wiki_page = page
+			file.save()
+			return HttpResponseRedirect(page.get_absolute_url())
+	else:
+		wiki_photo_form = WikiPhotoForm()
+		wiki_file_form = WikiFileForm()
+	return render_to_response('wiki/wiki_add.html', { 'page':page, 'wiki_photo_form':wiki_photo_form, 'wiki_file_form':wiki_file_form }, context_instance=RequestContext(request))
 
 @login_required
 def wiki_history(request, name):

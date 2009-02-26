@@ -1,6 +1,6 @@
-{% extends "art_cloud/base.html" %}
+{% extends "wiki/base.html" %}
 
-{% block style %}
+{% block sub-style %}
 #left-column { 
 	width: 140px; 
 	border-right: solid 1px #DDD;
@@ -15,11 +15,7 @@
 {% block content %}
 <h1>Wiki:</h1>
 <div id="main-column">
-	<div style="float: right;">[<a href="{% url wiki.views.wiki_edit page.name %}?next={% url wiki.views.index %}">edit this page</a>]</div>
-
-	{% if page.rendered %}
-		<div id="rendered-page">{{ page.rendered|safe }}</div>
-	{% endif %}
+	{% with "true" as hide_title %}{% include "wiki/wiki_render.frag" %}{% endwith %}
 </div>
 <div id="left-column">
 	<h4>Page Index:</h4>

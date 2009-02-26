@@ -1,14 +1,5 @@
-{% extends "art_cloud/base.html" %}
+{% extends "wiki/base.html" %}
 
 {% block content %}
-<div style="float: right; margin-top: 10px; ">
-	[<a href="{% url wiki.views.wiki_history page.name %}">page history</a>]
-	[<a href="{% url wiki.views.wiki_edit page.name %}">edit this page</a>]
-</div>
-<h1><a href="{% url wiki.views.index %}">Wiki</a>: {{ page }} </h1>
-
-{% if page.rendered %}
-	<div id="rendered-page">{{ page.rendered|safe }}</div>
-{% endif %}
-
+	{% include "wiki/wiki_render.frag" %}
 {% endblock %}

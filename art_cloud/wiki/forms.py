@@ -9,3 +9,13 @@ class WikiPageForm(forms.ModelForm):
 	class Meta:
 		model = WikiPage
 		fields = ('content',)
+
+class WikiFileForm(forms.ModelForm):
+	class Meta:
+		model = WikiFile
+		fields = ('file','title','description')
+
+class WikiPhotoForm(forms.ModelForm):
+	class Meta:
+		model = WikiPhoto
+		fields = ('image','title','description')

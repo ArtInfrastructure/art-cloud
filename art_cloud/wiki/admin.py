@@ -10,10 +10,18 @@ class StyledModelAdmin(admin.ModelAdmin):
 	class Media:
 		css = { "all": ('art_cloud/admin.css', )}
 
+class WikiFileAdmin(StyledModelAdmin):
+	search_fields = ('file','title','description')
+admin.site.register(WikiFile, WikiFileAdmin)	
+
 class WikiPageAdmin(StyledModelAdmin):
-	pass
+	search_fields = ('name','content')
 admin.site.register(WikiPage, WikiPageAdmin)	
 
+class WikiPhotoAdmin(StyledModelAdmin):
+	search_fields = ('image','title','description')
+admin.site.register(WikiPhoto, WikiPhotoAdmin)	
+
 class WikiPageLogAdmin(StyledModelAdmin):
-	pass
+	search_fields = ('wiki_page__name','content')
 admin.site.register(WikiPageLog, WikiPageLogAdmin)	

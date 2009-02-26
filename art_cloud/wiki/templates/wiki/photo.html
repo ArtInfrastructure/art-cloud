@@ -1,0 +1,34 @@
+{% extends "wiki/base.html" %}
+
+{% load imagetags %}
+{% block content %}
+<h1>Wiki Photo on <a href="{{ photo.wiki_page.get_absolute_url }}">{{ photo.wiki_page.name }}</a>: {{ photo.title }}</h1>
+
+<img style="margin-bottom: 20px; " src="{{ photo.image.url|fit_image:"600x600" }}" />
+
+<table>
+	{% if photo.caption %}
+	<tr>
+		<th>caption:</th>
+		<td>{{ photo.caption }}</td>
+	</tr>
+	{% endif %}
+	{% if photo.description %}
+	<tr>
+		<th>description:</th>
+		<td>{{ photo.description }}</td>
+	</tr>
+	{% endif %}
+	{% if photo.created %}
+	<tr>
+		<th>created:</th>
+		<td>{{ photo.created }}</td>
+	</tr>
+	{% endif %}
+	<tr>
+		<th>original file:</th>
+		<td><a href="{{ photo.image.url }}">{{ photo.image.url }}</a></td>
+	</tr>
+</table>
+
+{% endblock %}
