@@ -31,6 +31,7 @@ class WikiPage(models.Model):
 	objects = WikiPageManager()
 	@models.permalink
 	def get_absolute_url(self):
+		if self.name == "SplashPage": return ('wiki.views.index', [], {})
 		return ('wiki.views.wiki', [], { 'name':self.name })
 	@models.permalink
 	def get_edit_url(self):
