@@ -1,0 +1,10 @@
+{% extends "art_cloud/base.html" %}
+
+{% block content %}
+<h1>Page: {{ page }} [<a href="{% url wiki.views.wiki_edit page.name %}">edit</a>]</h1>
+
+{% if page.rendered %}
+	<div id="rendered-page">{{ page.rendered|safe }}</div>
+{% endif %}
+
+{% endblock %}

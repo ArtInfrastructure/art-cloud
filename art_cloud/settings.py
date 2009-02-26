@@ -68,6 +68,7 @@ INSTALLED_APPS = (
 	'pagination',
 	'tagging',
 	'art_cloud.front',
+	'art_cloud.wiki',
 )
 
 from local_settings import *
