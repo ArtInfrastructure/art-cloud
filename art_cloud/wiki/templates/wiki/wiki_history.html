@@ -1,0 +1,18 @@
+{% extends "art_cloud/base.html" %}
+
+{% block style %}
+.wiki-page-log-item { margin: 10px 10px;}
+{% endblock %}
+
+{% block content %}
+<h1>History: {{ page }}</h1>
+
+{% for log in page.wikipagelog_set.all %}
+{% ifchanged log.created.day %}
+	<h3>{{ log.created|date:"F j"}}:</h3>
+{% endifchanged %}
+<div class="wiki-page-log-item">
+	<a href="{{ log.get_absolute_url }}">{{ log.created|date:"g:i A" }}</a>
+</div>
+{% endfor %}
+{% endblock %}

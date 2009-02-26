@@ -4,6 +4,8 @@ from django.conf import settings
  
 urlpatterns = patterns('',
 	(r'^$', 'wiki.views.index'),
-	('(?P<name>[^/]+)/edit/$' , 'wiki.views.wiki_edit'),
-	('(?P<name>[^/]+)/$', 'wiki.views.wiki'),
+	(r'(?P<name>[^/]+)/history/(?P<id>[^/]+)$' , 'wiki.views.wiki_page_log'),
+	(r'(?P<name>[^/]+)/history/$' , 'wiki.views.wiki_history'),
+	(r'(?P<name>[^/]+)/edit/$' , 'wiki.views.wiki_edit'),
+	(r'(?P<name>[^/]+)/$', 'wiki.views.wiki'),
 )

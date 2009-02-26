@@ -21,6 +21,7 @@
 		{% if request.user.is_authenticated %}
 			<a href="{% url front.views.heartbeats %}">heartbeats</a> |
 			<a href="{% url front.views.tags %}">tags</a> |
+			<a href="{% url wiki.views.index %}">wiki</a> |
 			<a href="{% url django.contrib.auth.views.logout_then_login %}">logout</a>
 		{% endif %}
 	</div>

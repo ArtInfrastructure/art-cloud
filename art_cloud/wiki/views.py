@@ -30,22 +30,29 @@ from forms import *
 
 @login_required
 def index(request):
-	return render_to_response('wiki/index.html', { 'wiki_pages':WikiPage.objects.all() }, context_instance=RequestContext(request))
+	page = WikiPage.objects.get_or_create(name='SplashPage')
+	return render_to_response('wiki/index.html', { 'wiki_pages':WikiPage.objects.all(), 'page':page }, context_instance=RequestContext(request))
 
 @login_required
 def wiki(request, name):
-	try:
-		page = WikiPage.objects.get(name=name)
-	except:
-		page = WikiPage(name=name)
-	return render_to_response('wiki/wiki.html', { 'page':page }, context_instance=RequestContext(request))
+	return render_to_response('wiki/wiki.html', { 'page':WikiPage.objects.get_or_create(name=name) }, context_instance=RequestContext(request))
+
+@login_required
+def wiki_history(request, name):
+	return render_to_response('wiki/wiki_history.html', { 'page':WikiPage.objects.get_or_create(name=name) }, context_instance=RequestContext(request))
+
+@login_required
+def wiki_page_log(request, name, id):
+	page_log = get_object_or_404(WikiPageLog, wiki_page__name=name, pk=id)
+	if request.method == 'POST' and request.POST.get('revert', None):
+		page_log.wiki_page.content = page_log.content
+		page_log.wiki_page.save()
+		return HttpResponseRedirect(page_log.wiki_page.get_absolute_url())
+	return render_to_response('wiki/wiki_page_log.html', { 'page_log':page_log  }, context_instance=RequestContext(request))
 
 @login_required
 def wiki_edit(request, name):
-	try:
-		page = WikiPage.objects.get(name=name)
-	except WikiPage.DoesNotExist:
-		page = WikiPage(name=name)
+	page = WikiPage.objects.get_or_create(name=name)
 	if request.method == 'POST':
 		page_form = WikiPageForm(request.POST, instance=page)
 		if page_form.is_valid():

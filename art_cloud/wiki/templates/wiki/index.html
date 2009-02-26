@@ -1,10 +1,31 @@
 {% extends "art_cloud/base.html" %}
 
+{% block style %}
+#left-column { 
+	width: 120px; 
+	border-right: solid 1px #DDD;
+}
+#main-column {
+	width: 670px;
+	float: right;
+}
+{% endblock %}
+
 {% block content %}
-<h1>Page Index:</h1>
-<ul>
-{% for page in wiki_pages %}
-	<li><a href="{{ page.get_absolute_url }}">{{ page.name }}</a></li>
-{% endfor %}
-</ul>
+<h1>Wiki:</h1>
+<div id="main-column">
+	<div style="float: right;">[<a href="{% url wiki.views.wiki_edit page.name %}?next={% url wiki.views.index %}">edit this page</a>]</div>
+
+	{% if page.rendered %}
+		<div id="rendered-page">{{ page.rendered|safe }}</div>
+	{% endif %}
+</div>
+<div id="left-column">
+	<h4>Page Index:</h4>
+	<ul>
+	{% for page in wiki_pages %}
+		<li><a href="{{ page.get_absolute_url }}">{{ page.name }}</a></li>
+	{% endfor %}
+	</ul>
+</div>
 {% endblock %}

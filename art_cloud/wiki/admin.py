@@ -13,3 +13,7 @@ class StyledModelAdmin(admin.ModelAdmin):
 class WikiPageAdmin(StyledModelAdmin):
 	pass
 admin.site.register(WikiPage, WikiPageAdmin)	
+
+class WikiPageLogAdmin(StyledModelAdmin):
+	pass
+admin.site.register(WikiPageLog, WikiPageLogAdmin)	
