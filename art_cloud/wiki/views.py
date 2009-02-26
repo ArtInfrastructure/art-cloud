@@ -35,7 +35,10 @@ def index(request):
 
 @login_required
 def wiki(request, name):
-	return render_to_response('wiki/wiki.html', { 'page':WikiPage.objects.get_or_create(name=name) }, context_instance=RequestContext(request))
+	page = WikiPage.objects.get_or_create(name=name)
+	if not page.id:
+		return HttpResponseRedirect(page.get_edit_url())
+	return render_to_response('wiki/wiki.html', { 'page':page }, context_instance=RequestContext(request))
 
 @login_required
 def wiki_history(request, name):

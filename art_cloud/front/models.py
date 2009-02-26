@@ -128,7 +128,7 @@ class Installation(models.Model):
 	closed = models.DateTimeField(null=True, blank=True)
 	notes = models.TextField(blank=True, null=True)
 	photos = models.ManyToManyField(Photo, null=True, blank=True)
-	
+	wiki_name = models.CharField(max_length=255, blank=True, null=True)
 	objects = InstallationManager()
 
 	def _get_tags(self):

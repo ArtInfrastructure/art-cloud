@@ -74,6 +74,12 @@
 			</td>
 		</tr>
 		{% endif %}
+		{% if installation.wiki_name %}
+		<tr>
+			<th>wiki:</th>
+			<td><a href="{% url wiki.views.wiki installation.wiki_name %}">{{ installation.wiki_name }}</a></td>
+		</tr>
+		{% endif %}
 		{% if installation.photos.all %}
 		<tr>
 			<th>photos:</th>

@@ -31,6 +31,9 @@ class WikiPage(models.Model):
 	@models.permalink
 	def get_absolute_url(self):
 		return ('wiki.views.wiki', [], { 'name':self.name })
+	@models.permalink
+	def get_edit_url(self):
+		return ('wiki.views.wiki_edit', [], { 'name':self.name })
 	def __unicode__(self):
 		return self.name
 	def save(self, *args, **kwargs):
