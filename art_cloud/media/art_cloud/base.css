@@ -28,7 +28,9 @@ blockquote { margin: 15px; font-style: italic; }
 
 ul { margin: 10px 0 10px 0; }
 
-li { list-style: disc; margin: 0 0 10px 15px; }
+li { margin: 0 0 10px 15px; }
+ul li { list-style: disc; }
+ol li { list-style: decimal; }
 
 table, td, tr { text-align: left; }
 th, td { padding-bottom: 5px; vertical-align: top; }

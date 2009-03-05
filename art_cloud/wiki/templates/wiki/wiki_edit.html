@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Edit Page: {{ page }}</h1>
+<h1>Edit Page: <a href="{{ page.get_absolute_url }}">{{ page.name }}</a></h1>
 
 {% if page_form %}
 <form id="page-form" action="" method="post">

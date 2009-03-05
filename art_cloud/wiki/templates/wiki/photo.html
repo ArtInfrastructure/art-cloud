@@ -2,7 +2,7 @@
 
 {% load imagetags %}
 {% block content %}
-<h1>Wiki Photo on <a href="{{ photo.wiki_page.get_absolute_url }}">{{ photo.wiki_page.name }}</a>: {{ photo.title }}</h1>
+<h1>Wiki Photo on <a href="{{ photo.wiki_page.get_absolute_url }}">{{ photo.wiki_page.name }}</a>: {{ photo.display_name }}</h1>
 
 <img style="margin-bottom: 20px; " src="{{ photo.image.url|fit_image:"600x600" }}" />
 

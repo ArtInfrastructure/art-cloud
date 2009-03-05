@@ -18,7 +18,7 @@
 {% for photo in page.wikiphoto_set.all %}
 	<div class="wiki-photo-item">
 		<a href="{{ photo.get_absolute_url }}">
-			<img alt="{{ photo.title }}" title="{{ photo.title }}" src="{{ photo.image.url|fit_image:"150x150" }}" />
+			<img alt="{{ photo.display_name }}" title="{{ photo.display_name }}" src="{{ photo.image.url|fit_image:"150x150" }}" />
 		</a>
 	</div>
 {% endfor %}
@@ -28,6 +28,6 @@
 {% endif %}
 {% for file in page.wikifile_set.all %}
 	<div class="wiki-file-item">
-		<a href="{{ file.file.url }}">{{ file.title }}</a> <span class="wiki-control-link">[<a href="{{ file.get_absolute_url }}">info</a>]</span>
+		<a href="{{ file.file.url }}">{{ file.display_name }}</a> <span class="wiki-control-link">[<a href="{{ file.get_absolute_url }}">info</a>]</span>
 	</div>
 {% endfor %}

@@ -1,5 +1,6 @@
 # Copyright 2009 Trevor F. Smith Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 import os
+import os.path
 import urllib
 import datetime, calendar
 import re
@@ -58,11 +59,14 @@ class WikiPageLog(models.Model):
 		ordering = ('-created',)
 
 class WikiFile(models.Model):
-	file = models.FileField(upload_to='wiki_file', blank=False)
+	file = models.FileField(upload_to='wiki_file', blank=False, null=False)
 	wiki_page = models.ForeignKey(WikiPage, blank=False, null=False)
-	title = models.CharField(max_length=1024, null=False, blank=False)
+	title = models.CharField(max_length=1024, null=True, blank=True)
 	description = models.TextField(blank=True, null=True)
 	created = models.DateTimeField(auto_now_add=True)
+	def display_name(self):
+		if self.title: return self.title
+		return os.path.basename(self.file.name)
 	@models.permalink
 	def get_absolute_url(self):
 		return ('wiki.views.file', (), { 'name':self.wiki_page.name, 'id':self.id })
@@ -74,10 +78,13 @@ class WikiFile(models.Model):
 class WikiPhoto(ThumbnailedModel):
 	image = models.ImageField(upload_to='wiki_photo', blank=False)
 	wiki_page = models.ForeignKey(WikiPage, blank=False, null=False)
-	title = models.CharField(max_length=1024, null=False, blank=False)
+	title = models.CharField(max_length=1024, null=True, blank=True)
 	caption = models.CharField(max_length=1024, null=True, blank=True)
 	description = models.TextField(blank=True, null=True)
 	created = models.DateTimeField(auto_now_add=True)
+	def display_name(self):
+		if self.title: return self.title
+		return os.path.basename(self.image.name)
 	@models.permalink
 	def get_absolute_url(self):
 		return ('wiki.views.photo', (), { 'name':self.wiki_page.name, 'id':self.id })
