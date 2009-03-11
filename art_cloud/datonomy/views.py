@@ -28,12 +28,27 @@ def recent_dates(request):
 	data = serializers.serialize("json", NamedDate.objects.all()[:20])
 	return HttpResponse(data, mimetype="application/json")
 
+@login_required
+def calendar(request):
+	return calendar_by_date(request, year=datetime.datetime.now().year, month=datetime.datetime.now().month)
+
+@login_required
+def calendar_by_date(request, year=datetime.datetime.now().year, month=datetime.datetime.now().month):
+	date = datetime.datetime(day=1, month=int(month), year=int(year))
+	prev_date = date - datetime.timedelta(days=5)
+	prev_date = datetime.datetime(day=1, month=prev_date.month, year=prev_date.year)
+	next_date = date + datetime.timedelta(days=31)
+	next_date = datetime.datetime(day=1, month=next_date.month, year=next_date.year)
+	return render_to_response('datonomy/calendar.html', { 'year':year, 'month':month, 'date':date, 'next_date':next_date, 'prev_date':prev_date }, context_instance=RequestContext(request))
+
+@login_required
 def named_date(request, id):
 	date = get_object_or_404(NamedDate, pk=id)
 	action = request.GET.get('action', None)
 	if action == 'delete': date.delete()
 	return HttpResponseRedirect(date.content_object.get_absolute_url())
 
+@login_required
 def datonomy_js(request):
 	return render_to_response('datonomy/datonomy.js', { 'recent_dates':NamedDate.objects.all()[:20] }, context_instance=RequestContext(request), mimetype="text/javascript")
 
