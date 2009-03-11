@@ -27,7 +27,7 @@ class UserProfileAdmin(StyledModelAdmin):
 admin.site.register(UserProfile, UserProfileAdmin)	
 
 class PhotoAdmin(StyledModelAdmin):
-	list_display = ('title', 'image', 'thumb')
+	list_display = ('display_name', 'image', 'thumb')
 	search_fields = ('title', 'image')
 	pass
 admin.site.register(Photo, PhotoAdmin)	

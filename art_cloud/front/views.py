@@ -25,7 +25,8 @@ from django.template.loader import render_to_string
 from django.utils import feedgenerator
 
 from tagging.models import Tag, TaggedItem
-
+from datonomy.models import NamedDate
+from datonomy.forms import *
 from models import *
 from forms import *
 
@@ -165,12 +166,21 @@ def common_installation_detail(request, installation):
 	if request.method == 'POST':
 		photo_form = PhotoForm(request.POST, request.FILES)
 		tags_form = TagsForm(request.POST)
+		named_date_form = NamedDateForm(request.POST)
 		if photo_form.is_valid():
 			tags_form = TagsForm(tag_default_data)
+			named_date_form = NamedDateForm()
 			photo = photo_form.save()
 			installation.photos.add(photo)
 			installation.save()
+		elif named_date_form.is_valid():
+			tags_form = TagsForm(tag_default_data)
+			photo_form = PhotoForm()
+			date = named_date_form.save(commit=False)
+			date.content_object = installation
+			date.save()
 		elif tags_form.is_valid():
+			named_date_form = NamedDateForm()
 			photo_form = PhotoForm()
 			installation.tags = tags_form.cleaned_data['tags']
 			installation.save()
@@ -178,6 +188,7 @@ def common_installation_detail(request, installation):
 	else:
 		tags_form = TagsForm(tag_default_data)
 		photo_form = PhotoForm()
+		named_date_form = NamedDateForm()
 
-	return render_to_response('front/installation_detail.html', { 'installation':installation, 'tags_form': tags_form, 'photo_form':photo_form }, context_instance=RequestContext(request))
+	return render_to_response('front/installation_detail.html', { 'installation':installation, 'named_date_form':named_date_form, 'tags_form': tags_form, 'photo_form':photo_form }, context_instance=RequestContext(request))
 

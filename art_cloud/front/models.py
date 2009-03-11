@@ -26,6 +26,7 @@ from django.utils.encoding import force_unicode
 
 from art_cloud.abstract_models import ThumbnailedModel
 from tagging.models import Tag
+from datonomy.models import NamedDate
 
 class ArtistGroup(models.Model):
 	"""A group of artists who collectively create installations, perhaps also with individual artists."""
@@ -125,6 +126,9 @@ class Installation(models.Model):
 	def _get_tag_names(self):
 		return " ".join([tag.name for tag in self.tags])
 	tag_names = property(_get_tag_names, _set_tags)
+
+	def named_dates(self):
+		return NamedDate.objects.get_for_object(self)
 
 	def is_opened(self):
 		if self.is_closed(): return False

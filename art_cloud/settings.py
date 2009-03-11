@@ -68,6 +68,7 @@ INSTALLED_APPS = (
 	'pagination',
 	'tagging',
 	'art_cloud.front',
+	'art_cloud.datonomy',
 	'art_cloud.wiki',
 )
 

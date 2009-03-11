@@ -5,10 +5,12 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<title>{% block title %}{{ site.name }}{% endblock %}</title>
 	<link href="/media/art_cloud/base.css" rel="stylesheet" type="text/css" />
+
 	<style type="text/css">
 	#header-links { position: absolute; right: 10px; top: 10px;}
 	{% block style %}{% endblock %}
 	</style>
+	{% block sub-head %}{% endblock %}
 </head>
 <body>{% block body %}
 <div id="header">

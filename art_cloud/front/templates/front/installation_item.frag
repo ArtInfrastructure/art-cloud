@@ -90,5 +90,30 @@
 			</td>
 		</tr>
 		{% endif %}
+		{% if installation.named_dates.all or named_date_form %}
+		<tr>
+			<th>dates:</th>
+			<td>
+				<table class="date-list">
+				{% for date in installation.named_dates.all %}
+					<tr class="hover-tr">
+					<td>{{ date.name }}:</td> <td>{{ date.date|date:"F j, Y" }}</td>
+					<td>{% if named_date_form %}<span class="hover-td">[<a href="." onclick="deleteNamedDate({{ date.id }}); return false;">delete</a>]</span>{% endif %}</td>
+					</tr>
+				{% endfor %}
+				{% if named_date_form %}
+					<tr>
+						<form id="dated_name_form" action="." method="post">
+							{% for field in named_date_form %}
+								<td>{{ field }}</td>
+							{% endfor %}
+							<td>&nbsp;&nbsp;<input type="submit" value="add date" /></td>
+						</form>
+					</tr>
+				{% endif %}
+				</table>
+			</td>
+		</tr>
+		{% endif %}
 	</table>
 </div>

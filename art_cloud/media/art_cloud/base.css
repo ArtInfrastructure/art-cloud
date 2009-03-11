@@ -38,3 +38,10 @@ th { text-align: right; vertical-align: top; padding-right: 8px; }
 
 .even-row { padding: 20px 10px; }
 .odd-row { background-color: #EEE; padding: 10px 10px; }
+
+#recent-dates-pulldown { width: 200px; background-color: #FFF8DC; }
+#recent-dates-pulldown li { line-height: 20px; }
+.date-list input { display: inline; }
+
+.hover-tr .hover-td { visibility: hidden; }
+.hover-tr:hover .hover-td { visibility: visible; }
