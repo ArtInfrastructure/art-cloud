@@ -179,6 +179,19 @@ def common_installation_detail(request, installation):
 			date = named_date_form.save(commit=False)
 			date.content_object = installation
 			date.save()
+			named_date_form = NamedDateForm()
+		elif request.POST.get('recent_dates', None):
+			tags_form = TagsForm(tag_default_data)
+			photo_form = PhotoForm()
+			named_date_form = NamedDateForm()
+			dates = [int(rd) for rd in request.POST.getlist('recent_dates')]
+			for rd in dates:
+				try:
+					recent_date = NamedDate.objects.get(pk=rd)
+					NamedDate(name=recent_date.name, date=recent_date.date, content_object=installation).save()
+				except:
+					logging.error("Tried to add an unknown NamedDate: %s" % rd)
+				
 		elif tags_form.is_valid():
 			named_date_form = NamedDateForm()
 			photo_form = PhotoForm()
