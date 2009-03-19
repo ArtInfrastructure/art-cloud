@@ -511,24 +511,24 @@ class LocaleTextCalendar(TextCalendar):
         self.locale = locale
 
     def formatweekday(self, day, width):
-        with TimeEncoding(self.locale) as encoding:
-            if width >= 9:
-                names = day_name
-            else:
-                names = day_abbr
-            name = names[day]
-            if encoding is not None:
-                name = name.decode(encoding)
-            return name[:width].center(width)
+        encoding = TimeEncoding(self.locale)
+        if width >= 9:
+            names = day_name
+        else:
+            names = day_abbr
+        name = names[day]
+        if encoding is not None:
+            name = name.decode(encoding)
+        return name[:width].center(width)
 
     def formatmonthname(self, theyear, themonth, width, withyear=True):
-        with TimeEncoding(self.locale) as encoding:
-            s = month_name[themonth]
-            if encoding is not None:
-                s = s.decode(encoding)
-            if withyear:
-                s = "%s %r" % (s, theyear)
-            return s.center(width)
+        encoding = TimeEncoding(self.locale)
+        s = month_name[themonth]
+        if encoding is not None:
+            s = s.decode(encoding)
+        if withyear:
+            s = "%s %r" % (s, theyear)
+        return s.center(width)
 
 
 class LocaleHTMLCalendar(HTMLCalendar):
@@ -545,20 +545,20 @@ class LocaleHTMLCalendar(HTMLCalendar):
         self.locale = locale
 
     def formatweekday(self, day):
-        with TimeEncoding(self.locale) as encoding:
-            s = day_abbr[day]
-            if encoding is not None:
-                s = s.decode(encoding)
-            return '<th class="%s">%s</th>' % (self.cssclasses[day], s)
+        encoding = TimeEncoding(self.locale)
+        s = day_abbr[day]
+        if encoding is not None:
+            s = s.decode(encoding)
+        return '<th class="%s">%s</th>' % (self.cssclasses[day], s)
 
     def formatmonthname(self, theyear, themonth, withyear=True):
-        with TimeEncoding(self.locale) as encoding:
-            s = month_name[themonth]
-            if encoding is not None:
-                s = s.decode(encoding)
-            if withyear:
-                s = '%s %s' % (s, theyear)
-            return '<tr><th colspan="7" class="month">%s</th></tr>' % s
+        encoding = TimeEncoding(self.locale)
+        s = month_name[themonth]
+        if encoding is not None:
+            s = s.decode(encoding)
+        if withyear:
+            s = '%s %s' % (s, theyear)
+        return '<tr><th colspan="7" class="month">%s</th></tr>' % s
 
 
 # Support for old module level interface
