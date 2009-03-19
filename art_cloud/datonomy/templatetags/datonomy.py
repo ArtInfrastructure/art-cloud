@@ -3,7 +3,7 @@ import re
 import traceback
 import Image
 import datetime
-from calendar import Calendar
+from art_cloud.calendar import Calendar
 
 from django.template import Library
 from django import template
