@@ -15,6 +15,16 @@
 			<td>{{ profile.phone_number }}</td>
 		</tr>
 		{% endif %}
+		{% ifnotequal profile.collaborators.count 0 %}
+		<tr>
+			<th>collaborators:</th>
+			<td>
+			{% for artist in profile.collaborators %}
+				<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>{% loop_comma %}
+			{% endfor %}
+			</td>
+		</tr>
+		{% endifnotequal %}
 		{% ifnotequal profile.user.artistgroup_set.all.count 0 %}
 		<tr>
 			<th>groups:</th>

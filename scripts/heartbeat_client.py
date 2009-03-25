@@ -2,7 +2,7 @@
 
 # BEFORE RUNNING: Set this to your installation id, as provided by the art technician.
 
-INSTALLATION_ID = 15
+INSTALLATION_ID = 5
 
 # This is a script which will generate a heartbeat call to the art infrastructure.
 # If your piece does not send heartbeats the art technicial will be notified.
@@ -49,10 +49,10 @@ PRODUCTION_HEARTBEAT_URL = "http://%s/heartbeat/?%s=%s" % (PRODUCTION_HOST, INST
 DEBUG_HOST = "127.0.0.1:8000"
 DEBUG_HEARTBEAT_URL = "http://%s/heartbeat/?%s=%s" % (DEBUG_HOST, INSTALLATION_ID_PARAMETER, INSTALLATION_ID)
 
-#HEARTBEAT_URL = PRODUCTION_HEARTBEAT_URL
-#HOST = PRODUCTION_HOST
-HOST = DEBUG_HOST
-HEARTBEAT_URL = DEBUG_HEARTBEAT_URL
+HEARTBEAT_URL = PRODUCTION_HEARTBEAT_URL
+HOST = PRODUCTION_HOST
+#HOST = DEBUG_HOST
+#HEARTBEAT_URL = DEBUG_HEARTBEAT_URL
 
 HEARTBEAT_TIMEOUT = 80 # in seconds
 HEARTBEAT_PERIOD = HEARTBEAT_TIMEOUT / 2

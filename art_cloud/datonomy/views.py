@@ -50,7 +50,7 @@ def named_date(request, id):
 
 @login_required
 def datonomy_js(request):
-	return render_to_response('datonomy/datonomy.js', { 'recent_dates':NamedDate.objects.all()[:20] }, context_instance=RequestContext(request), mimetype="text/javascript")
+	return render_to_response('datonomy/datonomy.js', { 'recent_dates':NamedDate.objects.all()[:10] }, context_instance=RequestContext(request), mimetype="text/javascript")
 
 
 	

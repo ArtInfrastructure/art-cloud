@@ -192,6 +192,7 @@ class UserProfile(models.Model):
 	bio = models.TextField(null=True, blank=True)
 	url = models.URLField(verify_exists=False, null=True, blank=True, max_length=300)
 	phone_number = models.CharField(max_length=20, null=True, blank=True)
+
 	objects = UserProfileManager()
 	
 	@models.permalink
@@ -201,6 +202,13 @@ class UserProfile(models.Model):
 		for group in self.user.groups.all():
 			if group.name == 'artists': return True
 		return False
+	def collaborators(self):
+		group_q = User.objects.filter(artistgroup__artists=self.user)
+		installation_q = User.objects.filter(installation__artists=self.user)
+		installation_groups_q = User.objects.filter(installation__groups__artists=self.user) #TODO I'm not sure why this doesn't return anything
+		print installation_groups_q.all()
+		uber_q = group_q | installation_q | installation_groups_q
+		return uber_q.exclude(id=self.user.id).distinct()
 	def __unicode__(self):
 		return self.user.username
 	class Meta:

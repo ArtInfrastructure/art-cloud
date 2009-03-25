@@ -203,5 +203,5 @@ def common_installation_detail(request, installation):
 		photo_form = PhotoForm()
 		named_date_form = NamedDateForm()
 
-	return render_to_response('front/installation_detail.html', { 'installation':installation, 'named_date_form':named_date_form, 'tags_form': tags_form, 'photo_form':photo_form }, context_instance=RequestContext(request))
+	return render_to_response('front/installation_detail.html', { 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'named_date_form':named_date_form, 'tags_form': tags_form, 'photo_form':photo_form }, context_instance=RequestContext(request))
 

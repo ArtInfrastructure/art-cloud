@@ -10,12 +10,15 @@
 <script type="text/javascript" src="/admin-media/js/admin/RelatedObjectLookups.js"></script>
 <script type="text/javascript" src="/admin-media/js/calendar.js"></script>
 <script type="text/javascript" src="/admin-media/js/admin/DateTimeShortcuts.js"></script>
-
 <script src="{% url datonomy.views.datonomy_js %}" type="text/javascript"></script>
+
 <script type="text/javascript">
 
-function initialize(){
+function showAddNamedDateForm(){ $("#add-named-date").show(); $("#id_name").focus(); }
+function hideAddNamedDateForm(){ $("#add-named-date").hide(); }
 
+function initialize(){
+	$("#add-named-date").hide();
 }
 
 $(document).ready(function() { initialize(); });
@@ -26,6 +29,11 @@ $(document).ready(function() { initialize(); });
 {% block style %}
 h4 { margin-top: 20px; }
 #id_tags { width: 400px; }
+#add-named-date { 
+	position: absolute; left; 20px; 
+	background-color: #FFF; border: solid 2px #DDD;
+	padding: 20px; 
+}
 {% endblock %}
 
 {% block content%}
@@ -33,6 +41,8 @@ h4 { margin-top: 20px; }
 {% with request.user.is_staff as edit_tags %}{% with "true" as hide_title %}{% include "front/installation_item.frag" %}{% endwith %}{% endwith %}
 
 {% if named_date_form %}
+<div id="add-named-date">
+	<div style="position: absolute; right: 5px; top: 5px;">[<a href="." onclick="hideAddNamedDateForm(); return false;">close</a>]</div>
 	<h4>Add a date:</h4>
 	<table>
 	<tr>
@@ -46,8 +56,18 @@ h4 { margin-top: 20px; }
 	</table>
 	<div style="text-align: center; width: 400px;">
 		<b>or</b><br/>
-		[<a href="." onclick="showRecentDatesPopup('id_name'); return false;">choose from recent dates</a>]
+		<h4>Choose a recent date:</h4>
+		<form action="." method="post">
+		<table>
+			{% for recent_date in recent_dates.all|slice:":10" %}
+			<tr><td><input type="checkbox" name="recent_dates" value="{{ recent_date.id }}"/>{{ recent_date.name }} {{ recent_date.date }}</td></tr>
+			{% endfor %}
+			<tr><td><input type="submit" value="add dates" /></td></tr>
+		</table>
+		</form>
+
 	</div>
+</div>
 {% endif %}
 
 <h4>Add a photo:</h4>

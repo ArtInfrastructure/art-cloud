@@ -6,7 +6,10 @@
 
 {% block content%}
 <h1>Location: {{ installation_site.name }}</h1>
-{% with "true" as hide_name %}{% include "front/site_item.frag" %}{% endwith %}
+
+{% for installation in installation_site.installation_set.all %}
+	{% include "front/installation_item.frag" %}	
+{% endfor %}
 
 <h4>Add a photo:</h4>
 <table>
