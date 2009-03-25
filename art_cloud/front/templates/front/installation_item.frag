@@ -97,7 +97,7 @@
 				<table class="date-list">
 				{% for date in installation.named_dates.all %}
 					<tr class="hover-tr {% cycle 'even-row' 'odd-row' %}">
-					<td>{{ date.name }}:</td> <td>{{ date.date|date:"F j, Y" }}</td>
+					<td>{{ date.name }} / {{ date.date|date:"Y-m-j" }}</td>
 					<td>{% if named_date_form %}<span class="hover-td">[<a href="." onclick="deleteNamedDate({{ date.id }}); return false;">delete</a>]</span>{% endif %}</td>
 					</tr>
 				{% endfor %}

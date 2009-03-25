@@ -60,7 +60,7 @@ h4 { margin-top: 20px; }
 		<form action="." method="post">
 		<table>
 			{% for recent_date in recent_dates.all|slice:":10" %}
-			<tr><td><input type="checkbox" name="recent_dates" value="{{ recent_date.id }}"/>{{ recent_date.name }} {{ recent_date.date }}</td></tr>
+			<tr><td><input type="checkbox" name="recent_dates" value="{{ recent_date.id }}"/>{{ recent_date.name }} / {{ recent_date.date }}</td></tr>
 			{% endfor %}
 			<tr><td><input type="submit" value="add dates" /></td></tr>
 		</table>
