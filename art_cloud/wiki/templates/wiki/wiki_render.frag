@@ -9,20 +9,6 @@
 	<div class="rendered-page">{{ page.rendered|safe }}</div>
 {% endif %}
 
-<div class="wiki-control-links">[<a href="{% url wiki.views.wiki_add page.name %}">add file or photo</a>]</div>
-
-
-{% if page.wikiphoto_set.all %}
-<h3>Photos:</h3>
-{% endif %}
-{% for photo in page.wikiphoto_set.all %}
-	<div class="wiki-photo-item">
-		<a href="{{ photo.get_absolute_url }}">
-			<img alt="{{ photo.display_name }}" title="{{ photo.display_name }}" src="{{ photo.image.url|fit_image:"150x150" }}" />
-		</a>
-	</div>
-{% endfor %}
-
 {% if page.wikifile_set.all %}
 <h3>Files:</h3>
 {% endif %}

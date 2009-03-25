@@ -10,5 +10,7 @@ urlpatterns = patterns('',
 	(r'(?P<name>[^/]+)/file/(?P<id>[\d]+)/$' , 'wiki.views.file'),
 	(r'(?P<name>[^/]+)/add/$' , 'wiki.views.wiki_add'),
 	(r'(?P<name>[^/]+)/edit/$' , 'wiki.views.wiki_edit'),
+	(r'photo/(?P<id>[\d]+)/$' , 'wiki.views.photo_redirect'),
+	(r'photo-detail/(?P<id>[\d]+)/$' , 'wiki.views.photo_detail_redirect'),
 	(r'(?P<name>[^/]+)/$', 'wiki.views.wiki'),
 )

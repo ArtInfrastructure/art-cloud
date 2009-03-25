@@ -35,6 +35,16 @@ def index(request):
 	return render_to_response('wiki/index.html', { 'wiki_pages':WikiPage.objects.all(), 'page':page }, context_instance=RequestContext(request))
 
 @login_required
+def photo_redirect(request, id):
+	photo = get_object_or_404(WikiPhoto, pk=id)
+	return HttpResponseRedirect(photo.image.url)
+
+@login_required
+def photo_detail_redirect(request, id):
+	photo = get_object_or_404(WikiPhoto, pk=id)
+	return HttpResponseRedirect(photo.get_absolute_url())
+
+@login_required
 def photo(request, name, id):
 	photo = get_object_or_404(WikiPhoto, wiki_page__name=name, pk=id)
 	return render_to_response('wiki/photo.html', { 'photo':photo }, context_instance=RequestContext(request))
@@ -61,13 +71,15 @@ def wiki_add(request, name):
 			if not page.id: page.save()
 			photo.wiki_page = page
 			photo.save()
-			return HttpResponseRedirect(page.get_absolute_url())
+			page.content = "%s\n\nPhoto%s" % (page.content, photo.id)
+			page.save()
+			return HttpResponseRedirect(page.get_edit_url())
 		elif wiki_file_form.is_valid():
 			file = wiki_file_form.save(commit=False)
 			if not page.id: page.save()
 			file.wiki_page = page
 			file.save()
-			return HttpResponseRedirect(page.get_absolute_url())
+			return HttpResponseRedirect(page.get_edit_url())
 	else:
 		wiki_photo_form = WikiPhotoForm()
 		wiki_file_form = WikiFileForm()

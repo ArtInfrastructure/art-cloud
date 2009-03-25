@@ -69,7 +69,7 @@
 				<a href="{% url front.views.tag tag.name %}">{{ tag.name }}</a>{% loop_comma %}
 				{% endfor %}
 				{% if edit_tags and tags_form %}
-				<form action="." method="post">{% for field in tags_form %}{{ field }}{% endfor %}</form>
+				<form id="tag-form" action="." method="post">{% for field in tags_form %}{{ field }}{% endfor %} <input type="submit" value="save tags"/></form>
 				{% endif %}
 			</td>
 		</tr>
