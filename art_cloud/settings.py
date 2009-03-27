@@ -3,7 +3,7 @@
 HEARTBEAT_TIMEOUT = 10 # in seconds
 
 ADMINS = (
-    ('GORBET + BANERJEE (http://www.gorbetbanerjee.com/)', 'trevor@trevor.smith.name'),
+    ('Trevor F. Smith', 'trevor@trevor.smith.name'),
 )
 
 MANAGERS = ADMINS

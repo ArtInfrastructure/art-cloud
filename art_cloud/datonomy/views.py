@@ -21,12 +21,36 @@ from django.template.loader import render_to_string
 from django.utils import feedgenerator
 from django.core import serializers
 
+import vobject
+
 from models import *
 
 @login_required
 def recent_dates(request):
 	data = serializers.serialize("json", NamedDate.objects.all()[:20])
 	return HttpResponse(data, mimetype="application/json")
+
+def ical(request):
+	cal = vobject.iCalendar()
+	cal.add('METHOD').value = 'PUBLISH'
+	cal.add('X-WR-CALNAME').value = '%s Calendar' % Site.objects.get_current().name
+	for named_date in NamedDate.objects.all():
+		vevent = cal.add('vevent')
+		vevent.add('uid').value = 'named-date-%s' % named_date.id
+		vevent.add('summary').value = "%s: %s" % (named_date.content_object, named_date.name)
+		vevent.add('description').value = ''
+		vevent.add('location').value = ''
+		vevent.add('class').value = 'PUBLIC'
+		vevent.add('status').value = 'CONFIRMED'
+		vevent.add('dtstart').value = datetime.date(named_date.date.year, named_date.date.month, named_date.date.day)
+		vevent.add('dtend').value = datetime.date(named_date.date.year, named_date.date.month, named_date.date.day)
+	if request.GET.get('test', None):
+		response = HttpResponse(cal.serialize(), mimetype='text/plain')
+	else:
+		response = HttpResponse(cal.serialize(), mimetype='text/calendar')
+		response['Filename'] = 'filename.ics'  # IE needs this
+		response['Content-Disposition'] = 'attachment; filename=filename.ics'
+	return response
 
 @login_required
 def calendar(request):

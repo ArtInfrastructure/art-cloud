@@ -6,6 +6,7 @@ urlpatterns = patterns('',
 	(r'^date/(?P<id>[\d]+)/$', 'datonomy.views.named_date'),
 	(r'^date/recent/$', 'datonomy.views.recent_dates'),
 	(r'^calendar/$', 'datonomy.views.calendar'),
+	(r'^ical/$', 'datonomy.views.ical'),
 	(r'^calendar/(\d{4})/([\d]+)/$', 'datonomy.views.calendar_by_date'),
 	(r'^datonomy.js$', 'datonomy.views.datonomy_js'),
 )
