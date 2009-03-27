@@ -1,5 +1,7 @@
 {% extends "wiki/base.html" %}
 
+{% block sub-title %}{{ photo.display_name }} | {% endblock %}
+
 {% load imagetags %}
 {% block content %}
 <h1>Wiki Photo on <a href="{{ photo.wiki_page.get_absolute_url }}">{{ photo.wiki_page.name }}</a>: {{ photo.display_name }}</h1>

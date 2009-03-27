@@ -2,6 +2,9 @@
 {% load imagetags %}
 {% load listtags %}
 
+{% block sub-title %}{{ profile.display_name }} | {% endblock %}
+
+
 {% block content%}
 <h1>Artist: {{ profile.display_name }}</h1>
 {% with "true" as hide_name %}{% include "front/artist_item.frag" %}{% endwith %}

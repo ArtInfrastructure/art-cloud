@@ -1,5 +1,8 @@
 {% extends "wiki/base.html" %}
 {% load wikitags %}
+
+{% block sub-title %}Snapshot {{ page_log.created|date:"F j, g:i A"}} | {{ page_log.wiki_page.name }} | {% endblock %}
+
 {% block style %}
 #id_content { width: 100%; height: 400px; }
 {% endblock %}

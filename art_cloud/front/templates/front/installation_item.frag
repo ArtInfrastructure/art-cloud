@@ -3,6 +3,10 @@
 <div class="installation-item {% cycle 'even-row' 'odd-row' %}">
 	{% if not hide_title %}<h3><a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a></h3>{% endif %}
 	<table>
+		<tr>
+			<th>id number:</th>
+			<td>{{ installation.id }}</td>
+		</tr>
 		{% if installation.artists.all or installation.groups.all %}
 		<tr>
 			<th>artists:</th>

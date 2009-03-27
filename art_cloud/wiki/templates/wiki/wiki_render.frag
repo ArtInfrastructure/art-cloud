@@ -3,7 +3,7 @@
 	[<a href="{% url wiki.views.wiki_history page.name %}">page history</a>]
 	[<a href="{% url wiki.views.wiki_edit page.name %}">edit this page</a>]
 </div>
-{% if not hide_title %}<h1><a href="{% url wiki.views.index %}">Wiki</a>: {{ page }} </h1>{% endif %}
+{% if not hide_title %}<h1><a href="{% url wiki.views.index %}">Wiki</a>: {{ page.name }} </h1>{% endif %}
 
 {% if page.rendered %}
 	<div class="rendered-page">{{ page.rendered|safe }}</div>

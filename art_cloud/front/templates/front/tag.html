@@ -1,6 +1,8 @@
 {% extends "art_cloud/base.html" %}
 {% load imagetags %}
 
+{% block sub-title %}{{ tag.name }} | {% endblock %}
+
 {% block content%}
 <h1>Tag: {{ tag.name }}</h1>
 
