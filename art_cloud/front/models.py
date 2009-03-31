@@ -28,11 +28,22 @@ from art_cloud.abstract_models import ThumbnailedModel
 from tagging.models import Tag
 from datonomy.models import NamedDate
 
+class ArtistGroupManager(models.Manager):
+	def search(self, search_string):
+		terms = normalize_search_string(search_string)
+		if len(terms) == 0: return None;
+		name_query = ArtistGroup.objects.filter(name__icontains=terms[0])
+		for term in terms[1:]:
+			name_query = name_query & ArtistGroup.objects.filter(name__icontains=term)
+		search_query = name_query
+		return search_query.order_by('name')
+
 class ArtistGroup(models.Model):
 	"""A group of artists who collectively create installations, perhaps also with individual artists."""
 	name = models.CharField(max_length=1024, blank=False, null=False)
 	artists = models.ManyToManyField(User, blank=False, null=False)
 	url = models.URLField(verify_exists=False, blank=True, null=True, max_length=1024)
+	objects = ArtistGroupManager()
 	class Meta:
 		ordering = ['name']
 	@models.permalink
@@ -104,6 +115,14 @@ class InstallationSite(models.Model):
 class InstallationManager(models.Manager):
 	def all_open(self):
 		return self.filter(closed=None) | self.filter(closed__gt=datetime.datetime.now())
+	def search(self, search_string):
+		terms = normalize_search_string(search_string)
+		if len(terms) == 0: return None;
+		name_query = Installation.objects.filter(name__icontains=terms[0])
+		for term in terms[1:]:
+			name_query = name_query & Installation.objects.filter(name__icontains=term)
+		search_query = name_query
+		return search_query.order_by('name')
 
 class Installation(models.Model):
 	name = models.CharField(max_length=1024, null=False, blank=False)
@@ -184,6 +203,14 @@ class UserProfileManager(models.Manager):
 		message = render_to_string('front/email/tech_notification.txt', { 'message': message_text })
 		for user in User.objects.filter(groups__name="technicians"):
 			user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+	def search(self, search_string):
+		terms = normalize_search_string(search_string)
+		if len(terms) == 0: return None;
+		name_query = UserProfile.objects.filter(display_name__icontains=terms[0]) 
+		for term in terms[1:]:
+			name_query = name_query & UserProfile.objects.filter(display_name__icontains=term)
+		search_query = name_query
+		return search_query.order_by('display_name')
 
 class UserProfile(models.Model):
 	"""Extends the django.contrib.auth User model"""
@@ -194,7 +221,7 @@ class UserProfile(models.Model):
 	phone_number = models.CharField(max_length=20, null=True, blank=True)
 
 	objects = UserProfileManager()
-	
+
 	@models.permalink
 	def get_absolute_url(self):
 		return ('art_cloud.front.views.profile_detail', (), { 'username':urllib.quote(self.user.username) })
@@ -223,3 +250,6 @@ def user_post_save(sender, instance, signal, *args, **kwargs):
 		profile.display_name = instance.username
 		profile.save()
 signals.post_save.connect(user_post_save, sender=User)
+
+def normalize_search_string(search_string):
+	return search_string.split()

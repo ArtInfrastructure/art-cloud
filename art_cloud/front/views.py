@@ -52,6 +52,21 @@ def common_slice(request, template):
 													}, context_instance=RequestContext(request))
 
 @login_required
+def search(request):
+	installation_results = None
+	artist_results = None
+	artist_group_results = None
+	if request.method == 'POST':
+		search_form = SearchForm(request.POST)
+		if search_form.is_valid():
+			installation_results = Installation.objects.search(search_form.cleaned_data['terms'])
+			artist_results = UserProfile.objects.search(search_form.cleaned_data['terms'])
+			artist_group_results = ArtistGroup.objects.search(search_form.cleaned_data['terms'])
+	else:
+		search_form = SearchForm()
+	return render_to_response('front/search.html', { 'artist_group_results': artist_group_results, 'artist_results': artist_results, 'installation_results':installation_results, 'search_form': search_form }, context_instance=RequestContext(request))
+
+@login_required
 def tags(request):
 	return render_to_response('front/tags.html', { }, context_instance=RequestContext(request))
 

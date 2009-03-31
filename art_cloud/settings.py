@@ -51,6 +51,7 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.media',
     'django.core.context_processors.request',
 	'art_cloud.context_processors.site',
+	'art_cloud.context_processors.search',
 )
 
 ROOT_URLCONF = 'urls'

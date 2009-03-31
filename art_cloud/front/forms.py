@@ -5,6 +5,9 @@ from django.utils.html import strip_tags
 
 from models import *
 
+class SearchForm(forms.Form):
+	terms = forms.CharField(required=True)
+
 class UserProfileForm(forms.ModelForm):
 	class Meta:
 		model = UserProfile

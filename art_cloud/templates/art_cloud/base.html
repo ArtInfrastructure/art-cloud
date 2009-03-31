@@ -6,9 +6,10 @@
 	<title>{% block title %}{% block sub-title %}{% endblock %}{{ site.name }}{% endblock %}</title>
 	<link href="/media/art_cloud/base.css" rel="stylesheet" type="text/css" />
 	<script type="text/javascript" src="/media/art_cloud/jquery.js"></script>
+	<script type="text/javascript" src="/media/art_cloud/base.js"></script>
 
 	<style type="text/css">
-	#header-links { position: absolute; right: 10px; top: 10px;}
+	#header-links { position: absolute; right: 10px; top: 10px; z-index: 3;}
 	{% block style %}{% endblock %}
 	</style>
 	{% block sub-head %}{% endblock %}
@@ -29,8 +30,14 @@
 			<a href="{% url datonomy.views.calendar %}">calendar</a> |
 			<a href="{% url front.views.tags %}">tags</a> |
 			<a href="{% url wiki.views.index %}">wiki</a> |
+			<a href="." onclick="$('#search-form').toggle(); return false;">search</a> |
 			<a href="{% url django.contrib.auth.views.logout_then_login %}">logout</a>
 		{% endif %}
+		<br />
+		<form id="search-form" action="{% url front.views.search %}" method="post">
+			{% for field in search_form %}{{ field }}{% endfor %}
+			<input type="submit" value="search" />
+		</form>
 	</div>
 {% endblock %}
 </div>

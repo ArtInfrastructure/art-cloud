@@ -4,33 +4,7 @@
 
 {% block content%}
 <h1>Group: {{ artist_group.name }}</h1>
-<table>
-	<tr>
-		<th>members:</th>
-		<td>
-			{% for artist in artist_group.artists.all %}<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>{% loop_comma %}{% endfor %}
-		</td>
-	</tr>
-	{% if artist_group.url %}
-	<tr>
-		<th>url:</th>
-		<td>
-			<a href="{{ artist_group.url }}">{{ artist_group.url }}</a>
-		</td>
-	</tr>
-	{% endif %}
-	{% if artist_group.installation_set.all %}
-	<tr>
-		<th>artwork:</th>
-		<td>
-			{% for installation in artist_group.installation_set.all %}
-			<a href="{{ installation.get_absolute_url }}">{{ installation.name }}</a>{% loop_comma %}
-			{% endfor %}
-		</td>
-	</tr>
-	{% endif %}
-</table>
-
+{% with "true" as hide_title %}{% include "front/artist_group_item.frag" %}{% endwith %}
 {% endblock %}
 
 /* Copyright 2009 GORBET + BANERJEE (http://www.gorbetbanerjee.com/) Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */

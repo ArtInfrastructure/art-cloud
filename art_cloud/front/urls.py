@@ -19,6 +19,7 @@ urlpatterns = patterns('',
 	(r'^accounts/profile/$', 'django.views.generic.simple.redirect_to', {'url': '/'}),
 	(r'^heartbeat/$', 'art_cloud.front.views.heartbeats'),
 	(r'^group/(?P<id>[\d]+)$', 'art_cloud.front.views.artist_group_detail'),
+	(r'^search/$', 'art_cloud.front.views.search'),
 
 	(r'^installation-slice/$', 'art_cloud.front.views.installation_slice'),
 	(r'^artist-slice/$', 'art_cloud.front.views.artist_slice'),
