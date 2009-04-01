@@ -9,19 +9,17 @@
 		</tr>
 		{% if installation.artists.all or installation.groups.all %}
 		<tr>
-			<th>artists:</th>
+			<th>artist{{ installation.collaborators|pluralize }}:</th>
 			<td>
-				{% for artist in installation.artists.all %}
-					<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>{% loop_comma %}{% endfor %}{% ifnotequal installation.artists.all.count 0 %}{% ifnotequal installation.groups.all.count 0 %},{%endifnotequal%}{%endifnotequal%}
-				{% for artist_group in installation.groups.all %}
-					{% for artist in artist_group.artists.all %}<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>{% loop_comma %}{% endfor %}
+				{% for artist in installation.collaborators %}
+					<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>{% loop_comma %}
 				{% endfor %}
 			</td>
 		</tr>
 		{% endif %}
 		{% ifnotequal installation.groups.all.count 0 %}
 		<tr>
-			<th>groups:</th>
+			<th>group{{ installation.groups.all|pluralize }}:</th>
 			<td>
 				{% for artist_group in installation.groups.all %}
 						<a href="{{ artist_group.get_absolute_url }}">{{ artist_group }}</a>{% loop_comma %}
@@ -67,7 +65,7 @@
 		{% endif %}
 		{% if installation.tags or edit_tags %}
 		<tr>
-			<th>tags:</th>
+			<th>tag{{ installation.tags|pluralize }}:</th>
 			<td>
 				<div id="tag-list">
 					{% for tag in installation.tags %}
@@ -91,7 +89,7 @@
 		{% endif %}
 		{% if installation.photos.all %}
 		<tr>
-			<th>photos:</th>
+			<th>photo{{ installation.photos.all|pluralize }}:</th>
 			<td>
 				{% for photo in installation.photos.all %}
 					<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.image.url|fit_image:"50x50" }}" /></a>
@@ -101,7 +99,7 @@
 		{% endif %}
 		{% if installation.named_dates.all %}
 		<tr>
-			<th>dates:</th>
+			<th>date{{ installation.named_dates.all|pluralize }}:</th>
 			<td>
 				<table class="date-list">
 				{% for date in installation.named_dates.all %}

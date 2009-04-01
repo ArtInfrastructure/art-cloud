@@ -37,7 +37,7 @@
 		{% endif %}
 		{% if installation_site.photos.all %}
 		<tr>
-			<th>images:</th>
+			<th>image{{ installation_site.photos.all|pluralize }}:</th>
 			<td>
 				{% for photo in installation_site.photos.all %}
 					<a href="{{ photo.get_absolute_url }}"><img alt="{{ photo.title }}" title="{{ photo.title }}" src="{{ photo.image.url|fit_image:"150x150" }}" /></a>

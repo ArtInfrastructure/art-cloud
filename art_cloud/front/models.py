@@ -23,6 +23,7 @@ from django.contrib.sites.models import Site
 from django.dispatch import dispatcher
 from django.core.mail import send_mail
 from django.utils.encoding import force_unicode
+from django.db.models import Q
 
 from art_cloud.abstract_models import ThumbnailedModel
 from tagging.models import Tag
@@ -146,6 +147,10 @@ class Installation(models.Model):
 		return " ".join([tag.name for tag in self.tags])
 	tag_names = property(_get_tag_names, _set_tags)
 
+	def collaborators(self):
+		q = User.objects.filter(installation=self) | User.objects.filter(artistgroup__installation=self)
+		return q.distinct().order_by('username')
+		
 	def named_dates(self):
 		return NamedDate.objects.get_for_object(self)
 
@@ -230,12 +235,17 @@ class UserProfile(models.Model):
 			if group.name == 'artists': return True
 		return False
 	def collaborators(self):
-		group_q = User.objects.filter(artistgroup__artists=self.user)
-		installation_q = User.objects.filter(installation__artists=self.user)
-		installation_groups_q = User.objects.filter(installation__groups__artists=self.user) #TODO I'm not sure why this doesn't return anything
-		print installation_groups_q.all()
-		uber_q = group_q | installation_q | installation_groups_q
-		return uber_q.exclude(id=self.user.id).distinct()
+		group_q = Q(artistgroup__artists=self.user)
+		installation_q = Q(installation__artists=self.user)
+		groups = ArtistGroup.objects.filter(installation__in=self.user.installation_set.all())
+		installation_groups_q = Q(artistgroup__in=groups)
+		installations = Installation.objects.filter(groups__artists=self.user)
+		group_installations_q = Q(installation__in=installations)
+
+
+		uber_q = User.objects.filter(group_q | group_installations_q | installation_q | installation_groups_q)
+		print 'uber: %s' % uber_q.all()
+		return uber_q.exclude(id=self.user.id).distinct().order_by('username')
 	def __unicode__(self):
 		return self.user.username
 	class Meta:

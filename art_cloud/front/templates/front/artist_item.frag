@@ -17,7 +17,7 @@
 		{% endif %}
 		{% ifnotequal profile.collaborators.count 0 %}
 		<tr>
-			<th>collaborators:</th>
+			<th>collaborator{{ profile.collaborators|pluralize }}:</th>
 			<td>
 			{% for artist in profile.collaborators %}
 				<a href="{{ artist.get_profile.get_absolute_url }}">{{ artist.get_profile.display_name }}</a>{% loop_comma %}
@@ -27,7 +27,7 @@
 		{% endifnotequal %}
 		{% ifnotequal profile.user.artistgroup_set.all.count 0 %}
 		<tr>
-			<th>groups:</th>
+			<th>group{{ profile.user.artistgroup_set.all|pluralize }}:</th>
 			<td>
 				{% for artist_group in profile.user.artistgroup_set.all %}
 					<a href="{{ artist_group.get_absolute_url }}">{{ artist_group }}</a>{% loop_comma %}
