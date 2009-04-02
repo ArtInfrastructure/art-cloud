@@ -4,13 +4,25 @@
 
 {% block sub-title %}{{ profile.display_name }} | {% endblock %}
 
+{% block sub-head %}
+<script type="text/javascript">
+function init(){
+	$("#profile-edit-widget").hide();
+}
+$(document).ready(function() { init(); });
+</script>
+{% endblock %}
+
+{% block style %}
+#profile-edit-widget { border: solid 2px #DDD; position: absolute; background-color: #FFF; padding: 10px; }
+{% endblock %}
 
 {% block content%}
 <h1>Artist: {{ profile.display_name }}</h1>
-{% with "true" as hide_name %}{% include "front/artist_item.frag" %}{% endwith %}
-
 {% if request.user.is_staff %}
-<h2>Edit:</h2>
+<div id="profile-edit-widget">
+	<div style="float: right">[<a href="." onclick="$('#profile-edit-widget').hide(); return false;">close</a>]</div>
+	<h2>Edit profile:</h2>
 	<form method="post">
 		<table>
 		{{ user_form }}
@@ -19,7 +31,12 @@
 		</table>
 		<input type="submit" value="update profile" />
 	</form>
+</div>
+[<a href="." onclick="$('#profile-edit-widget').show(); return false;">edit user info</a>]
 {% endif %}
+
+{% with "true" as hide_name %}{% include "front/artist_item.frag" %}{% endwith %}
+
 
 {% endblock %}
 

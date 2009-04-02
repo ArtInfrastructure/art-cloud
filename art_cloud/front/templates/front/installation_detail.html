@@ -19,7 +19,6 @@ function showAddNamedDateForm(){ $("#add-named-date").show(); $("#id_name").focu
 function hideAddNamedDateForm(){ $("#add-named-date").hide(); }
 
 function initialize(){
-	$("#add-named-date").hide();
 	$("#tag-form").hide();
 }
 
@@ -41,44 +40,6 @@ h4 { margin-top: 20px; }
 {% block content%}
 <h1>Artwork: {{ installation.name }}</h1>
 {% with request.user.is_staff as edit_tags %}{% with "true" as hide_title %}{% include "front/installation_item.frag" %}{% endwith %}{% endwith %}
-
-{% if can_edit_dates %}
-<div id="add-named-date">
-	<div style="position: absolute; right: 5px; top: 5px;">[<a href="." onclick="hideAddNamedDateForm(); return false;">close</a>]</div>
-	<h4>Add a date:</h4>
-	<table>
-	<tr>
-		<form id="dated_name_form" action="." method="post">
-			{% for field in named_date_form %}
-				<td>{{ field }}</td>
-			{% endfor %}
-			<td>&nbsp;&nbsp;<input type="submit" value="add date" /></td>
-		</form>
-	</tr>
-	</table>
-	<div style="text-align: center; width: 400px;">
-		<b>or</b><br/>
-		<h4>Choose a recent date:</h4>
-		<form action="." method="post">
-		<table>
-			{% for recent_date in recent_dates.all|slice:":10" %}
-			<tr><td><input type="checkbox" name="recent_dates" value="{{ recent_date.id }}"/>{{ recent_date.name }} / {{ recent_date.date }}</td></tr>
-			{% endfor %}
-			<tr><td><input type="submit" value="add dates" /></td></tr>
-		</table>
-		</form>
-
-	</div>
-</div>
-{% endif %}
-
-<h4>Add a photo:</h4>
-<table>
-<form enctype="multipart/form-data" action='.' method='post'>
-	{{ photo_form }}
-	<tr><th></th><td><input type="submit" value="add photo"></td></tr>
-</form>
-</table>
 
 {% endblock %}
 

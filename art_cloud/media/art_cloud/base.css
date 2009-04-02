@@ -49,6 +49,9 @@ th { text-align: right; vertical-align: top; padding-right: 8px; }
 }
 #recent-dates-popup li { line-height: 20px; }
 #recent-dates-links { position: absolute; top: 10px; right: 10px; }
+
+#add-installation-photo-widget { border: solid 2px #DDD; padding: 10px; position: absolute; background-color: #FFF; }
+
 .date-list input { display: inline; }
 
 .hover-tr td {  padding-right: 20px; }

@@ -5,6 +5,7 @@ recentDates[recentDates.length] = { "name":"{{ date.name}}", "date":"{{ date.dat
 {% endfor %}
 
 function datonomyInitialize(){
+	$("#add-named-date").hide();
 	$(".named-date-edit-form").hide();
 }
 $(document).ready(function() { datonomyInitialize(); });

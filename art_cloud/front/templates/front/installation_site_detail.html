@@ -4,23 +4,50 @@
 
 {% block sub-title %}{{ installation_site.name }} | {% endblock %}
 
+{% block sub-head %}
+<script type="text/javascript">
+function init(){
+	$("#add-site-photo-widget").hide();
+}
+$(document).ready(function() { init(); });
+
+function showAddSitePhotoWidget() {
+	$("#add-site-photo-widget").show();
+}
+function hideAddSitePhotoWidget() {
+	$("#add-site-photo-widget").hide();
+}
+</script>
+{% endblock %}
+
 {% block style %}
+#add-site-photo-widget { border: solid 2px #DDD; position: absolute; background-color: #FFF; padding: 10px; }
 {% endblock %}
 
 {% block content%}
 <h1>Location: {{ installation_site.name }}</h1>
 
+{% for photo in installation_site.photos.all %}
+	<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.image.url|fit_image:"50x50" }}" /></a>
+{% endfor %}
+{% if photo_form %}
+{% if installation_site.photos.all %}<br />{% endif %}
+<div id="add-site-photo-widget">
+	<div style="float: right;">[<a href="." onclick="hideAddSitePhotoWidget(); return false;">close</a>]</div>
+	<table>
+	<form enctype="multipart/form-data" action='.' method='post'>
+		{{ photo_form }}
+		<tr><th></th><td><input type="submit" value="add photo"></td></tr>
+	</form>
+	</table>
+</div>
+[<a href="." onclick="showAddSitePhotoWidget(); return false">add a site photo</a>]
+{% endif %}
+
 {% for installation in installation_site.installation_set.all %}
 	{% include "front/installation_item.frag" %}	
 {% endfor %}
 
-<h4>Add a photo:</h4>
-<table>
-<form enctype="multipart/form-data" action='.' method='post'>
-	{{ photo_form }}
-	<tr><th></th><td><input type="submit" value="add photo"></td></tr>
-</form>
-</table>
 {% endblock %}
 
 /* Copyright 2009 GORBET + BANERJEE (http://www.gorbetbanerjee.com/) Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */

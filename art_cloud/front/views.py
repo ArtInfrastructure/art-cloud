@@ -193,13 +193,11 @@ def common_installation_detail(request, installation):
 			photo_form = PhotoForm()
 			pk = named_date_form.cleaned_data['pk']
 			if pk:
-				print 'has it: %s' % named_date_form.cleaned_data['pk']
 				date = NamedDate.objects.get(pk=pk)
 				date.name = named_date_form.cleaned_data['name']
 				date.date = named_date_form.cleaned_data['date']
 				date.save()
 			else:
-				print 'did not have it'
 				date = named_date_form.save(commit=False)
 				date.content_object = installation
 				date.save()
@@ -227,5 +225,5 @@ def common_installation_detail(request, installation):
 		photo_form = PhotoForm()
 		named_date_form = NamedDateForm()
 
-	return render_to_response('front/installation_detail.html', { 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'can_edit_dates':True, 'named_date_form':named_date_form, 'tags_form': tags_form, 'photo_form':photo_form }, context_instance=RequestContext(request))
+	return render_to_response('front/installation_detail.html', { 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'can_edit_dates':True, 'named_date_form':named_date_form, 'tags_form': tags_form, 'installation_photo_form':photo_form }, context_instance=RequestContext(request))
 

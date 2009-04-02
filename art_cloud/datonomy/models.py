@@ -30,7 +30,6 @@ class NamedDate(models.Model):
 	def edit_form(self):
 		from forms import NamedDateForm
 		form = NamedDateForm(instance=self, initial={'pk':self.id})
-		print form
 		return form
 
 	@models.permalink

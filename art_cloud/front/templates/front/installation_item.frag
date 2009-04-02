@@ -87,17 +87,30 @@
 			<td><a href="{% url wiki.views.wiki installation.wiki_name %}">{{ installation.wiki_name }}</a></td>
 		</tr>
 		{% endif %}
-		{% if installation.photos.all %}
+		{% if installation.photos.all or installation_photo_form %}
 		<tr>
 			<th>photo{{ installation.photos.all|pluralize }}:</th>
 			<td>
 				{% for photo in installation.photos.all %}
 					<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.image.url|fit_image:"50x50" }}" /></a>
 				{% endfor %}
+				{% if installation_photo_form %}
+				{% if installation.photos.all %}<br />{% endif %}
+				<div id="add-installation-photo-widget">
+					<div style="float: right;">[<a href="." onclick="hideAddInstallationPhotoWidget(); return false;">close</a>]</div>
+					<table>
+						<form enctype="multipart/form-data" action='.' method='post'>
+							{{ installation_photo_form }}
+							<tr><th></th><td><input type="submit" value="add photo"></td></tr>
+						</form>
+					</table>
+				</div>
+				[<a href="." onclick="showAddInstallationPhotoWidget(); return false;">add</a>]
+				{% endif %}
 			</td>
 		</tr>
 		{% endif %}
-		{% if installation.named_dates.all %}
+		{% if installation.named_dates.all or can_edit_dates %}
 		<tr>
 			<th>date{{ installation.named_dates.all|pluralize }}:</th>
 			<td>
@@ -107,15 +120,17 @@
 						{% include "datonomy/editable_named_date.frag" %}
 					</tr>
 				{% endfor %}
+				{% if can_edit_dates %}
+					<tr>
+						<td>
+							{% include "datonomy/named_date_add_widget.frag" %}
+							[<a href="." onclick="showAddNamedDateForm(); return false;">add</a>]
+
+						</td>
+					</tr>
+				{% endif %}
 				</table>
-			</td>
-		</tr>
-		{% endif %}
-		{% if can_edit_dates %}
-		<tr>
-			<th>&nbsp;</th>
-			<td>
-				<a href="." onclick="showAddNamedDateForm(); return false;">add date</a>
+
 			</td>
 		</tr>
 		{% endif %}
