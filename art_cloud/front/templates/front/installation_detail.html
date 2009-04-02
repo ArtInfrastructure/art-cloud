@@ -12,7 +12,6 @@
 <script type="text/javascript" src="/admin-media/js/admin/RelatedObjectLookups.js"></script>
 <script type="text/javascript" src="/admin-media/js/calendar.js"></script>
 <script type="text/javascript" src="/admin-media/js/admin/DateTimeShortcuts.js"></script>
-<script src="{% url datonomy.views.datonomy_js %}" type="text/javascript"></script>
 
 <script type="text/javascript">
 
@@ -43,7 +42,7 @@ h4 { margin-top: 20px; }
 <h1>Artwork: {{ installation.name }}</h1>
 {% with request.user.is_staff as edit_tags %}{% with "true" as hide_title %}{% include "front/installation_item.frag" %}{% endwith %}{% endwith %}
 
-{% if named_date_form %}
+{% if can_edit_dates %}
 <div id="add-named-date">
 	<div style="position: absolute; right: 5px; top: 5px;">[<a href="." onclick="hideAddNamedDateForm(); return false;">close</a>]</div>
 	<h4>Add a date:</h4>

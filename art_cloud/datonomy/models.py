@@ -27,6 +27,12 @@ class NamedDate(models.Model):
 
 	objects = NamedDateManager()
 
+	def edit_form(self):
+		from forms import NamedDateForm
+		form = NamedDateForm(instance=self, initial={'pk':self.id})
+		print form
+		return form
+
 	@models.permalink
 	def get_absolute_url(self): return ('datonomy.views.named_date', (), { 'id':self.id })
 	class Meta:

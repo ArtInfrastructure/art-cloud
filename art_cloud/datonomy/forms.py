@@ -8,7 +8,8 @@ from models import *
 class NamedDateForm(forms.ModelForm):
 	date = forms.DateField(widget=AdminDateWidget(), initial=datetime.datetime.now().isoformat().split('T')[0])
 	name = forms.CharField(initial='name')
+	pk = forms.CharField(widget=forms.HiddenInput(), required=False)
 	class Meta:
 		model = NamedDate
-		fields = ('name', 'date')
+		fields = ('name', 'date', 'pk')
 

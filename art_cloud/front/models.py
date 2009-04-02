@@ -242,7 +242,6 @@ class UserProfile(models.Model):
 		installations = Installation.objects.filter(groups__artists=self.user)
 		group_installations_q = Q(installation__in=installations)
 
-
 		uber_q = User.objects.filter(group_q | group_installations_q | installation_q | installation_groups_q)
 		print 'uber: %s' % uber_q.all()
 		return uber_q.exclude(id=self.user.id).distinct().order_by('username')

@@ -4,6 +4,18 @@ var recentDates = new Array();
 recentDates[recentDates.length] = { "name":"{{ date.name}}", "date":"{{ date.date }}", "id": "{{ date.id }}" };
 {% endfor %}
 
+function datonomyInitialize(){
+	$(".named-date-edit-form").hide();
+}
+$(document).ready(function() { datonomyInitialize(); });
+
+
+function editNamedDate(namedDateID) {
+	$("#named-date-" + namedDateID).hide();
+	$("#named-date-controls-" + namedDateID).hide();
+	$("#named-date-edit-form-" + namedDateID).show();
+}
+
 function deleteNamedDate(namedDateID) {
 	document.location.href = '/datonomy/date/' + namedDateID + '/?action=delete';
 }

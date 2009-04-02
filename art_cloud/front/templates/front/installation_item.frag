@@ -104,15 +104,14 @@
 				<table class="date-list">
 				{% for date in installation.named_dates.all %}
 					<tr class="hover-tr {% cycle 'even-row' 'odd-row' %}">
-					<td>{{ date.name }} / {{ date.date|date:"Y-m-j" }}</td>
-					<td>{% if named_date_form %}<span class="hover-td">[<a href="." onclick="deleteNamedDate({{ date.id }}); return false;">delete</a>]</span>{% endif %}</td>
+						{% include "datonomy/editable_named_date.frag" %}
 					</tr>
 				{% endfor %}
 				</table>
 			</td>
 		</tr>
 		{% endif %}
-		{% if named_date_form %}
+		{% if can_edit_dates %}
 		<tr>
 			<th>&nbsp;</th>
 			<td>
