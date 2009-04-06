@@ -178,19 +178,23 @@ def installation_detail(request, id):
 	
 def common_installation_detail(request, installation):
 	tag_default_data = {'tags': installation.tag_names }
+	notes_default_date = { 'notes':installation.notes }
 	if request.method == 'POST':
 		photo_form = PhotoForm(request.POST, request.FILES)
 		tags_form = TagsForm(request.POST)
 		named_date_form = NamedDateForm(request.POST)
+		installation_notes_form = InstallationNotesForm(request.POST)
 		if photo_form.is_valid():
 			tags_form = TagsForm(tag_default_data)
 			named_date_form = NamedDateForm()
 			photo = photo_form.save()
+			installation_notes_form = InstallationNotesForm(notes_default_date)
 			installation.photos.add(photo)
 			installation.save()
 		elif named_date_form.is_valid():
 			tags_form = TagsForm(tag_default_data)
 			photo_form = PhotoForm()
+			installation_notes_form = InstallationNotesForm(notes_default_date)
 			pk = named_date_form.cleaned_data['pk']
 			if pk:
 				date = NamedDate.objects.get(pk=pk)
@@ -205,6 +209,7 @@ def common_installation_detail(request, installation):
 		elif request.POST.get('recent_dates', None):
 			tags_form = TagsForm(tag_default_data)
 			photo_form = PhotoForm()
+			installation_notes_form = InstallationNotesForm(notes_default_date)
 			named_date_form = NamedDateForm()
 			dates = [int(rd) for rd in request.POST.getlist('recent_dates')]
 			for rd in dates:
@@ -213,17 +218,24 @@ def common_installation_detail(request, installation):
 					NamedDate(name=recent_date.name, date=recent_date.date, content_object=installation).save()
 				except:
 					logging.error("Tried to add an unknown NamedDate: %s" % rd)
-				
+		elif request.POST.get('installation_form_id', None):
+			tags_form = TagsForm(tag_default_data)
+			photo_form = PhotoForm()
+			named_date_form = NamedDateForm()
+			installation.notes = request.POST.get('notes', None)
+			installation.save()
 		elif tags_form.is_valid():
 			named_date_form = NamedDateForm()
+			installation_notes_form = InstallationNotesForm(notes_default_date)
 			photo_form = PhotoForm()
 			installation.tags = tags_form.cleaned_data['tags']
 			installation.save()
 			tag_form = TagsForm({'tags': installation.tag_names })
 	else:
+		installation_notes_form = InstallationNotesForm(notes_default_date)
 		tags_form = TagsForm(tag_default_data)
 		photo_form = PhotoForm()
 		named_date_form = NamedDateForm()
 
-	return render_to_response('front/installation_detail.html', { 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'can_edit_dates':True, 'named_date_form':named_date_form, 'tags_form': tags_form, 'installation_photo_form':photo_form }, context_instance=RequestContext(request))
+	return render_to_response('front/installation_detail.html', { 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'can_edit_dates':True, 'named_date_form':named_date_form, 'installation_notes_form':installation_notes_form, 'tags_form': tags_form, 'installation_photo_form':photo_form }, context_instance=RequestContext(request))
 

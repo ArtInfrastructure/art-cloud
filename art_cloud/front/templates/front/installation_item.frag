@@ -45,10 +45,25 @@
 			<td>{{ installation.closed|date:"F j, Y \a\t g:i A" }}</td>
 		</tr>
 		{% endif %}
-		{% if installation.notes %}
+		{% if installation.notes or installation_notes_form %}
 		<tr>
 			<th>notes:</th>
-			<td>{{ installation.notes }}</td>
+			<td>
+				<pre class="installation-notes" id="installation-notes-{{ installation.id }}">{{ installation.notes }}</pre>
+				{% if installation_notes_form %}
+				<div class="installation-notes-widget" id="installation-notes-widget-{{ installation.id }}">
+					<div style="float: right;">
+						[<a href="." onclick="$('#installation-notes-widget-{{ installation.id }}').hide(); $('#installation-notes-{{ installation.id }}').show(); return false;">close</a>]
+					</div>
+					<form action="." method="post">
+						{% for field in installation_notes_form %}{{ field}}{% endfor %}
+						<input type="hidden" name="installation_form_id" value="{{ installation.id }}" />
+						<input type="submit" value="save note" />
+					</form>
+				</div>
+				[<a href="." onclick="$('#installation-notes-{{ installation.id }}').hide(); $('#installation-notes-widget-{{ installation.id}}').show(); return false">edit</a>]
+				{% endif %}
+			</td>
 		</tr>
 		{% endif %}
 		{% if installation.heartbeat_set.all %}

@@ -13,6 +13,9 @@ class UserProfileForm(forms.ModelForm):
 		model = UserProfile
 		fields = ('display_name', 'bio', 'url', 'phone_number')
 
+class InstallationNotesForm(forms.Form):
+	notes = forms.CharField(required=False, widget=forms.Textarea())
+
 class UserForm(forms.ModelForm):
 	class Meta:
 		model = User
