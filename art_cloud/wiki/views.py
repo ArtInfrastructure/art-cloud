@@ -66,20 +66,26 @@ def wiki_add(request, name):
 	if request.method == 'POST':
 		wiki_photo_form = WikiPhotoForm(request.POST, request.FILES)
 		wiki_file_form = WikiFileForm(request.POST, request.FILES)
-		if wiki_photo_form.is_valid():
-			photo = wiki_photo_form.save(commit=False)
-			if not page.id: page.save()
-			photo.wiki_page = page
-			photo.save()
-			page.content = "%s\n\nPhoto%s" % (page.content, photo.id)
-			page.save()
-			return HttpResponseRedirect(page.get_edit_url())
-		elif wiki_file_form.is_valid():
-			file = wiki_file_form.save(commit=False)
-			if not page.id: page.save()
-			file.wiki_page = page
-			file.save()
-			return HttpResponseRedirect(page.get_edit_url())
+		if request.POST.get('photo-form', None):
+			wiki_file_form = WikiFileForm()
+			if wiki_photo_form.is_valid():
+				photo = wiki_photo_form.save(commit=False)
+				if not page.id: page.save()
+				photo.wiki_page = page
+				photo.save()
+				page.content = "%s\n\nPhoto%s" % (page.content, photo.id)
+				page.save()
+				return HttpResponseRedirect(page.get_edit_url())
+		elif request.POST.get('file-form', None):
+			wiki_photo_form = WikiPhotoForm()
+			if wiki_file_form.is_valid():
+				file = wiki_file_form.save(commit=False)
+				if not page.id: page.save()
+				file.wiki_page = page
+				file.save()
+				return HttpResponseRedirect(page.get_edit_url())
+		else:
+			print request.POST
 	else:
 		wiki_photo_form = WikiPhotoForm()
 		wiki_file_form = WikiFileForm()

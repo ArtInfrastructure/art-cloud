@@ -6,8 +6,14 @@
 
 {% block sub-head %}
 <script type="text/javascript">
+function hideErrorMessage(){
+	$("#error-message").hide("slide", { direction: "down" }, 1000);
+}
+
 function init(){
 	$("#add-site-photo-widget").hide();
+	$("#error-message").show("slide", { direction: "up" }, 1000);
+	setTimeout("hideErrorMessage();", 5000);
 }
 $(document).ready(function() { init(); });
 
@@ -26,6 +32,10 @@ function hideAddSitePhotoWidget() {
 
 {% block content%}
 <h1>Location: {{ installation_site.name }}</h1>
+
+{% if error_message %}
+<div id="error-message">{{ error_message }}</div>
+{% endif %}
 
 {% for photo in installation_site.photos.all %}
 	<a href="{{ photo.get_absolute_url }}"><img src="{{ photo.image.url|fit_image:"50x50" }}" /></a>

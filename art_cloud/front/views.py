@@ -155,16 +155,23 @@ def equipment_detail(request, id):
 
 @login_required
 def installation_site_detail(request, id):
+	error_message = None
 	site = get_object_or_404(InstallationSite, pk=id)
 	if request.method == 'POST':
 		photo_form = PhotoForm(request.POST, request.FILES)
 		if photo_form.is_valid():
-			photo = photo_form.save()
-			site.photos.add(photo)
-			site.save()
+			try:
+				photo = photo_form.save()
+				site.photos.add(photo)
+				site.save()
+			except:
+				error_message = 'I could not save that photo.'
+		else:
+			error_message = 'I could not read that photo file.'
 	else:
 		photo_form = PhotoForm()
-	return render_to_response('front/installation_site_detail.html', { 'photo_form':photo_form, 'installation_site':site }, context_instance=RequestContext(request))
+	print error_message
+	return render_to_response('front/installation_site_detail.html', { 'error_message':error_message, 'photo_form':photo_form, 'installation_site':site }, context_instance=RequestContext(request))
 
 @login_required
 def installation_detail_slug(request, slug):
