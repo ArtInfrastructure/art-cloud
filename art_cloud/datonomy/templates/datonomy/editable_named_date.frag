@@ -4,6 +4,7 @@
 		{% for field in date.edit_form %}
 			{{ field }}
 		{% endfor %}
+		<input type="hidden" name="named-date-form" value="true" />
 		<input type="submit" value="save" />
 	</form>
 </td>

@@ -8,7 +8,7 @@
 			{% for field in named_date_form %}
 				<td>{{ field }}</td>
 			{% endfor %}
-			<td>&nbsp;&nbsp;<input type="submit" value="add date" /></td>
+			<td><input type="hidden" name="named-date-form" value="true" />&nbsp;&nbsp;<input type="submit" value="add date" /></td>
 		</form>
 	</tr>
 	</table>
@@ -20,7 +20,7 @@
 			{% for recent_date in recent_dates.all|slice:":10" %}
 			<tr><td><input type="checkbox" name="recent_dates" value="{{ recent_date.id }}"/>{{ recent_date.name }} / {{ recent_date.date }}</td></tr>
 			{% endfor %}
-			<tr><td><input type="submit" value="add dates" /></td></tr>
+			<tr><td><input type="hidden" name="named-date-form" value="true" /><input type="submit" value="add dates" /></td></tr>
 		</table>
 		</form>
 

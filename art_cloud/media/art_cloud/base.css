@@ -57,3 +57,5 @@ th { text-align: right; vertical-align: top; padding-right: 8px; }
 .hover-tr td {  padding-right: 20px; }
 .hover-tr .hover-td { visibility: hidden; }
 .hover-tr:hover .hover-td { visibility: visible; }
+
+#error-message { padding: 10px; border: solid 2px #DDD; background-color: #F88; }

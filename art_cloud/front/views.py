@@ -177,6 +177,7 @@ def installation_detail(request, id):
 	return common_installation_detail(request, installation)
 	
 def common_installation_detail(request, installation):
+	error_message = None
 	tag_default_data = {'tags': installation.tag_names }
 	notes_default_date = { 'notes':installation.notes }
 	if request.method == 'POST':
@@ -184,28 +185,15 @@ def common_installation_detail(request, installation):
 		tags_form = TagsForm(request.POST)
 		named_date_form = NamedDateForm(request.POST)
 		installation_notes_form = InstallationNotesForm(request.POST)
-		if photo_form.is_valid():
+		if request.POST.get('photo-form', None):
 			tags_form = TagsForm(tag_default_data)
 			named_date_form = NamedDateForm()
-			photo = photo_form.save()
 			installation_notes_form = InstallationNotesForm(notes_default_date)
-			installation.photos.add(photo)
-			installation.save()
-		elif named_date_form.is_valid():
-			tags_form = TagsForm(tag_default_data)
-			photo_form = PhotoForm()
-			installation_notes_form = InstallationNotesForm(notes_default_date)
-			pk = named_date_form.cleaned_data['pk']
-			if pk:
-				date = NamedDate.objects.get(pk=pk)
-				date.name = named_date_form.cleaned_data['name']
-				date.date = named_date_form.cleaned_data['date']
-				date.save()
-			else:
-				date = named_date_form.save(commit=False)
-				date.content_object = installation
-				date.save()
-			named_date_form = NamedDateForm()
+			if photo_form.is_valid():
+				photo = photo_form.save()
+				installation_notes_form = InstallationNotesForm(notes_default_date)
+				installation.photos.add(photo)
+				installation.save()
 		elif request.POST.get('recent_dates', None):
 			tags_form = TagsForm(tag_default_data)
 			photo_form = PhotoForm()
@@ -217,25 +205,48 @@ def common_installation_detail(request, installation):
 					recent_date = NamedDate.objects.get(pk=rd)
 					NamedDate(name=recent_date.name, date=recent_date.date, content_object=installation).save()
 				except:
+					error_message = 'Could not add that date due to system error.'
 					logging.error("Tried to add an unknown NamedDate: %s" % rd)
+		elif request.POST.get('named-date-form', None):
+			tags_form = TagsForm(tag_default_data)
+			photo_form = PhotoForm()
+			installation_notes_form = InstallationNotesForm(notes_default_date)
+			if named_date_form.is_valid():
+				pk = named_date_form.cleaned_data['pk']
+				if pk:
+					date = NamedDate.objects.get(pk=pk)
+					date.name = named_date_form.cleaned_data['name']
+					date.date = named_date_form.cleaned_data['date']
+					date.save()
+				else:
+					date = named_date_form.save(commit=False)
+					date.content_object = installation
+					date.save()
+				named_date_form = NamedDateForm()
+			else:
+				print request.POST
+				if request.POST.get('id_name', None):
+					error_message = 'Could not parse that date.'
+				else:
+					error_message = 'That date needs a name.'
 		elif request.POST.get('installation_form_id', None):
 			tags_form = TagsForm(tag_default_data)
 			photo_form = PhotoForm()
 			named_date_form = NamedDateForm()
 			installation.notes = request.POST.get('notes', None)
 			installation.save()
-		elif tags_form.is_valid():
+		elif request.POST.get('tag-form', None):
 			named_date_form = NamedDateForm()
 			installation_notes_form = InstallationNotesForm(notes_default_date)
 			photo_form = PhotoForm()
-			installation.tags = tags_form.cleaned_data['tags']
-			installation.save()
-			tag_form = TagsForm({'tags': installation.tag_names })
+			if tags_form.is_valid():
+				installation.tags = tags_form.cleaned_data['tags']
+				installation.save()
+				tag_form = TagsForm({'tags': installation.tag_names })
 	else:
 		installation_notes_form = InstallationNotesForm(notes_default_date)
 		tags_form = TagsForm(tag_default_data)
 		photo_form = PhotoForm()
 		named_date_form = NamedDateForm()
-
-	return render_to_response('front/installation_detail.html', { 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'can_edit_dates':True, 'named_date_form':named_date_form, 'installation_notes_form':installation_notes_form, 'tags_form': tags_form, 'installation_photo_form':photo_form }, context_instance=RequestContext(request))
+	return render_to_response('front/installation_detail.html', { 'error_message':error_message, 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'can_edit_dates':True, 'named_date_form':named_date_form, 'installation_notes_form':installation_notes_form, 'tags_form': tags_form, 'installation_photo_form':photo_form }, context_instance=RequestContext(request))
 

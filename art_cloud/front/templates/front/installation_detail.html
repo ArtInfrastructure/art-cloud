@@ -19,11 +19,17 @@ function showAddNamedDateForm(){ $("#add-named-date").show(); $("#id_name").focu
 function hideAddNamedDateForm(){ $("#add-named-date").hide(); }
 
 function initialize(){
+	$("#error-message").hide();
 	$("#tag-form").hide();
 	$(".installation-notes-widget").hide();
+	$("#error-message").show("slide", { direction: "up" }, 1000);
+	setTimeout("hideErrorMessage();", 5000);
 }
-
 $(document).ready(function() { initialize(); });
+
+function hideErrorMessage(){
+	$("#error-message").hide("slide", { direction: "down" }, 1000);
+}
 
 </script>
 {% endblock %}
@@ -40,6 +46,11 @@ h4 { margin-top: 20px; }
 
 {% block content%}
 <h1>Artwork: {{ installation.name }}</h1>
+
+{% if error_message %}
+<div id="error-message">{{ error_message }}</div>
+{% endif %}
+
 {% with request.user.is_staff as edit_tags %}{% with "true" as hide_title %}{% include "front/installation_item.frag" %}{% endwith %}{% endwith %}
 
 {% endblock %}

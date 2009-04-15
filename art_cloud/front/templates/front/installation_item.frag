@@ -91,7 +91,7 @@
 					{% endif %}
 				</div>
 				{% if edit_tags and tags_form %}
-				<form id="tag-form" action="." method="post">{% for field in tags_form %}{{ field }}{% endfor %} <input type="submit" value="save tags"/></form>
+				<form id="tag-form" action="." method="post">{% for field in tags_form %}{{ field }}{% endfor %} <input type="submit" value="save tags"/><input type="hidden" name="tag-form" value="true" /></form>
 				{% endif %}
 			</td>
 		</tr>
@@ -116,7 +116,7 @@
 					<table>
 						<form enctype="multipart/form-data" action='.' method='post'>
 							{{ installation_photo_form }}
-							<tr><th></th><td><input type="submit" value="add photo"></td></tr>
+							<tr><th></th><td><input type="hidden" name="photo-form" value="true" /><input type="submit" value="add photo"></td></tr>
 						</form>
 					</table>
 				</div>
