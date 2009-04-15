@@ -190,10 +190,15 @@ def common_installation_detail(request, installation):
 			named_date_form = NamedDateForm()
 			installation_notes_form = InstallationNotesForm(notes_default_date)
 			if photo_form.is_valid():
-				photo = photo_form.save()
-				installation_notes_form = InstallationNotesForm(notes_default_date)
-				installation.photos.add(photo)
-				installation.save()
+				try:
+					photo = photo_form.save()
+					installation_notes_form = InstallationNotesForm(notes_default_date)
+					installation.photos.add(photo)
+					installation.save()
+				except:
+					error_message = 'I could not read that photo file.'
+			else:
+				error_message = 'I could not read that photo.'
 		elif request.POST.get('recent_dates', None):
 			tags_form = TagsForm(tag_default_data)
 			photo_form = PhotoForm()
