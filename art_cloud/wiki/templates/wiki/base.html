@@ -2,10 +2,12 @@
 
 {% block style %}
 .wiki-photo-item { display: inline; width: 160px; height: 170px; }
+
 .rendered-page { margin: 20px 0px; border-bottom: solid 1px #DDD; }
-.wiki-control-links { float: right; margin-top: 5px; }
-.wiki-control-link { font-size: 0.8em; }
 .rendered-page em { font-weight: bold; }
 .rendered-page li { margin: 0px 0px 0px 20px; }
+.rendered-page h1, .rendered-page h2, .rendered-page h3, .rendered-page h4, .rendered-page h5 { color: #000; }
+.wiki-control-links { float: right; margin-top: 5px; }
+.wiki-control-link { font-size: 0.8em; }
 {% block sub-style%}{% endblock %}
 {% endblock %}
