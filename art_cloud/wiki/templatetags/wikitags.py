@@ -19,3 +19,22 @@ def wiki(text):
 	text = WIKI_PHOTO_REGEX.sub(r'<a href="%sphoto-detail/\2/"><img src="%sphoto/\2/" width="150" /></a>' % (reverse('wiki.views.index', args=[], kwargs={}), reverse('wiki.views.index', args=[], kwargs={})), text)
 	text = WIKIREGEX.sub(r'<a href="%s\1/">\1</a>' % reverse('wiki.views.index', args=[], kwargs={}), text)
 	return text
+
+@register.filter
+def truncate(value, arg):
+	"""
+	Truncates a string after a given number of chars  
+	Argument: Number of chars to truncate after
+	From: http://www.djangosnippets.org/snippets/163/
+	"""
+	try:
+		length = int(arg)
+	except ValueError: # invalid literal for int()
+		return value # Fail silently.
+	if not isinstance(value, basestring):
+		value = str(value)
+	if (len(value) > length):
+		return value[:length] + "..."
+	else:
+		return value
+
