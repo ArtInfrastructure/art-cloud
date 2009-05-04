@@ -2,7 +2,16 @@
 from django.conf.urls.defaults import *
 from django.conf import settings
 
+from art_cloud.weather import WeatherQuery
+from models import *
+
 urlpatterns = patterns('',
+	(r'^api/weather/$', 'ground.views.podo', { 'podo':WeatherQuery }),
+#	(r'^api/installation/$', 'ground.views.model_list', { 'model':Installation }),
+#	(r'^api/installation/(?P<id>[\d]+)/$', 'ground.views.model', { 'model':Installation }),
+#	(r'^api/installation-site/$', 'ground.views.model_list', { 'model':InstallationSite }),
+#	(r'^api/installation-site/(?P<id>[\d]+)/$', 'ground.views.model', { 'model':InstallationSite }),
+
 	(r'^photo/(?P<id>[\d]+)/$', 'art_cloud.front.views.photo_detail'),
 	(r'^equipment-type/(?P<id>[\d]+)/$', 'art_cloud.front.views.equipment_type_detail'),
 	(r'^equipment/(?P<id>[\d]+)/$', 'art_cloud.front.views.equipment_detail'),

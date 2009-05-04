@@ -24,6 +24,7 @@ from django.dispatch import dispatcher
 from django.core.mail import send_mail
 from django.utils.encoding import force_unicode
 from django.db.models import Q
+from django.db.models.fields.files import ImageFieldFile
 
 from art_cloud.abstract_models import ThumbnailedModel
 from tagging.models import Tag
@@ -50,6 +51,9 @@ class ArtistGroup(models.Model):
 	@models.permalink
 	def get_absolute_url(self):
 		return ('art_cloud.front.views.artist_group_detail', (), { 'id':self.id })
+	class HydrationMeta:
+		attributes = ['id', 'name', 'url']
+		nodes = ['artists']
 	def __unicode__(self):
 		return self.name
 
@@ -67,6 +71,9 @@ class Photo(ThumbnailedModel):
 		return ('art_cloud.front.views.photo_detail', (), { 'id':self.id })
 	class Meta:
 		ordering = ['-created']
+	class HydrationMeta:
+		attributes = ['id', 'title', 'caption', 'created']
+		nodes = ['description', 'image']
 	def __unicode__(self):
 		return str(self.image)
 
@@ -80,6 +87,9 @@ class EquipmentType(models.Model):
 		return ('art_cloud.front.views.equipment_type_detail', (), { 'id':self.id })
 	class Meta:
 		ordering = ['name']
+	class HydrationMeta:
+		attributes = ['id', 'name', 'provider', 'url']
+		nodes = ['notes']
 	def __unicode__(self):
 		return self.name
 
@@ -94,6 +104,9 @@ class Equipment(models.Model):
 	class Meta:
 		verbose_name_plural = 'equipment'
 		ordering = ['name']
+	class HydrationMeta:
+		attributes = ['id', 'name']
+		nodes = ['equipment_type', 'photos', 'notes']
 	def __unicode__(self):
 		return "%s:%s" % (self.equipment_type.name, self.name)
 
@@ -110,6 +123,9 @@ class InstallationSite(models.Model):
 		verbose_name =  'location'
 		verbose_name_plural = 'locations'
 		ordering = ['name']
+	class HydrationMeta:
+		attributes = ['id', 'name', 'location']
+		nodes = ['notes', 'photos', 'equipment']
 	def __unicode__(self):
 		return self.name
 
@@ -174,6 +190,10 @@ class Installation(models.Model):
 		verbose_name =  'artwork'
 		verbose_name_plural = 'works of art'
 		ordering = ['name']
+	class HydrationMeta:
+		attributes = ['id', 'name', 'slug', 'opened', 'closed', 'wiki_name']
+		ref_attributes = ['site']
+		nodes = ['groups', 'artists', 'notes', 'photos']
 	def __unicode__(self):
 		return self.name
 

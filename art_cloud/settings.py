@@ -68,6 +68,7 @@ INSTALLED_APPS = (
 	'django.contrib.admin',
 	'pagination',
 	'tagging',
+	'art_cloud.ground',
 	'art_cloud.front',
 	'art_cloud.datonomy',
 	'art_cloud.wiki',
