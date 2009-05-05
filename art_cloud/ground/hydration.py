@@ -22,6 +22,7 @@ hydration_list_name = 'list'
 #		nodes = ['groups', 'artists', 'notes', 'photos']
 #		element_name = 'fantastico'
 
+
 class HydrationError(Exception): pass
 
 class XMLHydration:
@@ -67,9 +68,16 @@ class XMLHydration:
 		doc = getDOMImplementation().createDocument(None, element_name, None)
 		
 		if not hasattr(source, hydration_meta_name):
-			text = smart_unicode(source)
-			if len(text.strip()) == 0: return None
-			doc.documentElement.appendChild(doc.createTextNode(text))
+			if isinstance(source, DictType):
+				for (key, value) in source.items():
+					value_element = doc.createElement('item')
+					value_element.setAttribute('key', key)
+					value_element.setAttribute('value', value)
+					doc.documentElement.appendChild(value_element)
+			else:
+				text = smart_unicode(source)
+				if len(text.strip()) == 0: return None
+				doc.documentElement.appendChild(doc.createTextNode(text))
 			return doc
 			
 		meta = getattr(source, hydration_meta_name)
