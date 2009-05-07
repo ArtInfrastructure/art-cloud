@@ -1,10 +1,16 @@
-# Django settings for art cloud project.
+import os
 
 HEARTBEAT_TIMEOUT = 10 # in seconds
 
 ADMINS = (
     ('Trevor F. Smith', 'trevor@trevor.smith.name'),
 )
+
+PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
+BACKUP_ROOT = PROJECT_ROOT + '/backups/'
+
+# the directories under the media root which include things like uploaded pics or other dynamic files
+DYNAMIC_MEDIA_DIRS = ['photo', 'resized_image', 'wiki_file', 'wiki_photo']
 
 MANAGERS = ADMINS
 
@@ -22,6 +28,8 @@ USE_I18N = True
 
 # Examples: "http://media.lawrence.com", "http://example.com/media/"
 MEDIA_URL = '/media/'
+
+MEDIA_ROOT = PROJECT_ROOT + '/media/'
 
 ADMIN_MEDIA_PREFIX = '/admin-media/'
 
@@ -56,9 +64,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 ROOT_URLCONF = 'urls'
 
-TEMPLATE_DIRS = (
-    # Don't forget to use absolute paths, not relative paths.
-)
+# absolute paths here, too
+TEMPLATE_DIRS = ( PROJECT_ROOT + '/templates/', )
 
 INSTALLED_APPS = (
     'django.contrib.auth',
