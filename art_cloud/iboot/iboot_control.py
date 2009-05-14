@@ -38,12 +38,13 @@ class IBootControl:
 			msg = self.format_command(command)
 			sock.send(msg)
 			value = sock.recv(20)
-			if value == '': return None
+			if value == '': 
+				sock.close()
+				return None
 			return value
 		except:
 			print pprint.pformat(traceback.format_exc()) 
-		finally:
-			sock.close()
+		sock.close()
 		return None
 
 	def format_command(self, action):

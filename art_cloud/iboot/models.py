@@ -28,8 +28,6 @@ from django.db.models import Q
 from django.db.models.fields.files import ImageFieldFile
 from django.core.urlresolvers import reverse
 
-import art_cloud.front.templatetags.imagetags as imagetags
-
 class IBootDevice(models.Model):
 	name = models.CharField(max_length=1024, null=False, blank=False)
 	mac_address = models.CharField(max_length=1024, null=False, blank=False, help_text="e.g. 00-0D-AD-01-94-6F")
