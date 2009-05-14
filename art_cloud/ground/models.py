@@ -7,6 +7,10 @@ class UserHydrationMeta:
 	attributes = ['id', 'username']
 User.HydrationMeta = UserHydrationMeta
 
+#class UserAPIMeta:
+#	authorization = Authorization(read_own=True, update_own=True)
+#User.APIMeta = UserAPIMeta
+
 class ImageHydrationMeta:
 	element_name = 'image'
 	attributes = ['name', 'width', 'height']

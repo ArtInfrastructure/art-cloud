@@ -14,6 +14,8 @@ DYNAMIC_MEDIA_DIRS = ['photo', 'resized_image', 'wiki_file', 'wiki_photo']
 
 MANAGERS = ADMINS
 
+SOUTH_AUTO_FREEZE_APP = True
+
 AUTH_PROFILE_MODULE = "front.UserProfile"
 
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
@@ -75,7 +77,9 @@ INSTALLED_APPS = (
 	'django.contrib.admin',
 	'pagination',
 	'tagging',
+	'south',
 	'art_cloud.ground',
+	'art_cloud.iboot',
 	'art_cloud.front',
 	'art_cloud.datonomy',
 	'art_cloud.wiki',
