@@ -1,5 +1,4 @@
 backups
-*/migrations/
 local_settings.py
 media/photo/
 media/resized_image/
