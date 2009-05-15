@@ -1,7 +1,7 @@
 {% extends "art_cloud/base.html" %}
 {% load imagetags %}
 {% load listtags %}
-
+{% load debugtags %}
 {% block sub-title %}{{ equipment.name }} | {% endblock %}
 
 {% block sub-head %}
@@ -25,6 +25,16 @@ $(document).ready(function() { initialize(); });
 <h1><a href="{{ equipment.equipment_type.get_absolute_url }}">{{ equipment.equipment_type.name }}</a>: {{ equipment.name }}</h1>
 
 <table>
+	{% if equipment.installationsite_set.all %}
+	<tr>
+		<th>location{{ equipment.installationsite_set.all|pluralize }}:</th>
+		<td>
+			{% for site in equipment.installationsite_set.all %}
+				<a href="{{ site.get_absolute_url }}">{{ site.name }}</a>{% loop_comma %}
+			{% endfor %}
+		</td>
+	</tr>
+	{% endif %}
 	{% if equipment.notes or equipment_notes_form %}
 	<tr>
 		<th>notes:</th>
