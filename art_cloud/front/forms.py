@@ -16,6 +16,9 @@ class UserProfileForm(forms.ModelForm):
 class InstallationNotesForm(forms.Form):
 	notes = forms.CharField(required=False, widget=forms.Textarea())
 
+class EquipmentNotesForm(forms.Form):
+	notes = forms.CharField(required=False, widget=forms.Textarea())
+
 class UserForm(forms.ModelForm):
 	class Meta:
 		model = User

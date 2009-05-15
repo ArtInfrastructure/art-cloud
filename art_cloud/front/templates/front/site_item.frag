@@ -24,7 +24,17 @@
 			<th>equipment:</th>
 			<td>
 				{% for equipment in installation_site.equipment.all %}
-					{{ equipment }}{% loop_comma %}
+					<a href="{{ equipment.get_absolute_url }}">{{ equipment.name }}</a>{% loop_comma %}
+				{% endfor %}
+			</td>
+		</tr>
+		{% endif %}
+		{% if installation_site.iboots.all %}
+		<tr>
+			<th>power strips:</th>
+			<td>
+				{% for iboot in installation_site.iboots.all %}
+					<a href="{{ iboot.get_absolute_url }}">{{ iboot.name }}</a>{% loop_comma %}
 				{% endfor %}
 			</td>
 		</tr>

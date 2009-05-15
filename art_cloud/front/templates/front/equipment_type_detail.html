@@ -1,0 +1,67 @@
+{% extends "art_cloud/base.html" %}
+{% load imagetags %}
+{% load listtags %}
+
+{% block sub-title %}{{ equipment_type.name }} | {% endblock %}
+
+{% block sub-head %}
+<script type="text/javascript">
+function initialize(){
+	$(".equipment-type-notes-widget").hide();
+}
+$(document).ready(function() { initialize(); });
+</script>
+{% endblock %}
+
+{% block style %}
+.equipment-type-notes-widget { 
+	position: absolute; left; 20px; 
+	background-color: #FFF; border: solid 2px #DDD;
+	padding: 20px; 
+}
+{% endblock %}
+
+{% block content%}
+<h1>{{ equipment_type.name }}</h1>
+
+<table>
+	{% if equipment_type.provider %}
+	<tr><th>provider:</th><td>{{ equipment_type.provider }}</td></tr>
+	{% endif %}
+	{% if equipment_type.url %}
+	<tr><th>url:</th><td>{{ equipment_type.url|urlize }}</a></td></tr>
+	{% endif %}
+	{% if equipment_type.notes or equipment_type_notes_form %}
+	<tr>
+		<th>notes:</th>
+		<td>
+			<pre class="equipment-type-notes" id="equipment-type-notes-{{ equipment_type.id }}">{{ equipment_type.notes }}</pre>
+			{% if equipment_type_notes_form %}
+			<div class="equipment-type-notes-widget" id="equipment-type-notes-widget-{{ equipment_type.id }}">
+				<div style="float: right;">
+					[<a href="." onclick="$('#equipment-type-notes-widget-{{ equipment_type.id }}').hide(); $('#equipment-type-notes-{{ equipment_type.id }}').show(); return false;">close</a>]
+				</div>
+				<form action="." method="post">
+					{% for field in equipment_type_notes_form %}{{ field}}{% endfor %}
+					<input type="hidden" name="equipment_type_form_id" value="{{ equipment_type.id }}" />
+					<input type="submit" value="save note" />
+				</form>
+			</div>
+			[<a href="." onclick="$('#equipment-type-notes-{{ equipment_type.id }}').hide(); $('#equipment-type-notes-widget-{{ equipment_type.id}}').show(); return false">edit</a>]
+			{% endif %}
+		</td>
+	</tr>
+	{% endif %}
+</table>
+{% if equipment_type.equipment_set.all %}
+	<h3>Equipment of this type:</h3>
+	<ul>
+	{% for equipment in equipment_type.equipment_set.all %}
+		<li><a href="{{ equipment.get_absolute_url }}">{{ equipment.name }}</a></li>
+	{% endfor %}
+	</ul>
+{% endif %}
+
+{% endblock %}
+
+/* Copyright 2009 GORBET + BANERJEE (http://www.gorbetbanerjee.com/) Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License. */

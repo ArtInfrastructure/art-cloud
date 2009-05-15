@@ -14,7 +14,6 @@ class HeartbeatAdmin(StyledModelAdmin):
 	list_display = ('installation', 'created', 'trimmed_info')
 	date_hierarchy = 'created'
 	search_fields = ('installation__name', )
-	pass
 admin.site.register(Heartbeat, HeartbeatAdmin)	
 
 class ArtistGroupAdmin(StyledModelAdmin):
@@ -23,13 +22,11 @@ admin.site.register(ArtistGroup, ArtistGroupAdmin)
 
 class UserProfileAdmin(StyledModelAdmin):
 	list_display = ('user', 'display_name')
-	pass
 admin.site.register(UserProfile, UserProfileAdmin)	
 
 class PhotoAdmin(StyledModelAdmin):
 	list_display = ('display_name', 'image', 'thumb')
 	search_fields = ('title', 'image')
-	pass
 admin.site.register(Photo, PhotoAdmin)	
 
 class EquipmentTypeAdmin(StyledModelAdmin):
@@ -38,16 +35,13 @@ admin.site.register(EquipmentType, EquipmentTypeAdmin)
 
 class EquipmentAdmin(StyledModelAdmin):
 	filter_horizontal = ('photos',)
-	pass
 admin.site.register(Equipment, EquipmentAdmin)
 
 class InstallationSiteAdmin(StyledModelAdmin):
-	filter_horizontal = ('photos', 'equipment')
-	pass
+	filter_horizontal = ('photos', 'equipment', 'iboots')
 admin.site.register(InstallationSite, InstallationSiteAdmin)
 
 class InstallationAdmin(StyledModelAdmin):
 	list_display = ('name', 'site', 'is_opened')
 	filter_horizontal = ('artists', 'groups', 'photos')
-	pass
 admin.site.register(Installation, InstallationAdmin)

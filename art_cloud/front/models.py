@@ -29,6 +29,7 @@ from django.db.models.fields.files import ImageFieldFile
 from art_cloud.abstract_models import ThumbnailedModel
 from tagging.models import Tag
 from datonomy.models import NamedDate
+from iboot.models import IBootDevice
 
 class ArtistGroupManager(models.Manager):
 	def search(self, search_string):
@@ -108,7 +109,7 @@ class Equipment(models.Model):
 		attributes = ['id', 'name']
 		nodes = ['equipment_type', 'photos', 'notes']
 	def __unicode__(self):
-		return "%s:%s" % (self.equipment_type.name, self.name)
+		return "%s: %s" % (self.equipment_type.name, self.name)
 
 class InstallationSite(models.Model):
 	name = models.CharField(max_length=1024, null=False, blank=False)
@@ -116,6 +117,7 @@ class InstallationSite(models.Model):
 	notes = models.TextField(blank=True, null=True)
 	photos = models.ManyToManyField(Photo, null=True, blank=True)
 	equipment = models.ManyToManyField(Equipment, null=True, blank=True)
+	iboots = models.ManyToManyField(IBootDevice, null=True, blank=True)
 	@models.permalink
 	def get_absolute_url(self):
 		return ('art_cloud.front.views.installation_site_detail', (), { 'id':self.id })

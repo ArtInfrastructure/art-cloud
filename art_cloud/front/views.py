@@ -147,11 +147,29 @@ def photo_detail(request, id):
 
 @login_required
 def equipment_type_detail(request, id):
-	return render_to_response('front/equipment_type_detail.html', {}, context_instance=RequestContext(request))
+	equipment_type = get_object_or_404(EquipmentType, pk=id)
+	default_notes_data = { 'notes': equipment_type.notes }
+	if request.method == 'POST':
+		equipment_type_notes_form = EquipmentNotesForm(request.POST)
+		if request.POST.get('equipment_type_form_id', None):
+			equipment_type.notes = request.POST.get('notes', None)
+			equipment_type.save()
+	else:
+		equipment_type_notes_form = EquipmentNotesForm(default_notes_data)
+	return render_to_response('front/equipment_type_detail.html', { 'equipment_type':equipment_type, 'equipment_type_notes_form':equipment_type_notes_form }, context_instance=RequestContext(request))
 
 @login_required
 def equipment_detail(request, id):
-	return render_to_response('front/equipment_detail.html', {}, context_instance=RequestContext(request))
+	equipment = get_object_or_404(Equipment, pk=id)
+	default_notes_data = { 'notes': equipment.notes }
+	if request.method == 'POST':
+		equipment_notes_form = EquipmentNotesForm(request.POST)
+		if request.POST.get('equipment_form_id', None):
+			equipment.notes = request.POST.get('notes', None)
+			equipment.save()
+	else:
+		equipment_notes_form = EquipmentNotesForm(default_notes_data)
+	return render_to_response('front/equipment_detail.html', { 'equipment':equipment, 'equipment_notes_form':equipment_notes_form }, context_instance=RequestContext(request))
 
 @login_required
 def installation_site_detail(request, id):
