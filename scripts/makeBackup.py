@@ -2,10 +2,12 @@
 import os
 import datetime
 import sys
-
 import settings
-
 from common_script import *
+
+"""Creates a backup file of the form YYYY-MM-DD_HH-MM-SS-backup.tar in the directory specified by settings.BACKUP_ROOT.
+	The file contains the media directories specified by settings.DYNAMIC_MEDIA_DIRS and a pg_dump of the database.
+"""
 
 def main():
 	now = datetime.datetime.now()

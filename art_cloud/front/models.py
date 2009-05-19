@@ -59,6 +59,7 @@ class ArtistGroup(models.Model):
 		return self.name
 
 class Photo(ThumbnailedModel):
+	"""An image with some metadata to be associated with multiple types of models."""
 	image = models.ImageField(upload_to='photo', blank=False)
 	title = models.CharField(max_length=1024, null=True, blank=True)
 	caption = models.CharField(max_length=1024, null=True, blank=True)
@@ -79,6 +80,7 @@ class Photo(ThumbnailedModel):
 		return str(self.image)
 
 class EquipmentType(models.Model):
+	"""A sort of equipment, for example: 'Xenon Fantastico Projector'"""
 	name = models.CharField(max_length=1024, null=False, blank=False)
 	provider = models.TextField(null=True, blank=True)
 	url = models.URLField(verify_exists=False, blank=True, null=True, max_length=1024)
@@ -95,6 +97,7 @@ class EquipmentType(models.Model):
 		return self.name
 
 class Equipment(models.Model):
+	"""A piece of equipment like a projector or a ladder."""
 	name = models.CharField(max_length=1024, null=False, blank=False)
 	equipment_type = models.ForeignKey(EquipmentType, blank=False, null=False)
 	photos = models.ManyToManyField(Photo, null=True, blank=True)
@@ -112,6 +115,7 @@ class Equipment(models.Model):
 		return "%s: %s" % (self.equipment_type.name, self.name)
 
 class InstallationSite(models.Model):
+	"""A location in which art is installed."""
 	name = models.CharField(max_length=1024, null=False, blank=False)
 	location = models.CharField(max_length=1024, null=True, blank=True)
 	notes = models.TextField(blank=True, null=True)
@@ -144,6 +148,7 @@ class InstallationManager(models.Manager):
 		return search_query.order_by('name')
 
 class Installation(models.Model):
+	"""A piece of art"""
 	name = models.CharField(max_length=1024, null=False, blank=False)
 	slug = models.SlugField(blank=True, null=True)
 	groups = models.ManyToManyField(ArtistGroup, null=True, blank=True)
@@ -206,6 +211,7 @@ class HeartbeatManager(models.Manager):
 			heartbeat.delete()
 
 class Heartbeat(models.Model):
+	"""A periodic message sent by an installation which is used to monitor their status."""
 	installation = models.ForeignKey(Installation, null=False, blank=False)
 	info = models.TextField(blank=True, null=True)
 	created = models.DateTimeField(auto_now_add=True)
@@ -240,7 +246,7 @@ class UserProfileManager(models.Manager):
 		return search_query.order_by('display_name')
 
 class UserProfile(models.Model):
-	"""Extends the django.contrib.auth User model"""
+	"""Extends the django.contrib.auth User model to provide more information about an user account."""
 	user = models.ForeignKey(User, unique=True)
 	display_name = models.CharField(max_length=1024)
 	bio = models.TextField(null=True, blank=True)

@@ -52,6 +52,7 @@ class CalNode(template.Node):
 
 @register.tag(name="cal")
 def cal(parser, token):
+	"""Generates the HTML for a calendar showing all NamedDates"""
 	try:
 		tag_name, year, month = token.split_contents()
 	except ValueError:

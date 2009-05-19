@@ -1,4 +1,9 @@
 
+ADMINS = (
+    ('Trevor F. Smith', 'trevor@trevor.smith.name'),
+)
+MANAGERS = ADMINS
+
 PRODUCTION = False
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

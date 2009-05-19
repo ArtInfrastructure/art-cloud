@@ -13,6 +13,7 @@ WIKI_PHOTO_REGEX = re.compile(r'\b(%s)\b' % WIKI_PHOTO)
 
 @register.filter
 def wiki(text):
+	"""Convert the text into HTML using markdown and image name replacement."""
 	#text = strip_tags(text)
 	text = markdown(text)
 	text = urlize(text)

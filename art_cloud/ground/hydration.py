@@ -1,9 +1,19 @@
+"""A set of functions for generating and parsing XML for python objects which are decorated by a HydrationMeta class:
+
+	class HydrationMeta:
+		attributes = ['id', 'name', 'slug', 'opened', 'closed', 'wiki_name']
+		ref_attributes = ['power_pane']
+		ref_attributes = [('site','name)]
+		nodes = ['groups', 'artists', 'notes', 'photos']
+		element_name = 'fantastico'
+"""
 from types import ListType, DictType
 from xml.dom.minidom import getDOMImplementation
 import xml.dom.minidom as minidom
 
 from django.utils.encoding import smart_unicode
 from django.utils.xmlutils import SimplerXMLGenerator
+
 
 hydration_meta_name = 'HydrationMeta'
 hydration_attributes_name = 'attributes' # simple attributes on the element
@@ -14,14 +24,6 @@ hydration_text_node_name = 'text_node' # member which should be used as the text
 hydration_element_name = 'element_name' # what the element should be named, defaults to __class__.__name__.lower()
 
 hydration_list_name = 'list'
-
-#	class HydrationMeta:
-#		attributes = ['id', 'name', 'slug', 'opened', 'closed', 'wiki_name']
-#		ref_attributes = ['power_pane']
-#		ref_attributes = [('site','name)]
-#		nodes = ['groups', 'artists', 'notes', 'photos']
-#		element_name = 'fantastico'
-
 
 class HydrationError(Exception): pass
 

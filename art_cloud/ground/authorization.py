@@ -1,5 +1,4 @@
-
-# this isn't used by anyone.  yet.
+"""this isn't used by anyone.  yet."""
 
 AUTHORIZATION_META_NAME = 'AuthorizationMeta'
 

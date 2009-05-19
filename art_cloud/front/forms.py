@@ -13,10 +13,8 @@ class UserProfileForm(forms.ModelForm):
 		model = UserProfile
 		fields = ('display_name', 'bio', 'url', 'phone_number')
 
-class InstallationNotesForm(forms.Form):
-	notes = forms.CharField(required=False, widget=forms.Textarea())
-
-class EquipmentNotesForm(forms.Form):
+class NotesForm(forms.Form):
+	"""Used by Installation and Equipment pages to update their notes."""
 	notes = forms.CharField(required=False, widget=forms.Textarea())
 
 class UserForm(forms.ModelForm):

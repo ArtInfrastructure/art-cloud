@@ -1,3 +1,17 @@
+"""A library for fetching weather information from the National Oceanic and Atmospheric Administration 
+
+Example dehydrated result: 
+<?xml version="1.0" ?>
+<weatherquery coverage="definitely" date="2009-05-05 10:52:13.011519" icon_url="http://www.nws.noaa.gov/weather/images/fcicons/ra70.jpg" intensity="light" latitude="47.6218" location_name="Seattle" longitude="-122.3503" max_temp="57" min_temp="50" weather_type="rain">
+	<hazards>
+		<dict>
+			<item key="phenomena" value="Wind"/>
+			<item key="hazard_type" value="long duration"/>
+			<item key="significance" value="Advisory"/>
+		</dict>
+	</hazards>
+</weatherquery>
+"""
 import pprint
 import urllib 
 import datetime
@@ -9,18 +23,6 @@ LOCATION_TRIPLETS = (('San Jose', 37.3201, -121.8776), ('Seattle', 47.62180, -12
 
 NOAA_FORECAST_URL_FORMAT = "http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?lat=%s&lon=%s&format=24+hourly&startDate=%s&numDays=1"
 NOAA_CACHE_KEY = "noaa_weather"
-
-# Example dehydrated result: 
-#<?xml version="1.0" ?>
-#<weatherquery coverage="definitely" date="2009-05-05 10:52:13.011519" icon_url="http://www.nws.noaa.gov/weather/images/fcicons/ra70.jpg" intensity="light" latitude="47.6218" location_name="Seattle" longitude="-122.3503" max_temp="57" min_temp="50" weather_type="rain">
-#	<hazards>
-#		<dict>
-#			<item key="phenomena" value="Wind"/>
-#			<item key="hazard_type" value="long duration"/>
-#			<item key="significance" value="Advisory"/>
-#		</dict>
-#	</hazards>
-#</weatherquery>
 
 class WeatherQuery:
 	"""A lazily populated weather forecast object.  Uses the noaa_weather function, which will cache if possible to limit connections to the NOAA."""

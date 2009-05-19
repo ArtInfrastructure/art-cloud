@@ -150,12 +150,12 @@ def equipment_type_detail(request, id):
 	equipment_type = get_object_or_404(EquipmentType, pk=id)
 	default_notes_data = { 'notes': equipment_type.notes }
 	if request.method == 'POST':
-		equipment_type_notes_form = EquipmentNotesForm(request.POST)
+		equipment_type_notes_form = NotesForm(request.POST)
 		if request.POST.get('equipment_type_form_id', None):
 			equipment_type.notes = request.POST.get('notes', None)
 			equipment_type.save()
 	else:
-		equipment_type_notes_form = EquipmentNotesForm(default_notes_data)
+		equipment_type_notes_form = NotesForm(default_notes_data)
 	return render_to_response('front/equipment_type_detail.html', { 'equipment_type':equipment_type, 'equipment_type_notes_form':equipment_type_notes_form }, context_instance=RequestContext(request))
 
 @login_required
@@ -163,12 +163,12 @@ def equipment_detail(request, id):
 	equipment = get_object_or_404(Equipment, pk=id)
 	default_notes_data = { 'notes': equipment.notes }
 	if request.method == 'POST':
-		equipment_notes_form = EquipmentNotesForm(request.POST)
+		equipment_notes_form = NotesForm(request.POST)
 		if request.POST.get('equipment_form_id', None):
 			equipment.notes = request.POST.get('notes', None)
 			equipment.save()
 	else:
-		equipment_notes_form = EquipmentNotesForm(default_notes_data)
+		equipment_notes_form = NotesForm(default_notes_data)
 	return render_to_response('front/equipment_detail.html', { 'equipment':equipment, 'equipment_notes_form':equipment_notes_form }, context_instance=RequestContext(request))
 
 @login_required
@@ -209,15 +209,15 @@ def common_installation_detail(request, installation):
 		photo_form = PhotoForm(request.POST, request.FILES)
 		tags_form = TagsForm(request.POST)
 		named_date_form = NamedDateForm(request.POST)
-		installation_notes_form = InstallationNotesForm(request.POST)
+		installation_notes_form = NotesForm(request.POST)
 		if request.POST.get('photo-form', None):
 			tags_form = TagsForm(tag_default_data)
 			named_date_form = NamedDateForm()
-			installation_notes_form = InstallationNotesForm(notes_default_date)
+			installation_notes_form = NotesForm(notes_default_date)
 			if photo_form.is_valid():
 				try:
 					photo = photo_form.save()
-					installation_notes_form = InstallationNotesForm(notes_default_date)
+					installation_notes_form = NotesForm(notes_default_date)
 					installation.photos.add(photo)
 					installation.save()
 				except:
@@ -227,7 +227,7 @@ def common_installation_detail(request, installation):
 		elif request.POST.get('recent_dates', None):
 			tags_form = TagsForm(tag_default_data)
 			photo_form = PhotoForm()
-			installation_notes_form = InstallationNotesForm(notes_default_date)
+			installation_notes_form = NotesForm(notes_default_date)
 			named_date_form = NamedDateForm()
 			dates = [int(rd) for rd in request.POST.getlist('recent_dates')]
 			for rd in dates:
@@ -240,7 +240,7 @@ def common_installation_detail(request, installation):
 		elif request.POST.get('named-date-form', None):
 			tags_form = TagsForm(tag_default_data)
 			photo_form = PhotoForm()
-			installation_notes_form = InstallationNotesForm(notes_default_date)
+			installation_notes_form = NotesForm(notes_default_date)
 			if named_date_form.is_valid():
 				pk = named_date_form.cleaned_data['pk']
 				if pk:
@@ -267,14 +267,14 @@ def common_installation_detail(request, installation):
 			installation.save()
 		elif request.POST.get('tag-form', None):
 			named_date_form = NamedDateForm()
-			installation_notes_form = InstallationNotesForm(notes_default_date)
+			installation_notes_form = NotesForm(notes_default_date)
 			photo_form = PhotoForm()
 			if tags_form.is_valid():
 				installation.tags = tags_form.cleaned_data['tags']
 				installation.save()
 				tag_form = TagsForm({'tags': installation.tag_names })
 	else:
-		installation_notes_form = InstallationNotesForm(notes_default_date)
+		installation_notes_form = NotesForm(notes_default_date)
 		tags_form = TagsForm(tag_default_data)
 		photo_form = PhotoForm()
 		named_date_form = NamedDateForm()

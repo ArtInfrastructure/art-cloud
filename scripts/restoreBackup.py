@@ -7,7 +7,10 @@ import settings
 import shutil
 
 from common_script import *
-DEBUG = True
+
+"""Restores the media and database from a backupfile created by makeBackup.py"""
+
+DEBUG = False
 def main():
 	
 	if len(sys.argv) == 1:

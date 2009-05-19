@@ -17,7 +17,7 @@ class NamedDateManager(models.Manager):
 		return self.filter(content_type__pk=ContentType.objects.get_for_model(obj).pk, object_id=obj.pk)
 
 class NamedDate(models.Model):
-	"""A named date"""
+	"""A named date which is associated with another model using a generic foreign key"""
 	name = models.CharField(max_length=1024, blank=False, null=False)
 	date = models.DateField(blank=False, null=False)
 

@@ -26,6 +26,7 @@ class WikiPageManager(models.Manager):
 		except: return WikiPage(name=name)
 
 class WikiPage(models.Model):
+	"""A named chunk of markdown formatted text."""
 	name = models.CharField(max_length=255, unique=True, blank=False, null=False)
 	content = models.TextField(blank=False, null=False)
 	rendered = models.TextField(blank=True, null=True)
@@ -40,6 +41,7 @@ class WikiPage(models.Model):
 	def __unicode__(self):
 		return self.name
 	def save(self, *args, **kwargs):
+		"""When saving the content, render via markdown and save to self.rendered"""
 		self.rendered = wiki(self.content)
 		super(WikiPage, self).save(*args, **kwargs)
 		WikiPageLog.objects.create(wiki_page=self, content=self.content)
@@ -47,6 +49,7 @@ class WikiPage(models.Model):
 		ordering = ('name',)
 
 class WikiPageLog(models.Model):
+	"""A historical version of a WikiPage."""
 	wiki_page = models.ForeignKey(WikiPage, blank=False, null=False)
 	content = models.TextField(blank=False, null=False)
 	created = models.DateTimeField(auto_now_add=True)
@@ -59,6 +62,7 @@ class WikiPageLog(models.Model):
 		ordering = ('-created',)
 
 class WikiFile(models.Model):
+	"""A non-image file associated with a WikiPage."""
 	file = models.FileField(upload_to='wiki_file', blank=False, null=False)
 	wiki_page = models.ForeignKey(WikiPage, blank=False, null=False)
 	title = models.CharField(max_length=1024, null=True, blank=True)
@@ -76,6 +80,7 @@ class WikiFile(models.Model):
 		return str(self.file)
 
 class WikiPhoto(ThumbnailedModel):
+	"""An image and metadata associated with a WikiPage."""
 	image = models.ImageField(upload_to='wiki_photo', blank=False)
 	wiki_page = models.ForeignKey(WikiPage, blank=False, null=False)
 	title = models.CharField(max_length=1024, null=True, blank=True)

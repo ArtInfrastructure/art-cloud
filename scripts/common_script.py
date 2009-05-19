@@ -1,9 +1,7 @@
 #!/usr/bin/python
 import os
-import datetime
-import sys
 
-import settings
+"""A set of handy functions for IT scripts. """
 
 DEBUG = False
 

@@ -6,6 +6,7 @@ from django.forms.util import ErrorList
 from models import *
 
 class StyledModelAdmin(admin.ModelAdmin):
+	"""A common base admin class with shared media information."""
 	save_on_top=True
 	class Media:
 		css = { "all": ('art_cloud/admin.css', )}

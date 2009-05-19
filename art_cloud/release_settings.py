@@ -1,5 +1,10 @@
 DEVEL_ROOT = '/webapp/art-cloud/art_cloud'
 
+ADMINS = (
+    ('Trevor F. Smith', 'trevor@trevor.smith.name'),
+)
+MANAGERS = ADMINS
+
 PRODUCTION = True
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

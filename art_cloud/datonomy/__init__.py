@@ -1,0 +1,1 @@
+"""A django project which provides a calendar of named dates and an iCal feed for third party integration."""

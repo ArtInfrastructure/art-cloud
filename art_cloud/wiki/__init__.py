@@ -1,0 +1,1 @@
+"""A Django app which provides a private wiki with markdown formatting and inline images."""

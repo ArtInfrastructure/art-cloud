@@ -31,6 +31,7 @@ def recent_dates(request):
 	return HttpResponse(data, mimetype="application/json")
 
 def ical(request):
+	"""The iCal feed view"""
 	cal = vobject.iCalendar()
 	cal.add('METHOD').value = 'PUBLISH'
 	cal.add('X-WR-CALNAME').value = '%s Calendar' % Site.objects.get_current().name
