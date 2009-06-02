@@ -55,8 +55,6 @@ class WeatherQuery:
 			self.__intensity = weather['intensity']
 			if weather.has_key('hazards'):
 				self.__hazards = weather['hazards']
-			else:
-				print 'no hazards? %s' % weather
 		except:
 			error_message = "Failed to fetch the weather in %s." % self.location_name
 		self.populated = True

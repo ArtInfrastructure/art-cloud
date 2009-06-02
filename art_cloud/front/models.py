@@ -24,12 +24,13 @@ from django.dispatch import dispatcher
 from django.core.mail import send_mail
 from django.utils.encoding import force_unicode
 from django.db.models import Q
-from django.db.models.fields.files import ImageFieldFile
 
 from art_cloud.abstract_models import ThumbnailedModel
 from tagging.models import Tag
 from datonomy.models import NamedDate
 from iboot.models import IBootDevice
+
+from hydration import HydrationEmitter # this sets the piston emitters
 
 class ArtistGroupManager(models.Manager):
 	def search(self, search_string):

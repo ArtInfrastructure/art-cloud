@@ -13,7 +13,7 @@ import xml.dom.minidom as minidom
 
 from django.utils.encoding import smart_unicode
 from django.utils.xmlutils import SimplerXMLGenerator
-
+from django.contrib.auth.models import User
 
 hydration_meta_name = 'HydrationMeta'
 hydration_attributes_name = 'attributes' # simple attributes on the element
@@ -166,6 +166,28 @@ class XMLHydration:
 				doc.documentElement.appendChild(doc.createTextNode(smart_unicode(value)))
 
 		return doc
+
+from django.db.models.fields.files import ImageFieldFile
+class UserHydrationMeta:
+	"""Sets up hydration for the Django auth User model"""
+	attributes = ['id', 'username']
+User.HydrationMeta = UserHydrationMeta
+
+class ImageHydrationMeta:
+	"""Sets up hydration for Django's image field"""
+	element_name = 'image'
+	attributes = ['name', 'width', 'height']
+ImageFieldFile.HydrationMeta = ImageHydrationMeta
+
+import piston.emitters
+class HydrationEmitter(piston.emitters.Emitter):
+	""" Piston Emitter for our custom XML serialized format. """
+	def render(self, request, format='xml'):
+		from django.db.models.query import QuerySet
+		if isinstance(self.data, QuerySet):
+			return dehydrate_to_list_xml(self.data)
+		return dehydrate_to_xml(self.data)
+piston.emitters.Emitter.register('xml', HydrationEmitter, 'text/xml; charset=utf-8')
 
 def dehydrate_to_list_xml(input_list, start=None, end=None, xml_header=True):
 	if xml_header: return XMLHydration().dehydrate_to_list(input_list, start, end)
