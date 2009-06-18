@@ -1,1 +1,0 @@
-"""An API generator for django models or plain old python objects."""

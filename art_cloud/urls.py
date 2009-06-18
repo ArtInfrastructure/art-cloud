@@ -9,7 +9,6 @@ urlpatterns = patterns('',
 	(r'^admin/(.*)', admin.site.root),
 	(r'^wiki/', include('wiki.urls')),
 	(r'^datonomy/', include('datonomy.urls')),
-	(r'^ground/', include('ground.urls')),
 	(r'^iboot/', include('iboot.urls')),
 	(r'^', include('front.urls')),
 )

@@ -72,7 +72,7 @@ INSTALLED_APPS = (
 	'pagination',
 	'tagging',
 	'south',
-	'art_cloud.ground',
+	'piston',
 	'art_cloud.iboot',
 	'art_cloud.front',
 	'art_cloud.datonomy',
