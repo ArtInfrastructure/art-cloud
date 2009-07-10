@@ -8,7 +8,7 @@ register = template.Library()
 WIKI_NAME = r'(?:[A-Z]+[a-z]+){2,}'
 WIKIREGEX = re.compile(r'\b(%s)\b' % WIKI_NAME)
 
-WIKI_PHOTO = r'(?:Photo([\d])+)'
+WIKI_PHOTO = r'(?:Photo([\d]+))'
 WIKI_PHOTO_REGEX = re.compile(r'\b(%s)\b' % WIKI_PHOTO)
 
 @register.filter

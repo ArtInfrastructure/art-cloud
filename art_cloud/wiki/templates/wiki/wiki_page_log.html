@@ -8,10 +8,12 @@
 {% endblock %}
 
 {% block content %}
-<div style="float: right; margin-top: 5px; ">
-	[<a href="." onclick="document.getElementById('revert-form').submit(); return false;">revert to this version</a>]
-	<form id="revert-form" action="{{ page_log.get_absolute_url }}" method="post"><input type="hidden" name="revert" value="true"></form>
-</div>
+{% if request.user.is_staff %}
+	<div style="float: right; margin-top: 5px; ">
+			[<a href="." onclick="document.getElementById('revert-form').submit(); return false;">revert to this version</a>]
+			<form id="revert-form" action="{{ page_log.get_absolute_url }}" method="post"><input type="hidden" name="revert" value="true"></form>
+	</div>
+{% endif %}
 <h1>Snapshot of <a href="{{ page_log.wiki_page.get_absolute_url }}">{{ page_log.wiki_page.name }}</a> at {{ page_log.created|date:"F j, g:i A"}}:</h1>
 
 {{ page_log.content|wiki|safe }}

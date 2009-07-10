@@ -60,10 +60,10 @@ def wiki(request, name):
 	if not page.id: return HttpResponseRedirect(page.get_edit_url())
 	return render_to_response('wiki/wiki.html', { 'page':page }, context_instance=RequestContext(request))
 
-@login_required
+@staff_member_required
 def wiki_add(request, name):
 	page = WikiPage.objects.get_or_create(name=name)
-	if request.method == 'POST':
+	if request.method == 'POST' and request.user.is_staff:
 		wiki_photo_form = WikiPhotoForm(request.POST, request.FILES)
 		wiki_file_form = WikiFileForm(request.POST, request.FILES)
 		if request.POST.get('photo-form', None):
@@ -98,16 +98,16 @@ def wiki_history(request, name):
 @login_required
 def wiki_page_log(request, name, id):
 	page_log = get_object_or_404(WikiPageLog, wiki_page__name=name, pk=id)
-	if request.method == 'POST' and request.POST.get('revert', None):
+	if request.method == 'POST' and request.POST.get('revert', None)  and request.user.is_staff:
 		page_log.wiki_page.content = page_log.content
 		page_log.wiki_page.save()
 		return HttpResponseRedirect(page_log.wiki_page.get_absolute_url())
 	return render_to_response('wiki/wiki_page_log.html', { 'page_log':page_log  }, context_instance=RequestContext(request))
 
-@login_required
+@staff_member_required
 def wiki_edit(request, name):
 	page = WikiPage.objects.get_or_create(name=name)
-	if request.method == 'POST':
+	if request.method == 'POST' and request.user.is_staff:
 		page_form = WikiPageForm(request.POST, instance=page)
 		if page_form.is_valid():
 			page = page_form.save()

@@ -18,6 +18,7 @@ import datetime
 from xml.dom import minidom
 from xml.dom.minidom import Node
 from django.core.cache import cache
+import logging
 
 LOCATION_TRIPLETS = (('San Jose', 37.3201, -121.8776), ('Seattle', 47.62180, -122.35030), ('Portland', 45.52361, -122.675), ('Spokane', 47.65889, -117.425), ('Boise', 43.61361, -116.2025), ('Pendleton', 45.67222, -118.7875))
 
@@ -46,16 +47,18 @@ class WeatherQuery:
 		if self.populated: return
 		try:
 			weather = noaa_weather((self.location_name, self.latitude, self.longitude), self.date)
+			print weather
 			self.__summary = weather['summary']
 			self.__min_temp = weather['min_temp']
 			self.__max_temp = weather['max_temp']
 			self.__icon_url = weather['icon_url']
-			self.__weather_type = weather['weather_type']
-			self.__coverage = weather['coverage']
-			self.__intensity = weather['intensity']
+			if hasattr(weather, 'weather_type'): self.__weather_type = weather['weather_type']
+			if hasattr(weather, 'coverage'): self.__coverage = weather['coverage']
+			if hasattr(weather, 'intensity'): self.__intensity = weather['intensity']
 			if weather.has_key('hazards'):
 				self.__hazards = weather['hazards']
 		except:
+			logging.exception('Error fetching weather')
 			error_message = "Failed to fetch the weather in %s." % self.location_name
 		self.populated = True
 	def __get_summary(self):
@@ -105,7 +108,7 @@ class WeatherQuery:
 	hazards = property(__get_hazards, __set_hazards)	
 
 	class HydrationMeta:
-		attributes = ['location_name', 'latitude', 'longitude', 'date', 'error_message', 'min_temp', 'max_temp', 'icon_url', 'weather_type', 'coverage', 'intensity']
+		attributes = ['location_name', 'summary', 'latitude', 'longitude', 'date', 'error_message', 'min_temp', 'max_temp', 'icon_url', 'weather_type', 'coverage', 'intensity']
 		nodes = ['hazards']
 
 def noaa_weather(location_triplet, date=datetime.datetime.now()):
@@ -119,6 +122,11 @@ def noaa_weather(location_triplet, date=datetime.datetime.now()):
 	return noaa_dom_to_weather(location_triplet, date, dom)
 	
 def noaa_dom_to_weather(location_triplet, date, dom):
+	f = open('weather.xml', 'w')
+	f.write(dom.toprettyxml())
+	f.flush()
+	f.close()
+
 	weather = {}
 	for node in dom.getElementsByTagName('temperature'):
 		if node.getAttribute('type') == 'maximum': weather['max_temp'] = node.childNodes.item(3).firstChild.nodeValue.strip()
@@ -129,13 +137,16 @@ def noaa_dom_to_weather(location_triplet, date, dom):
 	weather['latitude'] = location_triplet[1]
 	weather['longitude'] = location_triplet[2]
 	tci_element = dom.getElementsByTagName('weather-conditions')[0].childNodes.item(1)
-	weather['weather_type'] = tci_element.getAttribute('weather-type')
-	weather['coverage'] = tci_element.getAttribute('coverage')
-	weather['intensity'] = tci_element.getAttribute('intensity')
+	if tci_element:
+		weather['weather_type'] = tci_element.getAttribute('weather-type')
+		weather['coverage'] = tci_element.getAttribute('coverage')
+		weather['intensity'] = tci_element.getAttribute('intensity')
+
 	for hazard in dom.getElementsByTagName('hazard'):
 		if not hasattr(weather, 'hazards'):
 			weather['hazards'] = []
 		weather['hazards'].append({ 'hazard_type': hazard.getAttribute('hazardType'), 'phenomena':hazard.getAttribute('phenomena'), 'significance':hazard.getAttribute('significance') })
+		print 'hazards ', weather['hazards']
 	cache.set(create_cache_key(location_triplet[1], location_triplet[2], date), weather, 3600)
 	return weather
 

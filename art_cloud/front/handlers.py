@@ -9,5 +9,8 @@ from weather import WeatherQuery
 
 class WeatherHandler(BaseHandler):
 	methods_allowed = ('GET',)
-	def read(self, request): return WeatherQuery()
+	def read(self, request): 
+		wq = WeatherQuery()
+		wq.populate()
+		return wq
 	
