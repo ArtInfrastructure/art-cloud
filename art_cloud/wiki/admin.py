@@ -10,6 +10,11 @@ class StyledModelAdmin(admin.ModelAdmin):
 	class Media:
 		css = { "all": ('art_cloud/admin.css', )}
 
+class WikiConstantAdmin(StyledModelAdmin):
+	search_fields = ('name','constant')
+	list_display = ('name', 'constant')
+admin.site.register(WikiConstant, WikiConstantAdmin)	
+
 class WikiPageAdmin(StyledModelAdmin):
 	search_fields = ('name','content')
 admin.site.register(WikiPage, WikiPageAdmin)	

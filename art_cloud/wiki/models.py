@@ -61,6 +61,15 @@ class WikiPageLog(models.Model):
 	class Meta:
 		ordering = ('-created',)
 
+class WikiConstant(models.Model):
+	"""A piece of wikitext which can be included (but not wiki rendered) in multiple wiki pages
+	The syntax is \%constant_name\%
+	"""
+	name = models.CharField(max_length=512, null=False, blank=False)
+	constant = models.TextField(blank=False, null=False)
+	def __unicode__(self):
+		return self.name
+
 class WikiFile(models.Model):
 	"""A non-image file associated with a WikiPage."""
 	file = models.FileField(upload_to='wiki_file', blank=False, null=False)

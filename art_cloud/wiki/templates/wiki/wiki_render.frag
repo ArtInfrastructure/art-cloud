@@ -1,4 +1,5 @@
 {% load imagetags %}
+{% load wikitags %}
 <div class="wiki-control-links">
 	[<a href="{% url wiki.views.wiki_history page.name %}">page history</a>]
 	{% if request.user.is_staff %}[<a href="{% url wiki.views.wiki_edit page.name %}">edit this page</a>]{% endif %}
@@ -6,7 +7,7 @@
 {% if not hide_title %}<h1><a href="{% url wiki.views.index %}">Wiki</a>: {{ page.name }} </h1>{% endif %}
 
 {% if page.rendered %}
-	<div class="rendered-page">{{ page.rendered|safe }}</div>
+	<div class="rendered-page">{{ page.rendered|include_constants|safe }}</div>
 {% endif %}
 
 {% if page.wikifile_set.all %}

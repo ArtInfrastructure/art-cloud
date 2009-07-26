@@ -22,6 +22,16 @@ def wiki(text):
 	return text
 
 @register.filter
+def include_constants(text):
+	from wiki.models import WikiConstant
+	constants = WikiConstant.objects.all()
+	for constant in constants:
+		pattern = r'(?:\$%s\$)' % constant.name
+		regex = re.compile(r'%s' % pattern)
+		text = regex.sub(constant.constant, text)
+	return text
+
+@register.filter
 def truncate(value, arg):
 	"""
 	Truncates a string after a given number of chars  
