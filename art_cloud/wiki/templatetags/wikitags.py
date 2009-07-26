@@ -15,8 +15,8 @@ WIKI_PHOTO_REGEX = re.compile(r'\b(%s)\b' % WIKI_PHOTO)
 def wiki(text):
 	"""Convert the text into HTML using markdown and image name replacement."""
 	#text = strip_tags(text)
-	text = markdown(text)
 	text = urlize(text)
+	text = markdown(text)
 	text = WIKI_PHOTO_REGEX.sub(r'<a href="%sphoto-detail/\2/"><img src="%sphoto/\2/" width="150" /></a>' % (reverse('wiki.views.index', args=[], kwargs={}), reverse('wiki.views.index', args=[], kwargs={})), text)
 	text = WIKIREGEX.sub(r'<a href="%s\1/">\1</a>' % reverse('wiki.views.index', args=[], kwargs={}), text)
 	return text
@@ -27,6 +27,10 @@ def include_constants(text):
 	constants = WikiConstant.objects.all()
 	for constant in constants:
 		pattern = r'(?:\$%s\$)' % constant.name
+		regex = re.compile(r'%s' % pattern)
+		text = regex.sub(constant.constant, text)
+		# handle the urlized constants which look like %24constant_name%24
+		pattern = r'(?:%%24%s%%24)' % constant.name
 		regex = re.compile(r'%s' % pattern)
 		text = regex.sub(constant.constant, text)
 	return text
