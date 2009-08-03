@@ -122,10 +122,6 @@ def noaa_weather(location_triplet, date=datetime.datetime.now()):
 	return noaa_dom_to_weather(location_triplet, date, dom)
 	
 def noaa_dom_to_weather(location_triplet, date, dom):
-	f = open('weather.xml', 'w')
-	f.write(dom.toprettyxml())
-	f.flush()
-	f.close()
 
 	weather = {}
 	for node in dom.getElementsByTagName('temperature'):
