@@ -7,6 +7,8 @@ from handlers import WeatherHandler
 
 from models import *
 
+weather_resource = Resource(handler=WeatherHandler)
+
 urlpatterns = patterns('',
 #	(r'^api/weather/$', 'ground.views.podo', { 'podo':WeatherQuery }),
 #	(r'^api/installation/$', 'ground.views.model_list', { 'model':Installation }),
@@ -14,7 +16,7 @@ urlpatterns = patterns('',
 #	(r'^api/installation-site/$', 'ground.views.model_list', { 'model':InstallationSite }),
 #	(r'^api/installation-site/(?P<id>[\d]+)/$', 'ground.views.model', { 'model':InstallationSite }),
 
-    url(r'^api/weather.xml$', Resource(handler=WeatherHandler), { 'emitter_format': 'xml' }), 
+    url(r'^api/weather/(?P<zip_code>[\d]+).xml$', weather_resource, { 'emitter_format': 'xml' }), 
 
 	(r'^photo/(?P<id>[\d]+)/$', 'art_cloud.front.views.photo_detail'),
 	(r'^equipment-type/(?P<id>[\d]+)/$', 'art_cloud.front.views.equipment_type_detail'),

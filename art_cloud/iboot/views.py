@@ -27,9 +27,11 @@ from django.utils import feedgenerator
 from models import *
 from iboot_control import IBootControl
 
+@staff_member_required
 def index(request):
 	return render_to_response('iboot/index.html', { 'iboots':IBootDevice.objects.all() }, context_instance=RequestContext(request))
 
+@staff_member_required
 def iboot(request, id):
 	iboot = get_object_or_404(IBootDevice, pk=id)
 	control = IBootControl(settings.IBOOT_POWER_PASSWORD, iboot.ip)

@@ -25,6 +25,29 @@ LOCATION_TRIPLETS = (('San Jose', 37.3201, -121.8776), ('Seattle', 47.62180, -12
 NOAA_FORECAST_URL_FORMAT = "http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?lat=%s&lon=%s&format=24+hourly&startDate=%s&numDays=1"
 NOAA_CACHE_KEY = "noaa_weather"
 
+GEOCODER_ZIP_API_URL_FORMAT = "http://geocoder.us/service/csv/geocode?zip=%s"
+GEOCODER_CACHE_KEY = 'geocoder_zip'
+
+def zip_to_lat_lon(zip):
+	"""Fetch the lat/lon and city/state for a zip, cached so we don't overstay our welcome"""
+	result = cache.get(create_zip_cache_key(zip))
+	if result:
+		if result == 'no such zip': return None
+		return result
+	print "missed the zip cache"
+
+	url = GEOCODER_ZIP_API_URL_FORMAT % zip
+	fields = urllib.urlopen(url).read().split(', ')
+	if len(fields) != 5:
+		cache.set(create_zip_cache_key(zip), 'no such zip', 10000000)
+		return None
+	result = [float(fields[0]), float(fields[1]), fields[2], fields[3]]
+	cache.set(create_zip_cache_key(zip), result, 10000000)
+	return result
+
+def create_zip_cache_key(zip):
+	return '%s_%s' % (GEOCODER_CACHE_KEY, zip)
+
 class WeatherQuery:
 	"""A lazily populated weather forecast object.  Uses the noaa_weather function, which will cache if possible to limit connections to the NOAA."""
 	def __init__(self, location_triplet=LOCATION_TRIPLETS[0], date=datetime.datetime.now()):
@@ -47,7 +70,6 @@ class WeatherQuery:
 		if self.populated: return
 		try:
 			weather = noaa_weather((self.location_name, self.latitude, self.longitude), self.date)
-			print weather
 			self.__summary = weather['summary']
 			self.__min_temp = weather['min_temp']
 			self.__max_temp = weather['max_temp']
@@ -113,7 +135,7 @@ class WeatherQuery:
 
 def noaa_weather(location_triplet, date=datetime.datetime.now()):
 	"""Fetch the day's forecast from the NOAA, cached so we don't overstay our welcome"""
-	weather = cache.get(create_cache_key(location_triplet[1], location_triplet[2], date))
+	weather = cache.get(create_noaa_cache_key(location_triplet[1], location_triplet[2], date))
 	if weather: return weather
 	print "missed the weather cache"
 	
@@ -122,7 +144,6 @@ def noaa_weather(location_triplet, date=datetime.datetime.now()):
 	return noaa_dom_to_weather(location_triplet, date, dom)
 	
 def noaa_dom_to_weather(location_triplet, date, dom):
-
 	weather = {}
 	for node in dom.getElementsByTagName('temperature'):
 		if node.getAttribute('type') == 'maximum': weather['max_temp'] = node.childNodes.item(3).firstChild.nodeValue.strip()
@@ -143,8 +164,8 @@ def noaa_dom_to_weather(location_triplet, date, dom):
 			weather['hazards'] = []
 		weather['hazards'].append({ 'hazard_type': hazard.getAttribute('hazardType'), 'phenomena':hazard.getAttribute('phenomena'), 'significance':hazard.getAttribute('significance') })
 		print 'hazards ', weather['hazards']
-	cache.set(create_cache_key(location_triplet[1], location_triplet[2], date), weather, 3600)
+	cache.set(create_noaa_cache_key(location_triplet[1], location_triplet[2], date), weather, 3600)
 	return weather
 
-def create_cache_key(latitude, longitude, date):
+def create_noaa_cache_key(latitude, longitude, date):
 	return "%s_%s_%s_%s" % (NOAA_CACHE_KEY, latitude, longitude, date.strftime('%Y-%m-%d'))

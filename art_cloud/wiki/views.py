@@ -60,6 +60,12 @@ def wiki(request, name):
 	if not page.id: return HttpResponseRedirect(page.get_edit_url())
 	return render_to_response('wiki/wiki.html', { 'page':page }, context_instance=RequestContext(request))
 
+@login_required
+def wiki_print(request, name):
+	page = WikiPage.objects.get_or_create(name=name)
+	if not page.id: return HttpResponseRedirect(page.get_edit_url())
+	return render_to_response('wiki/wiki_print.html', { 'page':page }, context_instance=RequestContext(request))
+
 @staff_member_required
 def wiki_add(request, name):
 	page = WikiPage.objects.get_or_create(name=name)

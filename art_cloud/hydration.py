@@ -30,13 +30,14 @@ class HydrationError(Exception): pass
 class XMLHydration:
 	"""This is an XML serializer.  There are many like it.  This one is mine."""
 	
-	def dehydrate_to_list_doc(self, input_list, start=None, end=None):
+	def dehydrate_to_list_doc(self, input_list, start=None, end=None, list_name=None):
 		if start == None: start = 0
 		if end == None:
 			end = len(input_list)
 		else:
 			end = min(end, len(input_list))
-		doc = getDOMImplementation().createDocument(None, hydration_list_name, None)
+		if list_name is None: list_name = hydration_list_name
+		doc = getDOMImplementation().createDocument(None, list_name, None)
 		doc.documentElement.setAttribute('start', str(start))
 		doc.documentElement.setAttribute('end', str(end))
 		doc.documentElement.setAttribute('total-length', str(len(input_list)))
@@ -44,8 +45,8 @@ class XMLHydration:
 			doc.documentElement.appendChild(self.dehydrate_to_doc(source).documentElement)
 		return doc
 
-	def dehydrate_to_list(self, input_list, start=None, end=None):
-		return self.dehydrate_to_list_doc(input_list, start, end).toprettyxml()
+	def dehydrate_to_list(self, input_list, start=None, end=None, list_name=None):
+		return self.dehydrate_to_list_doc(input_list, start, end, list_name).toprettyxml()
 		
 	def dehydrate(self, source):
 		return self.dehydrate_to_doc(source).toprettyxml()
@@ -66,7 +67,7 @@ class XMLHydration:
 
 	def dehydrate_to_doc(self, source):
 		element_name = self.get_element_name(source)
-		print '%s: %s' % (source, element_name)
+		#print '%s: %s' % (source, element_name)
 		doc = getDOMImplementation().createDocument(None, element_name, None)
 		
 		if not hasattr(source, hydration_meta_name):
@@ -189,9 +190,9 @@ class HydrationEmitter(piston.emitters.Emitter):
 		return dehydrate_to_xml(self.data)
 piston.emitters.Emitter.register('xml', HydrationEmitter, 'text/xml; charset=utf-8')
 
-def dehydrate_to_list_xml(input_list, start=None, end=None, xml_header=True):
-	if xml_header: return XMLHydration().dehydrate_to_list(input_list, start, end)
-	return XMLHydration().dehydrate_to_list_doc(input_list, start, end).documentElement.toprettyxml()
+def dehydrate_to_list_xml(input_list, start=None, end=None, xml_header=True, list_name=None):
+	if xml_header: return XMLHydration().dehydrate_to_list(input_list, start, end, list_name)
+	return XMLHydration().dehydrate_to_list_doc(input_list, start, end, list_name).documentElement.toprettyxml()
 	
 def dehydrate_to_xml(source, xml_header=True):
 	if xml_header: return XMLHydration().dehydrate(source)
