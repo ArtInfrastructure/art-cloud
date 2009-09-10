@@ -22,7 +22,8 @@ import logging
 
 LOCATION_TRIPLETS = (('San Jose', 37.3201, -121.8776), ('Seattle', 47.62180, -122.35030), ('Portland', 45.52361, -122.675), ('Spokane', 47.65889, -117.425), ('Boise', 43.61361, -116.2025), ('Pendleton', 45.67222, -118.7875))
 
-NOAA_FORECAST_URL_FORMAT = "http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?lat=%s&lon=%s&format=24+hourly&startDate=%s&numDays=1"
+NOAA_FORECAST_URL_FORMAT = "http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdXMLclient.php?lat=%s&lon=%s&product=time-series&maxt=maxt&mint=mint&wspd=wspd&wdir=wdir&sky=sky&wx=wx&icons=icons"
+#NOAA_FORECAST_URL_FORMAT = "http://www.weather.gov/forecasts/xml/sample_products/browser_interface/ndfdBrowserClientByDay.php?lat=%s&lon=%s&format=24+hourly&startDate=%s&numDays=1&wspd=wspd"
 NOAA_CACHE_KEY = "noaa_weather"
 
 GEOCODER_ZIP_API_URL_FORMAT = "http://geocoder.us/service/csv/geocode?zip=%s"
@@ -66,6 +67,9 @@ class WeatherQuery:
 		self.__coverage = None
 		self.__intensity = None
 		self.__hazards = []
+		self.__cloud_cover = None
+		self.__wind_direction = None
+		self.__wind_speed = None
 	def populate(self):
 		if self.populated: return
 		try:
@@ -74,11 +78,13 @@ class WeatherQuery:
 			self.__min_temp = weather['min_temp']
 			self.__max_temp = weather['max_temp']
 			self.__icon_url = weather['icon_url']
-			if hasattr(weather, 'weather_type'): self.__weather_type = weather['weather_type']
-			if hasattr(weather, 'coverage'): self.__coverage = weather['coverage']
-			if hasattr(weather, 'intensity'): self.__intensity = weather['intensity']
-			if weather.has_key('hazards'):
-				self.__hazards = weather['hazards']
+			self.__cloud_cover = weather['cloud_cover']
+			self.__wind_direction = weather['wind_direction']
+			self.__wind_speed = weather['wind_speed']
+			if 'weather_type' in weather: self.__weather_type = weather['weather_type']
+			if 'coverage' in weather: self.__coverage = weather['coverage']
+			if 'intensity' in weather: self.__intensity = weather['intensity']
+			if 'hazards' in weather: self.__hazards = weather['hazards']
 		except:
 			logging.exception('Error fetching weather')
 			error_message = "Failed to fetch the weather in %s." % self.location_name
@@ -124,13 +130,27 @@ class WeatherQuery:
 	intensity= property(__get_intensity, __set_intensity)	
 	def __get_hazards(self):
 		self.populate()
-		print self.__hazards
 		return self.__hazards
 	def __set_hazards(self, hazards): pass
 	hazards = property(__get_hazards, __set_hazards)	
+	def __get_cloud_cover(self):
+		self.populate()
+		return self.__cloud_cover
+	def __set_cloud_cover(self, cloud_cover): pass
+	cloud_cover = property(__get_cloud_cover, __set_cloud_cover)	
+	def __get_wind_direction(self):
+		self.populate()
+		return self.__wind_direction
+	def __set_wind_direction(self, wind_direction): pass
+	wind_direction = property(__get_wind_direction, __set_wind_direction)	
+	def __get_wind_speed(self):
+		self.populate()
+		return self.__wind_speed
+	def __set_wind_speed(self, wind_speed): pass
+	wind_speed = property(__get_wind_speed, __set_wind_speed)	
 
 	class HydrationMeta:
-		attributes = ['location_name', 'summary', 'latitude', 'longitude', 'date', 'error_message', 'min_temp', 'max_temp', 'icon_url', 'weather_type', 'coverage', 'intensity']
+		attributes = ['location_name', 'summary', 'latitude', 'longitude', 'date', 'error_message', 'min_temp', 'max_temp', 'icon_url', 'weather_type', 'coverage', 'intensity', 'cloud_cover', 'wind_speed', 'wind_direction']
 		nodes = ['hazards']
 
 def noaa_weather(location_triplet, date=datetime.datetime.now()):
@@ -139,8 +159,12 @@ def noaa_weather(location_triplet, date=datetime.datetime.now()):
 	if weather: return weather
 	print "missed the weather cache"
 	
-	url = NOAA_FORECAST_URL_FORMAT % (location_triplet[1], location_triplet[2], date.strftime('%Y-%m-%d'))
+	url = NOAA_FORECAST_URL_FORMAT % (location_triplet[1], location_triplet[2])
 	dom = minidom.parse(urllib.urlopen(url))
+	f = open('weather.xml', 'w')
+	f.write(dom.toprettyxml())
+	f.flush()
+	f.close()
 	return noaa_dom_to_weather(location_triplet, date, dom)
 	
 def noaa_dom_to_weather(location_triplet, date, dom):
@@ -158,7 +182,11 @@ def noaa_dom_to_weather(location_triplet, date, dom):
 		weather['weather_type'] = tci_element.getAttribute('weather-type')
 		weather['coverage'] = tci_element.getAttribute('coverage')
 		weather['intensity'] = tci_element.getAttribute('intensity')
-
+	
+	weather['cloud_cover'] = int(dom.getElementsByTagName('cloud-amount')[0].childNodes.item(3).firstChild.nodeValue.strip())
+	weather['wind_direction'] = int(dom.getElementsByTagName('direction')[0].childNodes.item(3).firstChild.nodeValue.strip())
+	weather['wind_speed'] = int(dom.getElementsByTagName('wind-speed')[0].childNodes.item(3).firstChild.nodeValue.strip())
+	
 	for hazard in dom.getElementsByTagName('hazard'):
 		if not hasattr(weather, 'hazards'):
 			weather['hazards'] = []
