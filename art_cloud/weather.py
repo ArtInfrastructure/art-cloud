@@ -46,7 +46,7 @@ def airport_code_to_observation(code):
 	except:
 		result = 'no such code'
 	
-	cache.set(create_airport_code_cache_key(code), result, 10000000)
+	cache.set(create_airport_code_cache_key(code), result, 1700)
 	if result == 'no such code': return None
 	return result
 
