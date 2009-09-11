@@ -43,6 +43,8 @@ def airport_code_to_observation(code):
 	url = AIRPORT_CODE_API_URL_FORMAT % code
 	try:
 		result = urllib.urlopen(url).read()
+		dom = minidom.parseString(result)
+		if len(dom.getElementsByTagName('current_observation')) == 0: raise Exception
 	except:
 		result = 'no such code'
 	
