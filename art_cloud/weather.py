@@ -29,6 +29,29 @@ NOAA_CACHE_KEY = "noaa_weather"
 GEOCODER_ZIP_API_URL_FORMAT = "http://geocoder.us/service/csv/geocode?zip=%s"
 GEOCODER_CACHE_KEY = 'geocoder_zip'
 
+AIRPORT_CODE_API_URL_FORMAT = "http://www.weather.gov/xml/current_obs/%s.xml"
+AIRPORT_CODE_CACHE_KEY = 'airport_code'
+
+def airport_code_to_observation(code):
+	"""Return NOAA observation xml string for an airport code, cached so we don't overstay our welcome"""
+	result = cache.get(create_airport_code_cache_key(code))
+	if result:
+		if result == 'no such code': return None
+		return result
+	print "missed the airport code cache"
+
+	url = AIRPORT_CODE_API_URL_FORMAT % code
+	try:
+		result = urllib.urlopen(url).read()
+	except:
+		result = 'no such code'
+	
+	cache.set(create_airport_code_cache_key(code), result, 10000000)
+	if result == 'no such code': return None
+	return result
+
+def create_airport_code_cache_key(code): return '%s_%s' % (AIRPORT_CODE_CACHE_KEY, code)
+
 def zip_to_lat_lon(zip):
 	"""Fetch the lat/lon and city/state for a zip, cached so we don't overstay our welcome"""
 	result = cache.get(create_zip_cache_key(zip))

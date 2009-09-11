@@ -3,11 +3,12 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 
 from piston.resource import Resource
-from handlers import WeatherHandler
+from handlers import WeatherHandler, AirportObservationHandler
 
 from models import *
 
 weather_resource = Resource(handler=WeatherHandler)
+airport_observation_resource = Resource(handler=AirportObservationHandler)
 
 urlpatterns = patterns('',
 #	(r'^api/weather/$', 'ground.views.podo', { 'podo':WeatherQuery }),
@@ -17,6 +18,7 @@ urlpatterns = patterns('',
 #	(r'^api/installation-site/(?P<id>[\d]+)/$', 'ground.views.model', { 'model':InstallationSite }),
 
     url(r'^api/weather/(?P<zip_code>[\d]+).xml$', weather_resource, { 'emitter_format': 'xml' }), 
+    url(r'^api/weather/airport/(?P<airport_code>[^/]+).xml$', airport_observation_resource, { 'emitter_format': 'string2xml' }), 
 
 	(r'^photo/(?P<id>[\d]+)/$', 'art_cloud.front.views.photo_detail'),
 	(r'^equipment-type/(?P<id>[\d]+)/$', 'art_cloud.front.views.equipment_type_detail'),

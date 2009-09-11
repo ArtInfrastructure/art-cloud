@@ -190,6 +190,12 @@ class HydrationEmitter(piston.emitters.Emitter):
 		return dehydrate_to_xml(self.data)
 piston.emitters.Emitter.register('xml', HydrationEmitter, 'text/xml; charset=utf-8')
 
+class StringAsXMLEmitter(piston.emitters.Emitter):
+	""" Piston Emitter for strings which should just be passed as XML. """
+	def render(self, request, format='string2xml'):
+		return self.data
+piston.emitters.Emitter.register('string2xml', StringAsXMLEmitter, 'text/xml; charset=utf-8')
+
 def dehydrate_to_list_xml(input_list, start=None, end=None, xml_header=True, list_name=None):
 	if xml_header: return XMLHydration().dehydrate_to_list(input_list, start, end, list_name)
 	return XMLHydration().dehydrate_to_list_doc(input_list, start, end, list_name).documentElement.toprettyxml()
