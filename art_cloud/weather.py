@@ -161,10 +161,6 @@ def noaa_weather(location_triplet, date=datetime.datetime.now()):
 	
 	url = NOAA_FORECAST_URL_FORMAT % (location_triplet[1], location_triplet[2])
 	dom = minidom.parse(urllib.urlopen(url))
-	f = open('weather.xml', 'w')
-	f.write(dom.toprettyxml())
-	f.flush()
-	f.close()
 	return noaa_dom_to_weather(location_triplet, date, dom)
 	
 def noaa_dom_to_weather(location_triplet, date, dom):
