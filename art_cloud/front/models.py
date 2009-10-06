@@ -28,7 +28,6 @@ from django.db.models import Q
 from art_cloud.abstract_models import ThumbnailedModel
 from tagging.models import Tag
 from datonomy.models import NamedDate
-from iboot.models import IBootDevice
 
 from hydration import HydrationEmitter # this sets the piston emitters
 
@@ -122,7 +121,6 @@ class InstallationSite(models.Model):
 	notes = models.TextField(blank=True, null=True)
 	photos = models.ManyToManyField(Photo, null=True, blank=True)
 	equipment = models.ManyToManyField(Equipment, null=True, blank=True)
-	iboots = models.ManyToManyField(IBootDevice, null=True, blank=True)
 	@models.permalink
 	def get_absolute_url(self):
 		return ('art_cloud.front.views.installation_site_detail', (), { 'id':self.id })

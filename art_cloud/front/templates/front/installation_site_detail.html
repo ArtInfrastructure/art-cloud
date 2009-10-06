@@ -54,12 +54,9 @@ function hideAddSitePhotoWidget() {
 [<a href="." onclick="showAddSitePhotoWidget(); return false">add a site photo</a>]
 {% endif %}
 
-{% if installation_site.iboots.all or installation_site.equipment.all %}
+{% if installation_site.equipment.all %}
 	<h3>Equipment:</h3>
 	<ul>
-	{% for iboot in installation_site.iboots.all %}
-		<li><a href="{{ iboot.get_absolute_url }}">{{ iboot.name }}</a></li>
-	{% endfor %}
 	{% for equipment in installation_site.equipment.all %}
 		<li><a href="{{ equipment.get_absolute_url }}">{{ equipment.name }}</a></li>
 	{% endfor %}

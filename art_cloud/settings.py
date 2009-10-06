@@ -73,8 +73,8 @@ INSTALLED_APPS = (
 	'tagging',
 	'south',
 	'piston',
-	'art_cloud.iboot',
 	'art_cloud.front',
+	#'art_cloud.iboot',
 	'art_cloud.datonomy',
 	'art_cloud.wiki',
 )

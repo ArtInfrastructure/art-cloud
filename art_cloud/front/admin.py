@@ -39,7 +39,7 @@ class EquipmentAdmin(StyledModelAdmin):
 admin.site.register(Equipment, EquipmentAdmin)
 
 class InstallationSiteAdmin(StyledModelAdmin):
-	filter_horizontal = ('photos', 'equipment', 'iboots')
+	filter_horizontal = ('photos', 'equipment')
 admin.site.register(InstallationSite, InstallationSiteAdmin)
 
 class InstallationAdmin(StyledModelAdmin):

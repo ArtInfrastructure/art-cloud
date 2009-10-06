@@ -8,6 +8,5 @@ urlpatterns = patterns('',
 	(r'^admin/', include(admin.site.urls)),
 	(r'^wiki/', include('wiki.urls')),
 	(r'^datonomy/', include('datonomy.urls')),
-	(r'^iboot/', include('iboot.urls')),
 	(r'^', include('front.urls')),
 )
