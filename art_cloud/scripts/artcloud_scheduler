@@ -16,7 +16,7 @@ ART_CLOUD_SRC_DIR="/webapp/art-cloud/art_cloud"
 SCHEDULER_SCRIPT_PATH="$ART_CLOUD_SRC_DIR/scripts/scheduler.py"
 
 start() {
-	export PYTHONPATH=.
+	export PYTHONPATH=".:/webapp/site-packages/"
 	cd $ART_CLOUD_SRC_DIR
         daemon $SCHEDULER_SCRIPT_PATH &
         RETVAL=$?
