@@ -1,0 +1,36 @@
+
+ADMINS = ( ('Your Name', 'you@example.com'), )
+MANAGERS = ADMINS
+
+# The path to the art server log file
+LOGGING_NAME = '/tmp/art-server.log'
+
+# The iBoot's HTTP access info
+IBOOT_USERNAME='root'
+IBOOT_PASSWORD='1234'
+IBOOT_POWER_PASSWORD = '4321'
+
+SECRET_KEY = 'xxx'
+
+from front.tasks import HeartbeatTask
+SCHEDULED_TASKS = [HeartbeatTask()]
+
+ARTCAM_PUBLIC_USERNAME = 'public'
+ARTCAM_PUBLIC_PASSWORD = '4321'
+
+PRODUCTION = False
+DEBUG = True
+TEMPLATE_DEBUG = DEBUG
+
+#CACHE_BACKEND = 'dummy:///'
+CACHE_BACKEND = 'locmem:///'
+
+DATABASE_ENGINE = 'postgresql_psycopg2' 
+DATABASE_NAME = 'db_name'
+DATABASE_USER = 'db_user'
+DATABASE_PASSWORD = '4321'
+DATABASE_HOST = ''
+DATABASE_PORT = ''
+
+import logging
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s', filename=LOGGING_NAME, filemode = 'w')
