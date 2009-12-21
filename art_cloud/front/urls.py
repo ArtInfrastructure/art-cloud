@@ -11,14 +11,8 @@ weather_resource = Resource(handler=WeatherHandler)
 airport_observation_resource = Resource(handler=AirportObservationHandler)
 
 urlpatterns = patterns('',
-#	(r'^api/weather/$', 'ground.views.podo', { 'podo':WeatherQuery }),
-#	(r'^api/installation/$', 'ground.views.model_list', { 'model':Installation }),
-#	(r'^api/installation/(?P<id>[\d]+)/$', 'ground.views.model', { 'model':Installation }),
-#	(r'^api/installation-site/$', 'ground.views.model_list', { 'model':InstallationSite }),
-#	(r'^api/installation-site/(?P<id>[\d]+)/$', 'ground.views.model', { 'model':InstallationSite }),
-
-    url(r'^api/weather/(?P<zip_code>[\d]+).xml$', weather_resource, { 'emitter_format': 'xml' }), 
-    url(r'^api/weather/airport/(?P<airport_code>[^/]+).xml$', airport_observation_resource, { 'emitter_format': 'string2xml' }), 
+   url(r'^api/weather/(?P<zip_code>[\d]+).xml$', weather_resource, { 'emitter_format': 'xml' }), 
+   url(r'^api/weather/airport/(?P<airport_code>[^/]+).xml$', airport_observation_resource, { 'emitter_format': 'string2xml' }), 
 
 	(r'^photo/(?P<id>[\d]+)/$', 'art_cloud.front.views.photo_detail'),
 	(r'^equipment-type/(?P<id>[\d]+)/$', 'art_cloud.front.views.equipment_type_detail'),
