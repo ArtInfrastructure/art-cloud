@@ -3,16 +3,25 @@ from django.conf.urls.defaults import *
 from django.conf import settings
 
 from piston.resource import Resource
-from handlers import WeatherHandler, AirportObservationHandler
+import piston.emitters
+from handlers import WeatherHandler, AirportObservationHandler, ICAOAirportObservationHandler
 
 from models import *
 
+class PlainTextEmitter(piston.emitters.Emitter):
+	""" Piston Emitter for plain text. """
+	def render(self, request, format='plain_text'):
+		return self.data
+piston.emitters.Emitter.register('plain_text', PlainTextEmitter, 'text/plain')
+
 weather_resource = Resource(handler=WeatherHandler)
 airport_observation_resource = Resource(handler=AirportObservationHandler)
+icao_airport_observation_resource = Resource(handler=ICAOAirportObservationHandler)
 
 urlpatterns = patterns('',
    url(r'^api/weather/(?P<zip_code>[\d]+).xml$', weather_resource, { 'emitter_format': 'xml' }), 
    url(r'^api/weather/airport/(?P<airport_code>[^/]+).xml$', airport_observation_resource, { 'emitter_format': 'string2xml' }), 
+   url(r'^api/weather/icao-airport/(?P<airport_code>[^/]+).txt$', icao_airport_observation_resource, { 'emitter_format': 'plain_text' }), 
 
 	(r'^photo/(?P<id>[\d]+)/$', 'art_cloud.front.views.photo_detail'),
 	(r'^equipment-type/(?P<id>[\d]+)/$', 'art_cloud.front.views.equipment_type_detail'),

@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from piston.handler import BaseHandler
 from piston.utils import rc, throttle
 
-from weather import WeatherQuery, zip_to_lat_lon, airport_code_to_observation
+from weather import WeatherQuery, zip_to_lat_lon, airport_code_to_observation, icao_airport_observation
 
 class WeatherHandler(BaseHandler):
 	methods_allowed = ('GET',)
@@ -21,6 +21,13 @@ class AirportObservationHandler(BaseHandler):
 	methods_allowed = ('GET',)
 	def read(self, request, airport_code):
 		result = airport_code_to_observation(airport_code)
+		if not result: return rc.NOT_FOUND
+		return result
+
+class ICAOAirportObservationHandler(BaseHandler):
+	methods_allowed = ('GET',)
+	def read(self, request, airport_code):
+		result = icao_airport_observation(airport_code)
 		if not result: return rc.NOT_FOUND
 		return result
 

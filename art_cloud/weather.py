@@ -32,11 +32,50 @@ GEOCODER_CACHE_KEY = 'geocoder_zip'
 AIRPORT_CODE_API_URL_FORMAT = "http://www.weather.gov/xml/current_obs/%s.xml"
 AIRPORT_CODE_CACHE_KEY = 'airport_code'
 
+ICAO_AIRPORT_OBSERVATION_URL_FORMAT = "http://weather.noaa.gov/pub/data/observations/metar/decoded/%s.TXT" #the ICAO code must be ALL CAPS
+ICAO_AIRPORT_OBSERVATION_CACHE_KEY = 'icao_airport_obs'
+
+NO_SUCH_CODE_CACHE_VALUE = 'no such code'
+
+def icao_airport_observation(code):
+	"""pass in a four letter ICAO airport code and receive NOAA's text information for that airport.
+	For example, passing in 'rjaa' (or 'RJAA') would return something like this:
+	New Tokyo Inter-National Airport, Japan (RJAA) 35-46N 140-23E 44M
+	Jan 20, 2010 - 01:00 PM EST / 2010.01.20 1800 UTC
+	Wind: from the SW (220 degrees) at 22 MPH (19 KT) gusting to 36 MPH (31 KT):0
+	Visibility: greater than 7 mile(s):0
+	Sky conditions: mostly cloudy
+	Temperature: 60 F (16 C)
+	Dew Point: 51 F (11 C)
+	Relative Humidity: 72%
+	Pressure (altimeter): 29.68 in. Hg (1005 hPa)
+	ob: RJAA 201800Z 22019G31KT 9999 FEW030 SCT180 BKN/// 16/11 Q1005 NOSIG RMK 1CU030 3AC180 A2970 P/FR
+	cycle: 18	
+	"""
+	result = cache.get(create_icao_airport_observation_cache_key(code))
+	if result:
+		if result == NO_SUCH_CODE_CACHE_VALUE: return None
+		return result
+	logging.debug("missed the non-us airport observation cache for %s" % code)
+
+	url = ICAO_AIRPORT_OBSERVATION_URL_FORMAT % code.upper()
+	try:
+		result = urllib.urlopen(url).read()
+		if result.find('<title>404 Not Found</title>') != -1: result = NO_SUCH_CODE_CACHE_VALUE
+	except:
+		logging.exception('Error fetching non us airport observation for %s' % code)
+		result = NO_SUCH_CODE_CACHE_VALUE
+	cache.set(create_icao_airport_observation_cache_key(code), result, 1700)
+	if result == NO_SUCH_CODE_CACHE_VALUE: return None
+	return result
+
+def create_icao_airport_observation_cache_key(code): return '%s_%s' % (ICAO_AIRPORT_OBSERVATION_CACHE_KEY, code)
+
 def airport_code_to_observation(code):
 	"""Return NOAA observation xml string for an airport code, cached so we don't overstay our welcome"""
 	result = cache.get(create_airport_code_cache_key(code))
 	if result:
-		if result == 'no such code': return None
+		if result == NO_SUCH_CODE_CACHE_VALUE: return None
 		return result
 	print "missed the airport code cache"
 
@@ -46,10 +85,10 @@ def airport_code_to_observation(code):
 		dom = minidom.parseString(result)
 		if len(dom.getElementsByTagName('current_observation')) == 0: raise Exception
 	except:
-		result = 'no such code'
+		result = NO_SUCH_CODE_CACHE_VALUE
 	
 	cache.set(create_airport_code_cache_key(code), result, 1700)
-	if result == 'no such code': return None
+	if result == NO_SUCH_CODE_CACHE_VALUE: return None
 	return result
 
 def create_airport_code_cache_key(code): return '%s_%s' % (AIRPORT_CODE_CACHE_KEY, code)
