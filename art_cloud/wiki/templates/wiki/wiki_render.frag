@@ -2,6 +2,7 @@
 {% load wikitags %}
 <div class="wiki-control-links">
 	[<a href="{% url wiki.views.wiki_history page.name %}">page history</a>]
+	[<a href="{% url wiki.views.wiki_print page.name %}">print version</a>]
 	{% if request.user.is_staff %}[<a href="{% url wiki.views.wiki_edit page.name %}">edit this page</a>]{% endif %}
 </div>
 {% if not hide_title %}<h1><a href="{% url wiki.views.index %}">Wiki</a>: {{ page.name }} </h1>{% endif %}
