@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <Response>
-		<Play>{{ intro_audio_url }}</Play>
+		<Gather method="POST" numDigits="3" action="http://{{ site.domain}}{% url phonon.api_views.information_node %}">  
+			{% if intro_audio_url %}
+				<Play>{{ intro_audio_url }}</Play>
+			{% else %}
+				<Say>Please enter the three digit code for the artwork of interest.</Say>
+			{% endif %}
+		</Gather>
 </Response> 

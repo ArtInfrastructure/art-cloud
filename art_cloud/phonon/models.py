@@ -37,7 +37,7 @@ from front.models import Installation
 # Record a feedback clip, tell artist
 
 class PhoneManager(models.Manager):
-	def get_by_number(self, phone_number):
+	def get_by_number(self, number):
 		try:
 			return self.get(phone_number=number)
 		except:
@@ -67,15 +67,32 @@ class PhoneCall(models.Model):
 	created = models.DateTimeField(auto_now_add=True)
 	completed = models.DateTimeField(blank=True, null=True)
 
+class AudioClipManager(models.Manager):
+	def default_landing_clip(self):
+		if self.filter(landing_clip=True).count() == 0: return None
+		return self.filter(landing_clip=True)[0]
+
 class AudioClip(models.Model):
 	name = models.CharField(max_length=1024, blank=False, null=False)
 	audio = models.FileField(upload_to='phonon_audio_clip', blank=False, null=False)
 	created = models.DateTimeField(auto_now_add=True)
+	landing_clip = models.BooleanField(blank=False, null=False, default=False)
+
+	objects = AudioClipManager()
+	def save(self, *args, **kwargs):
+		super(AudioClip, self).save(*args, **kwargs)
+		if self.landing_clip == True: # set all the other landing clips to not be landing clips
+			for old_landing_clip in AudioClip.objects.filter(landing_clip=True):
+				if old_landing_clip.id == self.id: continue
+				old_landing_clip.landing_clip = False
+				old_landing_clip.save()
+	def __unicode__(self):
+		return self.name
 
 class InformationNode(models.Model):
 	"""Information which is available via call or SMS"""
 	name = models.CharField(max_length=1024, blank=False, null=False)
-	code = models.PositiveIntegerField(); # The numeric code which a caller punches in to identify an installation
+	code = models.PositiveIntegerField(unique=True, blank=False, null=False); # The numeric code which a caller punches in to identify an installation
 	introduction = models.ForeignKey(AudioClip, blank=False, null=False)
 	installation = models.ForeignKey(Installation, blank=True, null=True) # Artwork which is associated with this node
 	class Meta:

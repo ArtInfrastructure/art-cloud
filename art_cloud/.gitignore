@@ -1,5 +1,6 @@
 backups
 local_settings.py
+media/phonon_audio_clip/
 media/photo/
 media/resized_image/
 media/wiki_file/

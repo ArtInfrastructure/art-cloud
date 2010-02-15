@@ -76,6 +76,7 @@ INSTALLED_APPS = (
 	'art_cloud.front',
 	'art_cloud.datonomy',
 	'art_cloud.wiki',
+	'art_cloud.phonon',
 )
 
 from local_settings import *

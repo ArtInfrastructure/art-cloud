@@ -70,6 +70,30 @@ def intro(request):
 
 	except:
 		logging.exception('error in intro: %s' % request.REQUEST.get('Caller'))
+		traceback.print_exc()
 		return render_to_response('phonon/phone/error.xml', {}, context_instance=RequestContext(request))
 
-	return render_to_response('phonon/phone/intro.xml', { 'intro_audio_url':get_intro_audio_url() }, context_instance=RequestContext(request))
+	landing_clip = AudioClip.objects.default_landing_clip()
+	if landing_clip != None:
+		intro_audio_url = 'http://%s%s' % (Site.objects.get_current().domain, landing_clip.audio.url)
+	else:
+		intro_audio_url = None
+
+	return render_to_response('phonon/phone/intro.xml', { 'intro_audio_url':intro_audio_url }, context_instance=RequestContext(request))
+
+@require_twilio_auth
+def information_node(request):
+	"""Information based on a node code"""
+	try:
+		phone = Phone.objects.get_by_number(request.REQUEST.get('Caller'))
+		call = PhoneCall.objects.filter(guid=request.REQUEST.get('CallGuid'))
+		if request.method == 'POST' and request.REQUEST.get('Digits', None):
+			digits = int(request.REQUEST.get('Digits'))
+			if InformationNode.objects.filter(code=digits).count() > 0:
+				node = InformationNode.objects.filter(code=digits)[0]
+				return render_to_response('phonon/phone/information_node.xml', {'information_node':node }, context_instance=RequestContext(request))
+	except:
+		logging.exception('error in information code: %s' % request.REQUEST.get('Caller'))
+		traceback.print_exc()
+		return render_to_response('phonon/phone/error.xml', {}, context_instance=RequestContext(request))
+	return HttpResponseRedirect(reverse('phonon.api_views.intro'))
