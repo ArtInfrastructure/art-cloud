@@ -5,18 +5,10 @@ MANAGERS = ADMINS
 # The path to the art server log file
 LOGGING_NAME = '/tmp/art-server.log'
 
-# The iBoot's HTTP access info
-IBOOT_USERNAME='root'
-IBOOT_PASSWORD='1234'
-IBOOT_POWER_PASSWORD = '4321'
-
 SECRET_KEY = 'xxx'
 
 from front.tasks import HeartbeatTask
 SCHEDULED_TASKS = [HeartbeatTask()]
-
-ARTCAM_PUBLIC_USERNAME = 'public'
-ARTCAM_PUBLIC_PASSWORD = '4321'
 
 PRODUCTION = False
 DEBUG = True
@@ -31,6 +23,17 @@ DATABASE_USER = 'db_user'
 DATABASE_PASSWORD = '4321'
 DATABASE_HOST = ''
 DATABASE_PORT = ''
+
+DEFAULT_FROM_EMAIL = "something@example.com"
+EMAIL_HOST = "smtp.example.com"
+EMAIL_HOST_PASSWORD = "password"
+EMAIL_HOST_USER = "username"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+
+TWILIO_PHONE_NUMBER = '(415) 555-1212'
+TWILIO_ACCOUNT_GUID = 'aaabbbcccddd'
+REQUIRE_TWILIO_AUTH = True
 
 import logging
 logging.basicConfig(level=logging.DEBUG, format='%(asctime)s %(levelname)s %(message)s', filename=LOGGING_NAME, filemode = 'w')

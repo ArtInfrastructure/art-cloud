@@ -6,7 +6,7 @@ PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
 BACKUP_ROOT = PROJECT_ROOT + '/backups/'
 
 # the directories under the media root which include things like uploaded pics or other dynamic files
-DYNAMIC_MEDIA_DIRS = ['photo', 'resized_image', 'wiki_file', 'wiki_photo']
+DYNAMIC_MEDIA_DIRS = ['photo', 'resized_image', 'wiki_file', 'wiki_photo', 'phonon_audio_clip']
 
 SOUTH_AUTO_FREEZE_APP = True
 
