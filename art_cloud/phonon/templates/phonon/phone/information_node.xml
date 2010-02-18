@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <Response>
-	<Play>http://{{site.domain}}{{ introduction_node.introduction.audio.url }}</Play>
+	<Play>http://{{site.domain}}{{ information_node.introduction.audio.url }}</Play>
 </Response> 

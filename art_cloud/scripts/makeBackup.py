@@ -2,7 +2,6 @@
 import os
 import datetime
 import sys
-import settings
 from common_script import *
 
 """Creates a backup file of the form YYYY-MM-DD_HH-MM-SS-backup.tar in the directory specified by settings.BACKUP_ROOT.
@@ -10,6 +9,7 @@ from common_script import *
 """
 
 def main():
+	import settings
 	now = datetime.datetime.now()
 	file_token = '%d-%02d-%02d_%02d-%02d-%02d' % (now.year, now.month, now.day, now.hour, now.minute, now.second)
 
@@ -39,6 +39,12 @@ def main():
 	
 	
 if __name__ == '__main__':
+        from django.core.management import setup_environ
+        import settings
+        import logging
+
+        setup_environ(settings)
+
 	main()
 
 # Copyright 2009 GORBET + BANERJEE (http://www.gorbetbanerjee.com/) Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
