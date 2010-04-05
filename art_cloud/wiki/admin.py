@@ -17,6 +17,9 @@ admin.site.register(WikiConstant, WikiConstantAdmin)
 
 class WikiPageAdmin(StyledModelAdmin):
 	search_fields = ('name','content')
+	list_display = ('name', 'public')
+	list_editable = ('public',)
+	#fields = ('name', 'content', 'public')
 admin.site.register(WikiPage, WikiPageAdmin)	
 
 class WikiFileAdmin(StyledModelAdmin):

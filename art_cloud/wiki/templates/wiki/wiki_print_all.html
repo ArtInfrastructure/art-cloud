@@ -1,0 +1,15 @@
+{% extends "wiki/base.html" %}
+
+{% block title %}{{ site.name }} Wiki{% endblock %}
+{% block style %}
+.page-breaker { margin-bottom: 30px; page-break-after: always; }
+{% endblock %}
+{% block header %}{% endblock %}
+{% block content %}
+{% for page in pages %}
+   {% if page.public or request.user.is_staff %}
+	   {% include "wiki/wiki_print_render.frag" %}
+	   <hr class="page-breaker" />
+	{% endif %}
+{% endfor %}
+{% endblock %}

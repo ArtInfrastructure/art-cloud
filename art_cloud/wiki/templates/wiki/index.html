@@ -23,8 +23,19 @@
 	<h4>Page Index:</h4>
 	<ul>
 	{% for page in wiki_pages %}
-		<li><a title="{{ page.name }}" href="{{ page.get_absolute_url }}">{{ page.name|truncate:"18" }}</a></li>
+	   {% if page.public or request.user.is_staff %}
+		   <li><a title="{{ page.name }}" href="{{ page.get_absolute_url }}">{{ page.name|truncate:"18" }}</a></li>
+		{% endif %}
 	{% endfor %}
 	</ul>
+	{% if wiki_pages %}
+	   <h4>Quicklinks:</h4>
+	   <ul>
+	      <li><a href="{% url wiki.views.wiki_print_all %}">printable all-in-one</a></li>
+	      {% if request.user.is_staff %}
+	         <li><a href="{% url admin:app_list 'wiki' %}">wiki admin</a></li>
+	      {% endif %}
+	   </ul>
+	{% endif %}
 </div>
 {% endblock %}

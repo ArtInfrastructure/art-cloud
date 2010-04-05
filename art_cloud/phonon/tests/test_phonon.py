@@ -49,6 +49,7 @@ class BasicViewsTest(TestCase):
 		self.failUnlessEqual(response.status_code, 200, 'status was %s' % response.status_code )
 		self.failUnless(response.template.name == 'phonon/phone/intro.xml')
 		self.failUnless(response.content.count("<Play>") == 1)
+		print response.content 
 
 		clip.landing_clip = False
 		clip.save()

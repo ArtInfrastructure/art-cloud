@@ -57,7 +57,7 @@ def file(request, name, id):
 @login_required
 def wiki(request, name):
 	page = WikiPage.objects.get_or_create(name=name)
-	if not page.id: return HttpResponseRedirect(page.get_edit_url())
+	if not page.id and request.user.is_staff: return HttpResponseRedirect(page.get_edit_url())
 	return render_to_response('wiki/wiki.html', { 'page':page }, context_instance=RequestContext(request))
 
 @login_required
@@ -65,6 +65,10 @@ def wiki_print(request, name):
 	page = WikiPage.objects.get_or_create(name=name)
 	if not page.id: return HttpResponseRedirect(page.get_edit_url())
 	return render_to_response('wiki/wiki_print.html', { 'page':page }, context_instance=RequestContext(request))
+
+@login_required
+def wiki_print_all(request):
+	return render_to_response('wiki/wiki_print_all.html', { 'pages':WikiPage.objects.all() }, context_instance=RequestContext(request))
 
 @staff_member_required
 def wiki_add(request, name):
