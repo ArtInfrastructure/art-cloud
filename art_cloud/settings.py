@@ -77,6 +77,7 @@ INSTALLED_APPS = (
 	'art_cloud.datonomy',
 	'art_cloud.wiki',
 	'art_cloud.phonon',
+	'art_cloud.pokepoke',
 )
 
 from local_settings import *
