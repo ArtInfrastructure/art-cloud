@@ -39,4 +39,4 @@ def alert(request):
 	if AlertPermission.objects.filter(secret=secret).count() != 1: return HttpResponseBadRequest('Invalid secret')
 	perm = AlertPermission.objects.get(secret=secret)
 	perm.send_alert(message=message, subject=subject)
-	return HttpResponse('Sent', mimetype='text/plain')
+	return HttpResponse('Sent alert', mimetype='text/plain')

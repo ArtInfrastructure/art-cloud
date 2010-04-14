@@ -30,4 +30,4 @@ from datonomy.forms import *
 from models import *
 
 @staff_member_required
-def index(request): return render_to_response('pokepoke/index.html', { }, context_instance=RequestContext(request))
+def index(request): return render_to_response('pokepoke/index.html', { 'alert_logs':AlertLog.objects.all()[0:50] }, context_instance=RequestContext(request))

@@ -52,7 +52,7 @@ class AlertPermission(models.Model):
 
 class AlertLog(models.Model):
 	"""A record of an alert broadcast"""
-	created = models.DateField(auto_now_add=True)
+	created = models.DateTimeField(auto_now_add=True)
 	permission = models.ForeignKey(AlertPermission, blank=False, null=False)
 	subject = models.CharField(max_length=1024, blank=True, null=True)
 	message = models.TextField(blank=True, null=True)
