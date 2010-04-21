@@ -31,7 +31,6 @@ from forms import *
 @login_required
 def index(request):
 	page = WikiPage.objects.get_or_create(name='SplashPage')
-	print dir(page)
 	return render_to_response('wiki/index.html', { 'wiki_pages':WikiPage.objects.all(), 'page':page }, context_instance=RequestContext(request))
 
 @login_required

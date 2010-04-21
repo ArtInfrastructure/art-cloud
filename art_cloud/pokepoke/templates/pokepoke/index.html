@@ -15,7 +15,7 @@
    <tr><th>created</th><th>source</th><th>subject</th><th>message</th></tr>
 {% for alert_log in alert_logs %}
    <tr>
-      <td>{{ alert_log.created|date:"m/d/y" }}</th>
+      <td>{{ alert_log.created|date:"m/d h:i a" }}</th>
       <td>{{ alert_log.permission.name }}</td>
       <td>{% if alert_log.subject %}{{ alert_log.subject }}{% endif %}</td>
       <td>{% if alert_log.message %}{{ alert_log.message }}{% endif %}</td>

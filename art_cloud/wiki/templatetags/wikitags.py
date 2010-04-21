@@ -6,7 +6,7 @@ from django.contrib.markup.templatetags.markup import markdown
 register = template.Library()
 
 WIKI_NAME = r'(?:[A-Z]+[a-z]+){2,}'
-WIKIREGEX = re.compile(r'\b(%s)\b' % WIKI_NAME)
+WIKIREGEX = re.compile(r'[^/]\b(%s)\b[^/]' % WIKI_NAME)
 
 WIKI_HARD_NAME = r'(?:Link:([A-Z|a-z|_|-]+))'
 WIKI_HARD_NAME_REGEX = re.compile(r'\b(%s)\b' % WIKI_HARD_NAME)
@@ -22,7 +22,7 @@ def wiki(text):
 	text = urlize(text)
 	text = markdown(text)
 	text = WIKI_PHOTO_REGEX.sub(r'<a href="%sphoto-detail/\2/"><img src="%sphoto/\2/" width="150" /></a>' % (reverse('wiki.views.index', args=[], kwargs={}), reverse('wiki.views.index', args=[], kwargs={})), text)
-	text = WIKIREGEX.sub(r'<a href="%s\1/">\1</a>' % reverse('wiki.views.index', args=[], kwargs={}), text)
+	text = WIKIREGEX.sub(r' <a href="%s\1/">\1</a> ' % reverse('wiki.views.index', args=[], kwargs={}), text)
 	text = WIKI_HARD_NAME_REGEX.sub(r'<a href="%s\2/">\2</a>' % reverse('wiki.views.index', args=[], kwargs={}), text)
 	return text
 
