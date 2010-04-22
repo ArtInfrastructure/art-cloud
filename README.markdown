@@ -30,16 +30,29 @@ I also recommend virtualenv, but YMMV: http://pypi.python.org/pypi/virtualenv
 Run these pip commands to install the requisite software packages:
 
 pip install django
+
 pip install markdown
+
 pip install south
+
 pip install django-piston
+
 pip install boto
+
 pip install django-pagination
+
 pip install BeautifulSoup
+
 pip install pil
+
 pip install feedparser
+
 pip install lxml
+
 pip install psycopg2
+
 pip install simplejson
+
 pip install tagging
+
 pip install vobject
