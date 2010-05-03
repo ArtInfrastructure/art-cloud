@@ -30,6 +30,7 @@
 		{% endif %}
 		{% if request.user.is_staff %}
 			<a href="/admin/">admin</a> |
+			{% if WEBMAIL_URL %}<a href="{{ WEBMAIL_URL|safe }}">webmail</a> |{% endif %}
 			<a href="{% url pokepoke.views.index %}">alerts</a> |
 		{% endif %}
 		{% if request.user.is_authenticated %}

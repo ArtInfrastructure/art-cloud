@@ -1,8 +1,10 @@
 from django.contrib.sites.models import Site
+from django.conf import settings
+
 
 def site(request):
     """Adds a site context variable"""
-    return {'site': Site.objects.get_current() }
+    return {'site': Site.objects.get_current(), 'WEBMAIL_URL':settings.WEBMAIL_URL }
 
 def search(request):
 	"""Adds a search form if a valid one isn't in there already"""
