@@ -4,7 +4,7 @@ body {
 	font-size:12px;
 	font-family:"Lucida Grande","DejaVu Sans","Bitstream Vera Sans",Verdana,Arial,sans-serif;
 	color:#000;
-	background:#DDF;
+	background: #FFF url('/media/art_cloud/cloud_header.jpg') repeat-x;
 	margin: 10px 10px 10px 10px;
 	width: 800px;
 	position: relative;
