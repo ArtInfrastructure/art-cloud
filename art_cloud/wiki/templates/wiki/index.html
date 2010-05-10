@@ -17,7 +17,7 @@
 {% block content %}
 <h1>Wiki:</h1>
 <div id="main-column">
-	{% with "true" as hide_title %}{% include "wiki/wiki_render.frag" %}{% endwith %}
+	{% with "true" as hide_title %}{% with "true" as hide_public %}{% include "wiki/wiki_render.frag" %}{% endwith %}{% endwith %}
 </div>
 <div id="left-column">
 	<h4>Page Index:</h4>

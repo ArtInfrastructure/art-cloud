@@ -57,6 +57,12 @@ def file(request, name, id):
 def wiki(request, name):
 	page = WikiPage.objects.get_or_create(name=name)
 	if not page.id and request.user.is_staff: return HttpResponseRedirect(page.get_edit_url())
+	if request.method == 'POST' and request.user.is_staff:
+	    if request.POST.get('public', None):
+	        if request.POST.get('public') == 'true': page.public = True
+	        if request.POST.get('public') == 'false': page.public = False
+	        page.save()
+	        
 	return render_to_response('wiki/wiki.html', { 'page':page }, context_instance=RequestContext(request))
 
 @login_required
