@@ -1,7 +1,5 @@
 import os
 
-HEARTBEAT_TIMEOUT = 500 # in seconds
-
 PROJECT_ROOT = os.path.realpath(os.path.dirname(__file__))
 BACKUP_ROOT = PROJECT_ROOT + '/backups/'
 
