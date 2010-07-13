@@ -30,7 +30,7 @@ class WikiPage(models.Model):
 	name = models.CharField(max_length=255, unique=True, blank=False, null=False)
 	content = models.TextField(blank=False, null=False)
 	rendered = models.TextField(blank=True, null=True)
-	public = models.BooleanField(default=False)
+	public = models.BooleanField(default=True)
 	objects = WikiPageManager()
 	@models.permalink
 	def get_absolute_url(self):

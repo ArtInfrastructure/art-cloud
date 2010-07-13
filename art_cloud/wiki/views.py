@@ -56,7 +56,7 @@ def file(request, name, id):
 @login_required
 def wiki(request, name):
 	page = WikiPage.objects.get_or_create(name=name)
-	if not page.id and request.user.is_staff: return HttpResponseRedirect(page.get_edit_url())
+	if not page.id: return HttpResponseRedirect(page.get_edit_url())
 	if request.method == 'POST' and request.user.is_staff:
 	    if request.POST.get('public', None):
 	        if request.POST.get('public') == 'true': page.public = True
@@ -75,10 +75,10 @@ def wiki_print(request, name):
 def wiki_print_all(request):
 	return render_to_response('wiki/wiki_print_all.html', { 'pages':WikiPage.objects.all() }, context_instance=RequestContext(request))
 
-@staff_member_required
+@login_required
 def wiki_add(request, name):
 	page = WikiPage.objects.get_or_create(name=name)
-	if request.method == 'POST' and request.user.is_staff:
+	if request.method == 'POST' and request.user.is_authenticated:
 		wiki_photo_form = WikiPhotoForm(request.POST, request.FILES)
 		wiki_file_form = WikiFileForm(request.POST, request.FILES)
 		if request.POST.get('photo-form', None):
@@ -113,18 +113,19 @@ def wiki_history(request, name):
 @login_required
 def wiki_page_log(request, name, id):
 	page_log = get_object_or_404(WikiPageLog, wiki_page__name=name, pk=id)
-	if request.method == 'POST' and request.POST.get('revert', None)  and request.user.is_staff:
+	if request.method == 'POST' and request.POST.get('revert', None) and request.user.is_authenticated:
 		page_log.wiki_page.content = page_log.content
 		page_log.wiki_page.save()
 		return HttpResponseRedirect(page_log.wiki_page.get_absolute_url())
 	return render_to_response('wiki/wiki_page_log.html', { 'page_log':page_log  }, context_instance=RequestContext(request))
 
-@staff_member_required
+@login_required
 def wiki_edit(request, name):
 	page = WikiPage.objects.get_or_create(name=name)
-	if request.method == 'POST' and request.user.is_staff:
+	if request.method == 'POST' and request.user.is_authenticated:
 		page_form = WikiPageForm(request.POST, instance=page)
 		if page_form.is_valid():
+			if not page.id: page.public = True
 			page = page_form.save()
 			if request.GET.get('next', None): return HttpResponseRedirect(request.GET.get('next'))
 			return HttpResponseRedirect(page.get_absolute_url())

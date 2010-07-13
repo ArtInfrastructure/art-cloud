@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-{% if request.user.is_staff %}
+{% if request.user.is_authenticated %}
 	<div style="float: right; margin-top: 5px; ">
 			[<a href="." onclick="document.getElementById('revert-form').submit(); return false;">revert to this version</a>]
 			<form id="revert-form" action="{{ page_log.get_absolute_url }}" method="post"><input type="hidden" name="revert" value="true"></form>

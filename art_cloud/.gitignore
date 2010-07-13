@@ -1,4 +1,5 @@
 backups
+pip-log.txt
 local_settings.py
 media/phonon_audio_clip/
 media/photo/

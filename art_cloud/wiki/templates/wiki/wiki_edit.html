@@ -53,33 +53,36 @@ function saveThenAddFile(){
 	<p>[<a href="{% url wiki.views.index %}WikiHelp">more help</a>]</p>
 </div>
 
-<form id="page-form" action="." method="post">
-	{% for field in page_form %}{{ field }}{% endfor %}
-	<input type="submit" value="save" />
-</form>
-<br clear="all" />
-<div class="wiki-control-links">[<a onclick="saveThenAddFile(); return false;" href="{% url wiki.views.wiki_add page.name %}">add file or photo</a>]</div>
+{% if not page.public and not request.user.is_staff %}
+   <p>This page is not public.</p>
+{% else %}
+   <form id="page-form" action="." method="post">
+   	{% for field in page_form %}{{ field }}{% endfor %}
+   	<input type="submit" value="save" />
+   </form>
+   <br clear="all" />
+   <div class="wiki-control-links">[<a onclick="saveThenAddFile(); return false;" href="{% url wiki.views.wiki_add page.name %}">add file or photo</a>]</div>
 
-{% if page.wikiphoto_set.all %}
-<h3>Photos:</h3>
-<p>To include a photo in the page, type a photo tag which starts with "Photo" and ends with the photo id, like so "Photo5".<br/>  You will find the photo tag above each photo listed below.</p>
+   {% if page.wikiphoto_set.all %}
+   <h3>Photos:</h3>
+   <p>To include a photo in the page, type a photo tag which starts with "Photo" and ends with the photo id, like so "Photo5".<br/>  You will find the photo tag above each photo listed below.</p>
+   {% endif %}
+   {% for photo in page.wikiphoto_set.all %}
+   	<div class="wiki-photo-item">
+   		Photo{{ photo.id }}<br/>
+   		<a href="{{ photo.get_absolute_url }}">
+   			<img alt="{{ photo.display_name }}" title="{{ photo.display_name }}" src="{{ photo.image.url|fit_image:"150x150" }}" /> 
+   		</a>
+   	</div>
+   {% endfor %}
+
+   {% if page.wikifile_set.all %}
+   <h3>Files:</h3>
+   {% endif %}
+   {% for file in page.wikifile_set.all %}
+   	<div class="wiki-file-item">
+   		<a href="{{ file.file.url }}">{{ file.display_name }}</a> <span class="wiki-control-link">[<a href="{{ file.get_absolute_url }}">info</a>]</span>
+   	</div>
+   {% endfor %}
 {% endif %}
-{% for photo in page.wikiphoto_set.all %}
-	<div class="wiki-photo-item">
-		Photo{{ photo.id }}<br/>
-		<a href="{{ photo.get_absolute_url }}">
-			<img alt="{{ photo.display_name }}" title="{{ photo.display_name }}" src="{{ photo.image.url|fit_image:"150x150" }}" /> 
-		</a>
-	</div>
-{% endfor %}
-
-{% if page.wikifile_set.all %}
-<h3>Files:</h3>
-{% endif %}
-{% for file in page.wikifile_set.all %}
-	<div class="wiki-file-item">
-		<a href="{{ file.file.url }}">{{ file.display_name }}</a> <span class="wiki-control-link">[<a href="{{ file.get_absolute_url }}">info</a>]</span>
-	</div>
-{% endfor %}
-
 {% endblock %}

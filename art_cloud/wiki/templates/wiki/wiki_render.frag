@@ -19,9 +19,9 @@ function togglePublic(){
 
 {% if page.public or request.user.is_staff %}
 	<div class="wiki-control-links">
-		{% if request.user.is_staff %}[<a href="{% url wiki.views.wiki_history page.name %}">page history</a>]{% endif %}
+		[<a href="{% url wiki.views.wiki_history page.name %}">page history</a>]
 		[<a href="{% url wiki.views.wiki_print page.name %}">print version</a>]
-		{% if request.user.is_staff %}[<a href="{% url wiki.views.wiki_edit page.name %}">edit this page</a>]{% endif %}
+		[<a href="{% url wiki.views.wiki_edit page.name %}">edit this page</a>]
 		{% if not hide_public %}
 			{% if request.user.is_staff %}public: <form action="." method="post" onsubmit="return false;"><input onclick="togglePublic();" type="checkbox" {% if page.public %}checked="checked"{% endif %} name="public"/></form>{% endif %}
 		{% endif %}
@@ -41,5 +41,5 @@ function togglePublic(){
 		</div>
 	{% endfor %}
 {% else %}
-   <p>This page exists but is only available to staff.</p>
+   <p>This page exists but is not public.</p>
 {% endif %}
