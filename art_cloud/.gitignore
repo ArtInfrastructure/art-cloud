@@ -3,6 +3,7 @@ pip-log.txt
 local_settings.py
 media/phonon_audio_clip/
 media/photo/
+media/document/
 media/resized_image/
 media/wiki_file/
 media/wiki_photo/

@@ -11,6 +11,10 @@ class StyledModelAdmin(admin.ModelAdmin):
 	class Media:
 		css = { "all": ('art_cloud/admin.css', )}
 
+class DocumentAdmin(StyledModelAdmin):
+	list_display = ('title', 'doc', 'created')
+admin.site.register(Document, DocumentAdmin)	
+
 class HeartbeatAdmin(StyledModelAdmin):
 	list_display = ('installation', 'created', 'trimmed_info')
 	date_hierarchy = 'created'

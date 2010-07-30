@@ -114,6 +114,23 @@ class Equipment(models.Model):
 	def __unicode__(self):
 		return "%s: %s" % (self.equipment_type.name, self.name)
 
+class Document(models.Model):
+	"""A document associated with an Installation."""
+	doc = models.FileField(upload_to='document', blank=False, null=False)
+	title = models.CharField(max_length=1024, null=True, blank=True)
+	created = models.DateTimeField(auto_now_add=True)
+	def save(self, *args, **kwargs):
+		"""When saving the content, use the title if one isn't provided"""
+		if self.title == None or len(self.title) == 0: self.title = str(self.doc)
+		if self.title.rfind('/') != -1: self.title = self.title[self.title.rfind('/') + 1:]
+		super(Document, self).save(*args, **kwargs)
+	def get_absolute_url(self):
+		return self.doc.url
+	class Meta:
+		ordering = ['-created']
+	def __unicode__(self):
+		return str(self.doc)
+
 class InstallationSite(models.Model):
 	"""A location in which art is installed."""
 	name = models.CharField(max_length=1024, null=False, blank=False)
@@ -158,6 +175,8 @@ class Installation(models.Model):
 	notes = models.TextField(blank=True, null=True)
 	photos = models.ManyToManyField(Photo, null=True, blank=True)
 	wiki_name = models.CharField(max_length=255, blank=True, null=True)
+	documents = models.ManyToManyField(Document, null=True, blank=True)
+
 	objects = InstallationManager()
 
 	def _get_tags(self):

@@ -26,5 +26,9 @@ class PhotoForm(forms.ModelForm):
 	class Meta:
 		model = Photo
 
+class DocumentForm(forms.ModelForm):
+	class Meta:
+		model = Document
+
 class TagsForm(forms.Form):
 	tags = forms.CharField(required=False)

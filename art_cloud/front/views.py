@@ -204,20 +204,22 @@ def installation_detail(request, id):
 def common_installation_detail(request, installation):
 	error_message = None
 	tag_default_data = {'tags': installation.tag_names }
-	notes_default_date = { 'notes':installation.notes }
+	notes_default_data = { 'notes':installation.notes }
 	if request.method == 'POST':
 		photo_form = PhotoForm(request.POST, request.FILES)
 		tags_form = TagsForm(request.POST)
 		named_date_form = NamedDateForm(request.POST)
 		installation_notes_form = NotesForm(request.POST)
+		document_form = DocumentForm(request.POST, request.FILES)
 		if request.POST.get('photo-form', None):
 			tags_form = TagsForm(tag_default_data)
 			named_date_form = NamedDateForm()
-			installation_notes_form = NotesForm(notes_default_date)
+			document_form = DocumentForm()
+			installation_notes_form = NotesForm(notes_default_data)
 			if photo_form.is_valid():
 				try:
 					photo = photo_form.save()
-					installation_notes_form = NotesForm(notes_default_date)
+					installation_notes_form = NotesForm(notes_default_data)
 					installation.photos.add(photo)
 					installation.save()
 				except:
@@ -227,7 +229,8 @@ def common_installation_detail(request, installation):
 		elif request.POST.get('recent_dates', None):
 			tags_form = TagsForm(tag_default_data)
 			photo_form = PhotoForm()
-			installation_notes_form = NotesForm(notes_default_date)
+			document_form = DocumentForm()
+			installation_notes_form = NotesForm(notes_default_data)
 			named_date_form = NamedDateForm()
 			dates = [int(rd) for rd in request.POST.getlist('recent_dates')]
 			for rd in dates:
@@ -240,7 +243,8 @@ def common_installation_detail(request, installation):
 		elif request.POST.get('named-date-form', None):
 			tags_form = TagsForm(tag_default_data)
 			photo_form = PhotoForm()
-			installation_notes_form = NotesForm(notes_default_date)
+			document_form = DocumentForm()
+			installation_notes_form = NotesForm(notes_default_data)
 			if named_date_form.is_valid():
 				pk = named_date_form.cleaned_data['pk']
 				if pk:
@@ -262,21 +266,39 @@ def common_installation_detail(request, installation):
 		elif request.POST.get('installation_form_id', None):
 			tags_form = TagsForm(tag_default_data)
 			photo_form = PhotoForm()
+			document_form = DocumentForm()
 			named_date_form = NamedDateForm()
 			installation.notes = request.POST.get('notes', None)
 			installation.save()
 		elif request.POST.get('tag-form', None):
 			named_date_form = NamedDateForm()
-			installation_notes_form = NotesForm(notes_default_date)
+			installation_notes_form = NotesForm(notes_default_data)
 			photo_form = PhotoForm()
+			document_form = DocumentForm()
 			if tags_form.is_valid():
 				installation.tags = tags_form.cleaned_data['tags']
 				installation.save()
 				tag_form = TagsForm({'tags': installation.tag_names })
+		elif request.POST.get('document-form', None):
+			print 'got doc form', document_form
+			tags_form = TagsForm(tag_default_data)
+			named_date_form = NamedDateForm()
+			installation_notes_form = NotesForm(notes_default_data)
+			photo_form = PhotoForm()
+			if document_form.is_valid():
+				print 'is valid'
+				document = document_form.save()
+				installation.documents.add(document)
+				installation.save()
+				print 'saved'
+				document_form = DocumentForm()
+			else:
+				print 'not valid'
 	else:
-		installation_notes_form = NotesForm(notes_default_date)
+		installation_notes_form = NotesForm(notes_default_data)
 		tags_form = TagsForm(tag_default_data)
 		photo_form = PhotoForm()
+		document_form = DocumentForm()
 		named_date_form = NamedDateForm()
-	return render_to_response('front/installation_detail.html', { 'error_message':error_message, 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'can_edit_dates':True, 'named_date_form':named_date_form, 'installation_notes_form':installation_notes_form, 'tags_form': tags_form, 'installation_photo_form':photo_form }, context_instance=RequestContext(request))
+	return render_to_response('front/installation_detail.html', { 'document_form':document_form, 'error_message':error_message, 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'can_edit_dates':True, 'named_date_form':named_date_form, 'installation_notes_form':installation_notes_form, 'tags_form': tags_form, 'installation_photo_form':photo_form }, context_instance=RequestContext(request))
 

@@ -45,6 +45,26 @@
 			<td>{{ installation.closed|date:"F j, Y \a\t g:i A" }}</td>
 		</tr>
 		{% endif %}
+		{% if document_form %}
+		<tr>
+		   <th>docs:</th>
+		   <td>
+				{% for document in installation.documents.all %}
+					<a href="{{ document.get_absolute_url }}">{{ document.title }}</a>{% loop_comma %}
+				{% endfor %}
+				<div id="add-installation-document-widget">
+					<div style="float: right;">[<a href="." onclick="hideAddInstallationDocumentWidget(); return false;">close</a>]</div>
+					<table>
+         			<form enctype="multipart/form-data" action="." method="post">
+         				{{ document_form }}
+							<tr><th></th><td><input type="hidden" name="document-form" value="true" /><input type="submit" value="add doc"></td></tr>
+         			</form>
+					</table>
+				</div>
+				[<a href="." onclick="showAddInstallationDocumentWidget(); return false;">add</a>]
+		   </td>
+		</tr>
+		{% endif %}
 		{% if installation.notes or installation_notes_form %}
 		<tr>
 			<th>notes:</th>
