@@ -18,3 +18,7 @@ function showAddInstallationDocumentWidget() {
 function hideAddInstallationDocumentWidget() {
 	$("#add-installation-document-widget").hide();
 }
+
+function toggleInstallationOpened(installationID, currentlyOpened) {
+	console.log("toggle installation ID", installationID, currentlyOpened);
+}

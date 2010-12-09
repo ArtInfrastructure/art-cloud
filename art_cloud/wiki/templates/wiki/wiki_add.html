@@ -15,6 +15,7 @@
 	</table>
 	<input type="hidden" name="file-form" value="true" />
 	<input type="submit" value="add file" />
+	{% csrf_token %}
 </form>
 
 <h2>Add a photo:</h2>
@@ -24,6 +25,7 @@
 	</table>
 	<input type="hidden" name="photo-form" value="true" />
 	<input type="submit" value="add photo" />
+	{% csrf_token %}
 </form>
 
 {% endblock %}

@@ -211,11 +211,13 @@ def common_installation_detail(request, installation):
 		named_date_form = NamedDateForm(request.POST)
 		installation_notes_form = NotesForm(request.POST)
 		document_form = DocumentForm(request.POST, request.FILES)
+		toggle_installation_open_form = ToggleInstallationOpenForm(request.POST)
 		if request.POST.get('photo-form', None):
 			tags_form = TagsForm(tag_default_data)
 			named_date_form = NamedDateForm()
 			document_form = DocumentForm()
 			installation_notes_form = NotesForm(notes_default_data)
+			toggle_installation_open_form = ToggleInstallationOpenForm(initial={'installation_id':installation.id, 'opened':not installation.is_opened()})
 			if photo_form.is_valid():
 				try:
 					photo = photo_form.save()
@@ -232,6 +234,7 @@ def common_installation_detail(request, installation):
 			document_form = DocumentForm()
 			installation_notes_form = NotesForm(notes_default_data)
 			named_date_form = NamedDateForm()
+			toggle_installation_open_form = ToggleInstallationOpenForm(initial={'installation_id':installation.id, 'opened':not installation.is_opened()})
 			dates = [int(rd) for rd in request.POST.getlist('recent_dates')]
 			for rd in dates:
 				try:
@@ -245,6 +248,7 @@ def common_installation_detail(request, installation):
 			photo_form = PhotoForm()
 			document_form = DocumentForm()
 			installation_notes_form = NotesForm(notes_default_data)
+			toggle_installation_open_form = ToggleInstallationOpenForm(initial={'installation_id':installation.id, 'opened':not installation.is_opened()})
 			if named_date_form.is_valid():
 				pk = named_date_form.cleaned_data['pk']
 				if pk:
@@ -268,6 +272,7 @@ def common_installation_detail(request, installation):
 			photo_form = PhotoForm()
 			document_form = DocumentForm()
 			named_date_form = NamedDateForm()
+			toggle_installation_open_form = ToggleInstallationOpenForm(initial={'installation_id':installation.id, 'opened':not installation.is_opened()})
 			installation.notes = request.POST.get('notes', None)
 			installation.save()
 		elif request.POST.get('tag-form', None):
@@ -275,6 +280,7 @@ def common_installation_detail(request, installation):
 			installation_notes_form = NotesForm(notes_default_data)
 			photo_form = PhotoForm()
 			document_form = DocumentForm()
+			toggle_installation_open_form = ToggleInstallationOpenForm(initial={'installation_id':installation.id, 'opened':not installation.is_opened()})
 			if tags_form.is_valid():
 				installation.tags = tags_form.cleaned_data['tags']
 				installation.save()
@@ -285,6 +291,7 @@ def common_installation_detail(request, installation):
 			named_date_form = NamedDateForm()
 			installation_notes_form = NotesForm(notes_default_data)
 			photo_form = PhotoForm()
+			toggle_installation_open_form = ToggleInstallationOpenForm(initial={'installation_id':installation.id, 'opened':not installation.is_opened()})
 			if document_form.is_valid():
 				print 'is valid'
 				document = document_form.save()
@@ -294,11 +301,26 @@ def common_installation_detail(request, installation):
 				document_form = DocumentForm()
 			else:
 				print 'not valid'
+		elif toggle_installation_open_form.is_valid():
+			tags_form = TagsForm(tag_default_data)
+			named_date_form = NamedDateForm()
+			document_form = DocumentForm()
+			photo_form = PhotoForm()
+			installation_notes_form = NotesForm(notes_default_data)
+			if toggle_installation_open_form.cleaned_data['opened']:
+				installation.opened = datetime.datetime.now()
+				installation.closed = None
+			else:
+				installation.opened = None
+				installation.closed = None
+			installation.save()
+			toggle_installation_open_form = ToggleInstallationOpenForm(initial={'installation_id':installation.id, 'opened':not installation.is_opened()})
 	else:
 		installation_notes_form = NotesForm(notes_default_data)
 		tags_form = TagsForm(tag_default_data)
 		photo_form = PhotoForm()
 		document_form = DocumentForm()
 		named_date_form = NamedDateForm()
-	return render_to_response('front/installation_detail.html', { 'document_form':document_form, 'error_message':error_message, 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'can_edit_dates':True, 'named_date_form':named_date_form, 'installation_notes_form':installation_notes_form, 'tags_form': tags_form, 'installation_photo_form':photo_form }, context_instance=RequestContext(request))
+		toggle_installation_open_form = ToggleInstallationOpenForm(initial={'installation_id':installation.id, 'opened':not installation.is_opened()})
+	return render_to_response('front/installation_detail.html', { 'toggle_installation_open_form':toggle_installation_open_form, 'document_form':document_form, 'error_message':error_message, 'installation':installation, 'recent_dates':NamedDate.objects.all().order_by('-id'), 'can_edit_dates':True, 'named_date_form':named_date_form, 'installation_notes_form':installation_notes_form, 'tags_form': tags_form, 'installation_photo_form':photo_form }, context_instance=RequestContext(request))
 

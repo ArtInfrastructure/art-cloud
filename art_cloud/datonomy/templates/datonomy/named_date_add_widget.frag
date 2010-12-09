@@ -9,6 +9,7 @@
 				<td>{{ field }}</td>
 			{% endfor %}
 			<td><input type="hidden" name="named-date-form" value="true" />&nbsp;&nbsp;<input type="submit" value="add date" /></td>
+			{% csrf_token %}
 		</form>
 	</tr>
 	</table>
@@ -22,6 +23,7 @@
 			{% endfor %}
 			<tr><td><input type="hidden" name="named-date-form" value="true" /><input type="submit" value="add dates" /></td></tr>
 		</table>
+		{% csrf_token %}
 		</form>
 
 	</div>

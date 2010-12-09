@@ -42,7 +42,7 @@ function showRecentDatesPopup(){
 		html += '<input type="checkbox" name="recent_dates" value="' + recentDates[i].id + '"/> ' + recentDates[i].name + ': ' + recentDates[i].date + '<br />';
 	}
 	html += '<br /><input type="submit" value="add dates" />'
-	html += '</form>';
+	html += '{% csrf_token %}</form>';
 
 	var pulldown = document.createElement('div');
 	pulldown.setAttribute('id', 'recent-dates-popup');

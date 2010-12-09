@@ -23,7 +23,7 @@ function togglePublic(){
 		[<a href="{% url wiki.views.wiki_print page.name %}">print version</a>]
 		[<a href="{% url wiki.views.wiki_edit page.name %}">edit this page</a>]
 		{% if not hide_public %}
-			{% if request.user.is_staff %}public: <form action="." method="post" onsubmit="return false;"><input onclick="togglePublic();" type="checkbox" {% if page.public %}checked="checked"{% endif %} name="public"/></form>{% endif %}
+			{% if request.user.is_staff %}public: <form action="." method="post" onsubmit="return false;"><input onclick="togglePublic();" type="checkbox" {% if page.public %}checked="checked"{% endif %} name="public"/>{% csrf_token %}</form>{% endif %}
 		{% endif %}
 	</div>
 	{% if not hide_title %}<h1><a href="{% url wiki.views.index %}">Wiki</a>: {{ page.name }} </h1>{% endif %}

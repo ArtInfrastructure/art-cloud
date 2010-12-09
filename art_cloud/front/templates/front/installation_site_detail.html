@@ -47,7 +47,7 @@ function hideAddSitePhotoWidget() {
 	<table>
 	<form enctype="multipart/form-data" action='.' method='post'>
 		{{ photo_form }}
-		<tr><th></th><td><input type="submit" value="add photo"></td></tr>
+		<tr><th></th><td><input type="submit" value="add photo">{% csrf_token %}</td></tr>
 	</form>
 	</table>
 </div>

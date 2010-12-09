@@ -1,6 +1,5 @@
 {% load listtags %}
 {% load imagetags %}
-<div class="site-item {% cycle 'even-row' 'odd-row' %}">
 	{% if not hide_name %}<h3><a href="{{ installation_site.get_absolute_url }}">{{ installation_site.name }}</a></h3>{% endif %}
 	<table>
 		{% if installation_site.location %}
@@ -46,4 +45,3 @@
 		</tr>
 		{% endif %}
 	</table>
-</div>

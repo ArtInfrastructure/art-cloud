@@ -45,6 +45,7 @@ $(document).ready(function() { initialize(); });
 					{% for field in equipment_type_notes_form %}{{ field}}{% endfor %}
 					<input type="hidden" name="equipment_type_form_id" value="{{ equipment_type.id }}" />
 					<input type="submit" value="save note" />
+					{% csrf_token %}
 				</form>
 			</div>
 			[<a href="." onclick="$('#equipment-type-notes-{{ equipment_type.id }}').hide(); $('#equipment-type-notes-widget-{{ equipment_type.id}}').show(); return false">edit</a>]

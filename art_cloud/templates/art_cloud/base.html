@@ -44,7 +44,7 @@
 		<br />
 		<form id="search-form" action="{% url front.views.search %}" method="post">
 			{% for field in search_form %}{{ field }}{% endfor %}
-			<input type="submit" value="search" />
+			<input type="submit" value="search" />{% csrf_token %}
 		</form>
 	</div>
 {% endblock %}

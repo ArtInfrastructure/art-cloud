@@ -60,3 +60,5 @@ th { text-align: right; vertical-align: top; padding-right: 8px; }
 .hover-tr:hover .hover-td { visibility: visible; }
 
 #error-message { padding: 10px; border: solid 2px #DDD; background-color: #F88; }
+
+.toggle-open-form { display: inline; visibility: hidden; position: absolute; width: 0px; height: 0px;}

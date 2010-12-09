@@ -13,6 +13,11 @@ class UserProfileForm(forms.ModelForm):
 		model = UserProfile
 		fields = ('display_name', 'bio', 'url', 'phone_number')
 
+class ToggleInstallationOpenForm(forms.Form):
+	"""Submitted to toggle whether the installation is opened"""
+	installation_id = forms.IntegerField()
+	opened = forms.BooleanField(required=False)
+
 class NotesForm(forms.Form):
 	"""Used by Installation and Equipment pages to update their notes."""
 	notes = forms.CharField(required=False, widget=forms.Textarea())

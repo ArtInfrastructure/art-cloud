@@ -26,10 +26,10 @@ $(document).ready(function() { init(); });
 	<form method="post">
 		<table>
 		{{ user_form }}
-
 		{{ user_profile_form }}
 		</table>
 		<input type="submit" value="update profile" />
+		{% csrf_token %}
 	</form>
 </div>
 [<a href="." onclick="$('#profile-edit-widget').show(); return false;">edit user info</a>]

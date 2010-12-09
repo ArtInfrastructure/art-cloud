@@ -9,7 +9,9 @@
 
 {% block slice %}
 {% for profile in profiles %}
+<div class="{% cycle 'even-row' 'odd-row' %}">
 {% include "front/artist_item.frag" %}
+</div>
 {% endfor %}
 
 {% endblock %}

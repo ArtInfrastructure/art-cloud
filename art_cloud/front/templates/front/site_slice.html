@@ -7,7 +7,9 @@
 
 {% block slice %}
 	{% for installation_site in sites %}
+	<div class="site-item {% cycle 'even-row' 'odd-row' %}">
 		{% include "front/site_item.frag" %}
+	</div>
 	{% endfor %}
 {% endblock %}
 

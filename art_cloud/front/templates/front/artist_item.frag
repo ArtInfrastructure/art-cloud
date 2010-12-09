@@ -1,6 +1,6 @@
 {% load listtags %}
 {% load imagetags %}
-<div class="artist-item {% cycle 'even-row' 'odd-row' %}">
+<span class="artist-item">
 	{% if not hide_name %}<h3><a href="{{ profile.get_absolute_url }}">{{ profile.display_name }}</a></h3>{% endif %}
 	<table>
 		{% if profile.user.email %}
@@ -59,4 +59,4 @@
 			{% endfor %}
 		</td>
 	</table>
-</div>
+</span>

@@ -33,12 +33,14 @@
 			<td><a href="{{ installation.site.get_absolute_url }}">{{ installation.site }}</a></td>
 		</tr>
 		{% endif %}
-		{% if installation.opened %}
 		<tr>
 			<th>opened:</th>
-			<td>{{ installation.opened|date:"F j, Y \a\t g:i A" }}</td>
+			<td>{{ installation.is_opened }}
+				{% if toggle_installation_open_form %}
+					[<a href="." onclick="$('#toggle-open-{{ installation.id}}').submit(); return false;">toggle</a>] <form class="toggle-open-form" id="toggle-open-{{ installation.id }}" action="." method="post">{% for field in toggle_installation_open_form %}{{ field }}{% endfor %}{% csrf_token %}</form>
+				{% endif %}
+			</td>
 		</tr>
-		{% endif %}
 		{% if installation.closed %}
 		<tr>
 			<th>closed:</th>
@@ -57,8 +59,9 @@
 					<table>
          			<form enctype="multipart/form-data" action="." method="post">
          				{{ document_form }}
-							<tr><th></th><td><input type="hidden" name="document-form" value="true" /><input type="submit" value="add doc"></td></tr>
-         			</form>
+						<tr><th></th><td><input type="hidden" name="document-form" value="true" /><input type="submit" value="add doc"></td></tr>
+         				{% csrf_token %}
+					</form>
 					</table>
 				</div>
 				[<a href="." onclick="showAddInstallationDocumentWidget(); return false;">add</a>]
@@ -111,7 +114,7 @@
 					{% endif %}
 				</div>
 				{% if edit_tags and tags_form %}
-				<form id="tag-form" action="." method="post">{% for field in tags_form %}{{ field }}{% endfor %} <input type="submit" value="save tags"/><input type="hidden" name="tag-form" value="true" /></form>
+				<form id="tag-form" action="." method="post">{% for field in tags_form %}{{ field }}{% endfor %} <input type="submit" value="save tags"/><input type="hidden" name="tag-form" value="true" />{% csrf_token %}</form>
 				{% endif %}
 			</td>
 		</tr>
@@ -137,6 +140,7 @@
 						<form enctype="multipart/form-data" action='.' method='post'>
 							{{ installation_photo_form }}
 							<tr><th></th><td><input type="hidden" name="photo-form" value="true" /><input type="submit" value="add photo"></td></tr>
+							{% csrf_token %}
 						</form>
 					</table>
 				</div>

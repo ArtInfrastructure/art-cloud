@@ -59,6 +59,7 @@ function saveThenAddFile(){
    <form id="page-form" action="." method="post">
    	{% for field in page_form %}{{ field }}{% endfor %}
    	<input type="submit" value="save" />
+	{% csrf_token %}
    </form>
    <br clear="all" />
    <div class="wiki-control-links">[<a onclick="saveThenAddFile(); return false;" href="{% url wiki.views.wiki_add page.name %}">add file or photo</a>]</div>

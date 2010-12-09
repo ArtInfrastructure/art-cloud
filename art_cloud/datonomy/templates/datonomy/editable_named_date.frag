@@ -6,6 +6,7 @@
 		{% endfor %}
 		<input type="hidden" name="named-date-form" value="true" />
 		<input type="submit" value="save" />
+		{% csrf_token %}
 	</form>
 </td>
 <td id="named-date-controls-{{ date.id }}">
