@@ -14,7 +14,7 @@ a:link, a:visited { color: #666699; text-decoration:none; }
 a:hover { color: #9999CC; text-decoration: underline; }
 a.section:link, a.section:visited { color: white; text-decoration:none; }
 
-em { font-weight: bold; }
+em, strong { font-weight: bold; }
 
 p, ol, ul, dl { margin:.2em 0 .8em 0; }
 p { padding:0; line-height:140%; }
