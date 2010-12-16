@@ -47,6 +47,8 @@
 			<input type="submit" value="search" />{% csrf_token %}
 		</form>
 	</div>
+	{% block page_help_icon %}{% endblock %}
+	<div id="page-help">{% block page_help %}{% endblock %}</div>
 {% endblock %}
 </div>
 <div id="content">{% block content %}{% endblock %}</div>

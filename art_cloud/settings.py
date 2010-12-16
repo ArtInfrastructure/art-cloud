@@ -72,6 +72,7 @@ INSTALLED_APPS = (
 	'tagging',
 	'south',
 	'piston',
+	'art_cloud.clue',
 	'art_cloud.front',
 	'art_cloud.datonomy',
 	'art_cloud.wiki',

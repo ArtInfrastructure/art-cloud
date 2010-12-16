@@ -1,7 +1,7 @@
 {% extends "art_cloud/base.html" %}
 {% load imagetags %}
 {% load listtags %}
-
+{% load clue %}
 {% block sub-title %}{{ installation.name }} | {% endblock %}
 
 {% block sub-head %}
@@ -43,6 +43,10 @@ h4 { margin-top: 20px; }
 	padding: 20px; 
 }
 {% endblock %}
+
+{% block page_help_icon %}{% include "clue/page_help_icon.frag" %}{% endblock %}
+{% block page_help %}{% help_text "installation detail" %}{% endblock %}
+
 
 {% block content%}
 <h1>Artwork: {{ installation.name }}</h1>

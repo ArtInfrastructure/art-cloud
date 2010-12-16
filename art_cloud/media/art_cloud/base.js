@@ -2,6 +2,8 @@ function baseInit(){
 	$("#search-form").hide();
 	$("#add-installation-photo-widget").hide();
 	$("#add-installation-document-widget").hide();
+	$("#page-help").hide();
+	$("#page-help-icon").click(function(){ $("#page-help").toggle(); });
 }
 $(document).ready(function() { baseInit(); });
 

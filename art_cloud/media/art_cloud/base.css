@@ -13,7 +13,9 @@ body {
 a:link, a:visited { color: #666699; text-decoration:none; }
 a:hover { color: #9999CC; text-decoration: underline; }
 a.section:link, a.section:visited { color: white; text-decoration:none; }
- 
+
+em { font-weight: bold; }
+
 p, ol, ul, dl { margin:.2em 0 .8em 0; }
 p { padding:0; line-height:140%; }
  
@@ -44,7 +46,7 @@ th { text-align: right; vertical-align: top; padding-right: 8px; }
 #recent-dates-popup { 
 	width: 600px;
 	padding: 30px;
-	background-color: #FFF; border: solid 3px #AAA;
+	background-color: #FFF; border: solid 2px #AAA;
 	position: absolute; top: 50px; left: 50px;
 }
 #recent-dates-popup li { line-height: 20px; }
@@ -61,4 +63,18 @@ th { text-align: right; vertical-align: top; padding-right: 8px; }
 
 #error-message { padding: 10px; border: solid 2px #DDD; background-color: #F88; }
 
+#page-help, #page-help-icon { float: right; }
+#page-help-icon { margin-right: 20px; margin-top: 10px; }
+#page-help {
+	width: 50%;
+	z-index: 10;
+	position: absolute;
+	right: 50px;
+	top: 55px;
+	border: solid 2px #EEE;
+	background-color: #FFF;
+	padding: 10px;
+}
 .toggle-open-form { display: inline; visibility: hidden; position: absolute; width: 0px; height: 0px;}
+
+.help-text h1, .help-text h2, .help-text h3, .help-text h4 { color: #000; margin: 15px 0px 10px 0px; }

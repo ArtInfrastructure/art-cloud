@@ -43,6 +43,7 @@ urlpatterns = patterns('',
 
 	(r'^installation-slice/$', 'art_cloud.front.views.installation_slice'),
 	(r'^artist-slice/$', 'art_cloud.front.views.artist_slice'),
+	(r'^help-slice/$', 'art_cloud.front.views.help_slice'),
 	(r'^$', 'art_cloud.front.views.site_slice'),
 
 	(r'^media/(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),

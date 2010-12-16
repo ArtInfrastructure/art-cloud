@@ -5,6 +5,18 @@ from django.forms.util import ErrorList
 
 from models import *
 
+# Remove a bunch of admin UI so as not to confuse users
+from piston.models import Consumer, Nonce, Resource, Token
+admin.site.unregister(Consumer)
+admin.site.unregister(Nonce)
+admin.site.unregister(Resource)
+admin.site.unregister(Token)
+from tagging.models import Tag, TaggedItem
+admin.site.unregister(Tag)
+admin.site.unregister(TaggedItem)
+from django.contrib.comments import Comment
+admin.site.unregister(Comment)
+
 class StyledModelAdmin(admin.ModelAdmin):
 	"""A common base admin class with shared media information."""
 	save_on_top=True
