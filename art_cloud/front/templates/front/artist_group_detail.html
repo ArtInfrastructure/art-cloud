@@ -1,6 +1,10 @@
 {% extends "art_cloud/base.html" %}
 {% load imagetags %}
 {% load listtags %}
+{% load clue %}
+
+{% block page_help_icon %}{% include "clue/page_help_icon.frag" %}{% endblock %}
+{% block page_help %}{% help_text "group detail" %}{% endblock %}
 
 {% block content%}
 <h1>Group: {{ artist_group.name }}</h1>

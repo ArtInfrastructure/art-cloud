@@ -2,9 +2,12 @@
 {% load imagetags %}
 {% load listtags %}
 {% load tagging_tags %}
+{% load clue %}
 
 {% block sub-title %}Tags | {% endblock %}
 
+{% block page_help_icon %}{% include "clue/page_help_icon.frag" %}{% endblock %}
+{% block page_help %}{% help_text "tags" %}{% endblock %}
 
 {% block content%}
 <h1>Tag Cloud</h1>

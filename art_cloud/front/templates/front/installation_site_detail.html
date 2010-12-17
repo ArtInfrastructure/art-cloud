@@ -1,6 +1,7 @@
 {% extends "art_cloud/base.html" %}
 {% load imagetags %}
 {% load listtags %}
+{% load clue %}
 
 {% block sub-title %}{{ installation_site.name }} | {% endblock %}
 
@@ -29,6 +30,9 @@ function hideAddSitePhotoWidget() {
 {% block style %}
 #add-site-photo-widget { border: solid 2px #DDD; position: absolute; background-color: #FFF; padding: 10px; }
 {% endblock %}
+
+{% block page_help_icon %}{% include "clue/page_help_icon.frag" %}{% endblock %}
+{% block page_help %}{% help_text "site detail" %}{% endblock %}
 
 {% block content%}
 <h1>Location: {{ installation_site.name }}</h1>

@@ -1,6 +1,7 @@
 {% extends "art_cloud/base.html" %}
 {% load imagetags %}
 {% load listtags %}
+{% load clue %}
 
 {% block sub-title %}{{ profile.display_name }} | {% endblock %}
 
@@ -16,6 +17,9 @@ $(document).ready(function() { init(); });
 {% block style %}
 #profile-edit-widget { border: solid 2px #DDD; position: absolute; background-color: #FFF; padding: 10px; }
 {% endblock %}
+
+{% block page_help_icon %}{% include "clue/page_help_icon.frag" %}{% endblock %}
+{% block page_help %}{% help_text "artist detail" %}{% endblock %}
 
 {% block content%}
 <h1>Artist: {{ profile.display_name }}</h1>
