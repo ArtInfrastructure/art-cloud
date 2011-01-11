@@ -36,9 +36,7 @@ def exists(request):
 
 def auth(request):
 	if request.POST.get('username', None) and request.POST.get('password', None):
-		print 'authing', request.POST.get('username'), '/', request.POST.get('password')
 		if User.objects.filter(username=request.POST.get('username')).count() == 0: return HttpResponse('False', mimetype='text/plain')
 		user = User.objects.get(username=request.POST.get('username'))
-		print 'authed', user.check_password(request.POST.get('password'))
 		return HttpResponse(user.check_password(request.POST.get('password')), mimetype='text/plain')
 	return HttpResponse('False', mimetype='text/plain')
