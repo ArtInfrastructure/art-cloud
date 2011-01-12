@@ -74,6 +74,7 @@ INSTALLED_APPS = (
 	'piston',
 	'art_cloud.clue',
 	'art_cloud.front',
+	'art_cloud.malleus',
 	'art_cloud.datonomy',
 	'art_cloud.wiki',
 	'art_cloud.phonon',

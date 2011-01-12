@@ -1,0 +1,1 @@
+"""Malleus is a Django app to control the audio settings app, Incus, on a remote server."""
