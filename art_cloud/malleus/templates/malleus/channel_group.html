@@ -6,37 +6,59 @@
 <script type="text/javascript">
 var sliderHeight = 150;
 
-// set up the master output slider
-$(function() {
+$(document).ready(function() {
+	// set up the master output slider
 	$("#master-output-slider").slider({
 		orientation: "vertical",
 		range: "min",
 		min: -100,
 		max: 100,
 		value: {{ channel_group.master_gain }},
-		slide: function(event, ui) { $("#master-output-amount").html(ui.value); }
+		slide: function(event, ui) { $("#master-output-amount").html(ui.value); },
+		change: function(event, ui) { changeMasterGain(ui.value); }
 	});
 	$("#master-output-slider").height(sliderHeight);
 	$("#master-output-amount").html($("#master-output-slider").slider("value"));
+
+	// set up the channel sliders
+	{% for channel in channel_group.channels %}
+		$("#channel-slider-{{channel.id}}").slider({
+			orientation: "vertical",
+			range: "min",
+			min: -100,
+			max: 100,
+			value: {{ channel.gain }},
+			slide: function(event, ui) { $("#channel-amount-{{channel.id}}").html(ui.value); },
+			change: function(event, ui) { changeChannelGain({{channel.id}}, ui.value); }
+		});
+		$("#channel-slider-{{channel.id}}").height(sliderHeight);
+		$("#channel-amount-{{channel.id}}").html($("#channel-slider-{{channel.id}}").slider("value"));
+	{% endfor %}
 });
 
-// set up the channel sliders
-$(function() {
-{% for channel in channel_group.channels %}
-	$("#channel-slider-{{channel.id}}").slider({
-		orientation: "vertical",
-		range: "min",
-		min: -100,
-		max: 100,
-		value: {{ channel.gain }},
-		slide: function(event, ui) { $("#channel-amount-{{channel.id}}").html(ui.value); }
+function changeMasterGain(gain){
+	console.log('Changing master gain: ' + gain);
+	$.ajax({
+		type: "POST",
+		url: "/api/audio/ab-group/" + {{channel_group.id}} + "/gain/",
+		data: "gain=" + gain,
+		success: function(msg){
+			console.log("Master gain received: " + msg);
+		}
 	});
-	$("#channel-slider-{{channel.id}}").height(sliderHeight);
-	$("#channel-amount-{{channel.id}}").html($("#channel-slider-{{channel.id}}").slider("value"));
-{% endfor %}
-});
+}
 
-
+function changeChannelGain(channel_id, gain){
+	console.log('Changing ' + channel_id + ': ' + gain);
+	$.ajax({
+		type: "POST",
+		url: "/api/audio/ab-channel/" + channel_id + "/gain/",
+		data: "gain=" + gain,
+		success: function(msg){
+			console.log("Gain received: " + msg);
+		}
+	});
+}
 
 </script>
 {% endblock %}

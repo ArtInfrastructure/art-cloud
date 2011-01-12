@@ -1,4 +1,4 @@
-import urllib
+import urllib, urllib2
 import pprint
 import traceback
 from datetime import datetime
@@ -13,6 +13,11 @@ def get_resource(url):
 	xml = sock.read()
 	sock.close()
 	return xml
+
+def post_resource(url, values):
+	req = urllib2.Request(url, urllib.urlencode(values))
+	return urllib2.urlopen(req).read()
+
 
 class ABDeviceInfo:
 	"""Wraps the ABDevice"""
@@ -66,7 +71,7 @@ class IncusClient(object):
 		
 	def fetch_devices(self):
 		try:
-			xml = get_resource(self.ab_devices_url)
+			xml = get_resource(self.ab_devices_url())
 			device_elements = etree.fromstring(xml).xpath('//abdevice')
 			return [ABDeviceInfo().hydrate(etree.tostring(element, pretty_print=True)) for element in device_elements]
 		except:
@@ -90,13 +95,45 @@ class IncusClient(object):
 		except:
 			traceback.print_exc()
 			return None
+
+	def get_group_gain(self, id):
+		try:
+			return float(get_resource(self.ab_group_gain_url(id)))
+		except:
+			traceback.print_exc()
+			return None
 	
-	@property
+	def set_group_gain(self, id, gain):
+		try:
+			return float(post_resource(self.ab_group_gain_url(id), {'gain':gain}))
+		except:
+			traceback.print_exc()
+			return None
+
+	def get_channel_gain(self, id):
+		try:
+			return float(get_resource(self.ab_channel_gain_url(id)))
+		except:
+			traceback.print_exc()
+			return None
+	
+	def set_channel_gain(self, id, gain):
+		try:
+			return float(post_resource(self.ab_channel_gain_url(id), {'gain':gain}))
+		except:
+			traceback.print_exc()
+			return None
+		
 	def api_url(self): return 'http://%s:%s/api/audio/' % (self.host, self.port)
 	
-	@property
-	def ab_devices_url(self): return '%sab-device/' % self.api_url
+	def ab_devices_url(self): return '%sab-device/' % self.api_url()
 
-	def ab_device_url(self, id): return '%s%s/' % (self.ab_devices_url, id)
+	def ab_device_url(self, id): return '%s%s/' % (self.ab_devices_url(), id)
 
-	def ab_group_url(self, id): return '%sab-group/%s/' % (self.api_url, id)
+	def ab_group_url(self, id): return '%sab-group/%s/' % (self.api_url(), id)
+
+	def ab_group_gain_url(self, id): return '%sgain/' % (self.ab_group_url(id))
+
+	def ab_channel_gain_url(self, id): return '%sab-channel/%s/gain/' % (self.api_url(), id)
+
+

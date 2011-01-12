@@ -3,6 +3,9 @@ import datetime
 import calendar
 import pprint
 import traceback
+import logging
+import urllib
+import sys
 
 from django.conf import settings
 from django.db.models import Q
@@ -15,43 +18,42 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.comments.models import Comment
 from django.contrib.sites.models import Site
 from django.utils.html import strip_tags
+import django.contrib.contenttypes.models as content_type_models
 from django.template import RequestContext
 from django.core.cache import cache
 from django.core.mail import send_mail
 from django.contrib.auth.decorators import login_required
 from django.contrib.admin.views.decorators import staff_member_required
 from django.template.loader import render_to_string
+from django.utils import feedgenerator
 
-from models import *
 from incus_client import IncusClient
-from hydration import dehydrate_to_xml
+from hydration import dehydrate_to_xml, hydrate_from_xml
 
 @staff_member_required
-def index(request):
+def channel_gain(request, id):
 	try:
 		client = IncusClient(settings.ART_SERVER_HOST, settings.ART_SERVER_PORT)
-		devices = client.fetch_devices()
+		if request.method == 'POST' and request.POST.get('gain', None):
+			gain = client.set_channel_gain(id, float(request.POST.get('gain')))
+		else:
+			gain = client.get_channel_gain(id)
+		if gain == None: raise HttpResponseServerError('Did not receive gain from the art server')
+		return HttpResponse(gain, content_type="text/plain")
 	except:
 		traceback.print_exc()
-		devices = None
-	return render_to_response('malleus/index.html', { "devices":devices }, context_instance=RequestContext(request))
+		raise HttpResponseServerError('Error communicating with the art server', traceback)
 
 @staff_member_required
-def device(request, id):
+def channel_group_gain(request, id):
 	try:
 		client = IncusClient(settings.ART_SERVER_HOST, settings.ART_SERVER_PORT)
-		device = client.fetch_device(id)
+		if request.method == 'POST' and request.POST.get('gain', None):
+			gain = client.set_group_gain(id, float(request.POST.get('gain')))
+		else:
+			gain = client.get_group_gain(id)
+		if gain == None: raise HttpResponseServerError('Did not receive gain from the art server')
+		return HttpResponse(gain, content_type="text/plain")
 	except:
 		traceback.print_exc()
-		device = None
-	return render_to_response('malleus/device.html', { "device":device }, context_instance=RequestContext(request))
-
-@staff_member_required
-def channel_group(request, id):
-	try:
-		client = IncusClient(settings.ART_SERVER_HOST, settings.ART_SERVER_PORT)
-		channel_group = client.fetch_group(id)
-	except:
-		traceback.print_exc()
-		channel_group = None
-	return render_to_response('malleus/channel_group.html', { "channel_group":channel_group }, context_instance=RequestContext(request))
+		raise HttpResponseServerError('Error communicating with the art server', traceback)
