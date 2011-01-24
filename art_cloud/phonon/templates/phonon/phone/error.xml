@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <Response>
-	<Say>There was an error. Dang.</Say>
+	<Say>{% if error_message %}{{ error_message|safe }}{% else %}There was an error. Call the art technician.{% endif %}</Say>
 </Response>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<Response>
+		<Gather method="POST" numDigits="6" action="http://{{ site.domain}}{% url phonon.api_views.emergency_code %}">  
+			<Say>Enter the code to activate the art emergency system.</Say>
+		</Gather>
+</Response> 

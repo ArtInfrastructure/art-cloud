@@ -25,6 +25,7 @@ from django.template.loader import render_to_string
 from django.utils import feedgenerator
 from django.core.urlresolvers import reverse
 
+from malleus.incus_client import IncusClient
 from models import *
 
 def require_twilio_auth(function):
@@ -37,41 +38,63 @@ def require_twilio_auth(function):
 		return function(request, *args, **kwargs)
 	return _rta
 
-@require_twilio_auth
-def intro(request):
-	"""The root view"""
+def get_or_create_call(request):
 	try:
 		if request.REQUEST.get('CallStatus') == 'completed':
-			try:
-				call = PhoneCall.objects.get(guid=request.REQUEST.get('CallGuid'))
-				call.completed = datetime.datetime.now()
-				call.save()
-			except:
-				pass #ah well
-			return HttpResponse('Thanks')
+			call = PhoneCall.objects.get(guid=request.REQUEST.get('CallGuid'))
+			call.completed = datetime.datetime.now()
+			call.save()
+			return call
 
 		phone = Phone.objects.get_by_number(request.REQUEST.get('Caller'))
 		if phone == None:
-			phone = Phone(phone_number=request.REQUEST.get('Caller'))
-			phone.save()
+			phone = Phone.objects.create(phone_number=request.REQUEST.get('Caller'))
 			
 		if phone.blocked:
 			logging.debug('Refusing a blocked phone: %s' % request.REQUEST.get('Caller'))
-			return render_to_response('phonon/phone/phone_blocked.xml', {}, context_instance=RequestContext(request))
+			return None
 			
-		if PhoneCall.objects.filter(guid=request.REQUEST.get('CallGuid')).count() == 0:
-			call = PhoneCall(phone=phone, guid=request.REQUEST.get('CallGuid'))
-			call.save()
-		else:
-			call = PhoneCall.objects.filter(guid=request.REQUEST.get('CallGuid'))
-
-		incoming_number = request.REQUEST.get('Called', None)
-		logging.debug("%s called %s" % (request.REQUEST.get('Caller'), request.REQUEST.get('Called')))
-
+		return PhoneCall.objects.get_or_create(phone=phone, guid=request.REQUEST.get('CallGuid'))
 	except:
 		logging.exception('error in intro: %s' % request.REQUEST.get('Caller'))
 		traceback.print_exc()
+		return None
+
+@require_twilio_auth
+def emergency_intro(request):
+	call = get_or_create_call(request)
+	if call == None: return render_to_response('phonon/phone/error.xml', {}, context_instance=RequestContext(request))
+	return render_to_response('phonon/phone/emergency_intro.xml', { }, context_instance=RequestContext(request))
+
+@require_twilio_auth
+def emergency_code(request):
+	call = get_or_create_call(request)
+	if call == None: return render_to_response('phonon/phone/error.xml', {}, context_instance=RequestContext(request))
+
+	try:
+		if request.method == 'POST' and request.REQUEST.get('Digits', None):
+			client = IncusClient(settings.ART_SERVER_HOST, settings.ART_SERVER_PORT)
+			result = client.activate_emergency_mute(request.REQUEST.get('Digits'))
+			if result == True:
+				return render_to_response('phonon/phone/emergency_activated.xml', {}, context_instance=RequestContext(request))
+			elif result == False:
+				return HttpResponseRedirect(reverse('phonon.api_views.emergency_intro'))
+			else:
+				return render_to_response('phonon/phone/error.xml', { 'error_message':'There was a problem. Please call the art technician.' }, context_instance=RequestContext(request))
+		else:
+			return HttpResponseRedirect(reverse('phonon.api_views.emergency_intro'))
+	except:
+		logging.exception('error in emergency_code: %s' % request.REQUEST.get('Caller'))
+		traceback.print_exc()
 		return render_to_response('phonon/phone/error.xml', {}, context_instance=RequestContext(request))
+
+@require_twilio_auth
+def tour_intro(request):
+	"""The root view"""
+	logging.debug("%s called %s" % (request.REQUEST.get('Caller', None), request.REQUEST.get('Called', None)))
+
+	call = get_or_create_call(request)
+	if call == None: return render_to_response('phonon/phone/error.xml', {}, context_instance=RequestContext(request))
 
 	landing_clip = AudioClip.objects.default_landing_clip()
 	if landing_clip != None:
@@ -79,7 +102,7 @@ def intro(request):
 	else:
 		intro_audio_url = None
 
-	return render_to_response('phonon/phone/intro.xml', { 'intro_audio_url':intro_audio_url }, context_instance=RequestContext(request))
+	return render_to_response('phonon/phone/tour_intro.xml', { 'intro_audio_url':intro_audio_url }, context_instance=RequestContext(request))
 
 @require_twilio_auth
 def information_node(request):
@@ -96,4 +119,4 @@ def information_node(request):
 		logging.exception('error in information code: %s' % request.REQUEST.get('Caller'))
 		traceback.print_exc()
 		return render_to_response('phonon/phone/error.xml', {}, context_instance=RequestContext(request))
-	return HttpResponseRedirect(reverse('phonon.api_views.intro'))
+	return HttpResponseRedirect(reverse('phonon.api_views.tour_intro'))
