@@ -1,12 +1,8 @@
 # Copyright 2011 GORBET + BANERJEE (http://www.gorbetbanerjee.com/) Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
-from django.conf.urls.defaults import *
-from django.conf import settings
+from django import forms
+from django.contrib.auth.models import User
+from django.utils.html import strip_tags
 
-from models import *
 
-urlpatterns = patterns('',
-	(r'^device/(?P<id>[\d]+)/$', 'malleus.views.device'),
-	(r'^channel-group/(?P<id>[\d]+)/$', 'malleus.views.channel_group'),
-	(r'^emergency/$', 'malleus.views.emergency'),
-	(r'^$', 'malleus.views.index'),
-)
+class AudioEmergencyForm(forms.Form):
+	mute_code = forms.CharField(required=True)

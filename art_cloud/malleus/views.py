@@ -23,6 +23,7 @@ from django.contrib.admin.views.decorators import staff_member_required
 from django.template.loader import render_to_string
 
 from models import *
+from forms import AudioEmergencyForm
 from incus_client import IncusClient
 from hydration import dehydrate_to_xml
 
@@ -35,6 +36,28 @@ def index(request):
 		traceback.print_exc()
 		devices = None
 	return render_to_response('malleus/index.html', { "devices":devices }, context_instance=RequestContext(request))
+
+def emergency(request):
+	page_message = None
+	if request.method == 'POST':
+		audio_emergency_form = AudioEmergencyForm(request.POST)
+		if audio_emergency_form.is_valid():
+			try:
+				client = IncusClient(settings.ART_SERVER_HOST, settings.ART_SERVER_PORT)
+				result = client.activate_emergency_mute(audio_emergency_form.cleaned_data['mute_code'])
+				if result == True:
+					page_message = 'The emergency mute has been activated.'
+				elif result == False:
+					page_message = 'That code was not accepted.'
+				else:
+					page_message = 'There was a problem. Please call the art technician.'
+			except:
+				page_message = 'There was an error.  Please call the art technician.'
+				traceback.print_exc()
+			audio_emergency_form = AudioEmergencyForm()
+	else:
+		audio_emergency_form = AudioEmergencyForm()
+	return render_to_response('malleus/emergency.html', { 'page_message':page_message, 'audio_emergency_form':audio_emergency_form }, context_instance=RequestContext(request))
 
 @staff_member_required
 def device(request, id):

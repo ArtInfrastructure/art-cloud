@@ -123,8 +123,18 @@ class IncusClient(object):
 		except:
 			traceback.print_exc()
 			return None
+	
+	def activate_emergency_mute(self, code):
+		try:
+			return post_resource(self.emergency_mute_url(), {'code':code}) == 'Activated'
+		except:
+			traceback.print_exc()
+			return None
 		
+	
 	def api_url(self): return 'http://%s:%s/api/audio/' % (self.host, self.port)
+
+	def emergency_mute_url(self): return '%semergency/' % self.api_url()
 	
 	def ab_devices_url(self): return '%sab-device/' % self.api_url()
 
