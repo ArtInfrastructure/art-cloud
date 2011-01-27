@@ -34,6 +34,9 @@ EMAIL_SUBJECT_PREFIX = "[Art Cloud] "
 
 WEBMAIL_URL = "https://mail.google.com/a/example.org/" # or None if you don't want this linked from the UI
 
+ART_SERVER_HOST = '127.0.0.1'
+ART_SERVER_PORT = 8000
+
 HEARTBEAT_TIMEOUT = 500 # in seconds
 
 ALERT_SECRET = "some long secret string"

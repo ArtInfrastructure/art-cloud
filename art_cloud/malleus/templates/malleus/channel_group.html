@@ -86,13 +86,6 @@ function changeChannelGain(channel_id, gain){
 		<div class="channel-slider" id="master-output-slider"></div>
 		<span class="channel-amount" id="master-output-amount"></span>
 	</div>
-
-	<form id="settings-form" action="." onsubmit="return false" method="post">
-		<label>Settings memory:</label>
-		<input type="submit" value="Save" />
-		<input type="submit" value="Restore" />
-		{% csrf_token %}
-	</form>
 	
 </div>
 
@@ -106,10 +99,6 @@ function changeChannelGain(channel_id, gain){
 		</div>
 	{% endfor %}
 	<br clear="all" />
-	<form action="." onsubmit="return false;" id="channels-form">
-			<input type="submit" value="zero all" />
-			{% csrf_token %}
-	</form>
 </div>
 
 
