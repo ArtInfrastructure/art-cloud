@@ -25,8 +25,8 @@ $(document).ready(function() {
 		$("#channel-slider-{{channel.id}}").slider({
 			orientation: "vertical",
 			range: "min",
-			min: -100,
-			max: 100,
+			min: 0,
+			max: 10,
 			value: {{ channel.gain }},
 			slide: function(event, ui) { $("#channel-amount-{{channel.id}}").html(ui.value); },
 			change: function(event, ui) { changeChannelGain({{channel.id}}, ui.value); }
@@ -64,8 +64,8 @@ function changeChannelGain(channel_id, gain){
 {% endblock %}
 
 {% block style %}
-#left-column { width: 300px; float: left; }
-#right-column { width: 500px; float: right; }
+#left-column { visibility: hidden; position: absolute; z-index: -100; width: 300px; float: left; }
+#right-column { width: 500px; /*float: right;*/ }
 #master-output-div, .channel-div { text-align: center; margin-bottom: 20px; }
 .channel-div { display: inline; float: left; }
 .channel-slider { margin: 10px 10px; }
@@ -86,14 +86,13 @@ function changeChannelGain(channel_id, gain){
 		<div class="channel-slider" id="master-output-slider"></div>
 		<span class="channel-amount" id="master-output-amount"></span>
 	</div>
-	
 </div>
 
 <div id="right-column">
 	<div style="margin: 0px 0px 10px 0;">Channel gains:</div>
 	{% for channel in channel_group.channels %}
 		<div class="channel-div" id="channel-{{channel.id}}">
-			<label for="channel-amount-{{channel.id}}">{{ channel.number }}</label>
+			<label for="channel-amount-{{channel.id}}">{{channel.channel_type}}{{ channel.number }}</label>
 			<div class="channel-slider" id="channel-slider-{{channel.id}}"></div>
 			<span class="channel-amount" id="channel-amount-{{channel.id}}"></span>
 		</div>

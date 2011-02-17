@@ -55,13 +55,14 @@ class ABChannelGroupInfo:
 
 class ABChannelInfo:
 	"""Wraps the ABChannel"""
-	def __init__(self, id=None, number=None, gain=None):
+	def __init__(self, id=None, number=None, gain=None, channel_type=None):
 		self.id = id
 		self.number = number
 		self.gain = gain
+		self.channel_type = channel_type
 	class HydrationMeta:
 		element_name = 'abchannel'
-		attributes = ['id', 'number', 'gain']
+		attributes = ['id', 'number', 'gain', 'channel_type']
 	def hydrate(self, data): return hydrate_from_xml(self, data)
 
 class IncusClient(object):
