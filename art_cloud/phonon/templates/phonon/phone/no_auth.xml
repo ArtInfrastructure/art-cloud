@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>  
 <Response>
-	<Say>Unfortunately, there was an error.</Say>
+	<Say>Unfortunately, there was an error handling this service.</Say>
 </Response>

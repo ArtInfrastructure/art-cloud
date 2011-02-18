@@ -2,10 +2,10 @@ backups
 pip-log.txt
 local_settings.py
 apache_log.py
-media/phonon_audio_clip/
-media/photo/
-media/document/
-media/resized_image/
-media/wiki_file/
-media/wiki_photo/
-front/fixtures/
+media/phonon_audio_clip
+media/photo
+media/document
+media/resized_image
+media/wiki_file
+media/wiki_photo
+front/fixtures

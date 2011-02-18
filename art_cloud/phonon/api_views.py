@@ -54,7 +54,7 @@ def get_or_create_call(request):
 			logging.debug('Refusing a blocked phone: %s' % request.REQUEST.get('Caller'))
 			return None
 			
-		return PhoneCall.objects.get_or_create(phone=phone, guid=request.REQUEST.get('CallGuid'))
+		return PhoneCall.objects.get_or_create(phone=phone, guid=request.REQUEST.get('CallGuid'))[0]
 	except:
 		logging.exception('error in intro: %s' % request.REQUEST.get('Caller'))
 		traceback.print_exc()
@@ -63,13 +63,14 @@ def get_or_create_call(request):
 @require_twilio_auth
 def emergency_intro(request):
 	call = get_or_create_call(request)
-	if call == None: return render_to_response('phonon/phone/error.xml', {}, context_instance=RequestContext(request))
+	if call == None: return render_to_response('phonon/phone/error.xml', {'error_message':'Error in emergency intro'}, context_instance=RequestContext(request))
 	return render_to_response('phonon/phone/emergency_intro.xml', { }, context_instance=RequestContext(request))
 
 @require_twilio_auth
 def emergency_code(request):
 	call = get_or_create_call(request)
-	if call == None: return render_to_response('phonon/phone/error.xml', {}, context_instance=RequestContext(request))
+	if call == None: 
+		return render_to_response('phonon/phone/error.xml', {'error_message':'There was an error with the code'}, context_instance=RequestContext(request))
 
 	try:
 		if request.method == 'POST' and request.REQUEST.get('Digits', None):
@@ -86,7 +87,7 @@ def emergency_code(request):
 	except:
 		logging.exception('error in emergency_code: %s' % request.REQUEST.get('Caller'))
 		traceback.print_exc()
-		return render_to_response('phonon/phone/error.xml', {}, context_instance=RequestContext(request))
+		return render_to_response('phonon/phone/error.xml', {'error_message':'Error in code two'}, context_instance=RequestContext(request))
 
 @require_twilio_auth
 def tour_intro(request):
