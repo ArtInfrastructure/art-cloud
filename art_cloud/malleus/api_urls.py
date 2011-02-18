@@ -4,5 +4,6 @@ from django.conf import settings
 
 urlpatterns = patterns('',
 	(r'^ab-channel/(?P<id>[\d]+)/gain/$', 'malleus.api_views.channel_gain'),
+	(r'^ab-channel/(?P<id>[\d]+)/mute/$', 'malleus.api_views.channel_mute'),
 	(r'^ab-group/(?P<id>[\d]+)/gain/$', 'malleus.api_views.channel_group_gain'),
 )

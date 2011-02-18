@@ -31,6 +31,17 @@ from incus_client import IncusClient
 from hydration import dehydrate_to_xml, hydrate_from_xml
 
 @staff_member_required
+def channel_mute(request, id):
+	try:
+		client = IncusClient(settings.ART_SERVER_HOST, settings.ART_SERVER_PORT)
+		if request.method == 'POST' and request.POST.get('mute', None) == 'toggle':
+			response = client.toggle_mute(id)
+		return HttpResponse(response, content_type="text/plain")
+	except:
+		traceback.print_exc()
+		raise HttpResponseServerError('Error communicating with the art server', traceback)
+
+@staff_member_required
 def channel_gain(request, id):
 	try:
 		client = IncusClient(settings.ART_SERVER_HOST, settings.ART_SERVER_PORT)

@@ -7,6 +7,7 @@
 var sliderHeight = 150;
 
 $(document).ready(function() {
+	/*
 	// set up the master output slider
 	$("#master-output-slider").slider({
 		orientation: "vertical",
@@ -19,7 +20,15 @@ $(document).ready(function() {
 	});
 	$("#master-output-slider").height(sliderHeight);
 	$("#master-output-amount").html($("#master-output-slider").slider("value"));
-
+	*/
+	
+	$('#toggle-mute-button').click(function(){
+		{% for channel in channel_group.channels %}
+		toggle_mute({{ channel.id }});
+		{% endfor %}
+		return false;
+	});
+	
 	// set up the channel sliders
 	{% for channel in channel_group.channels %}
 		$("#channel-slider-{{channel.id}}").slider({
@@ -36,6 +45,18 @@ $(document).ready(function() {
 	{% endfor %}
 });
 
+function toggle_mute(channel_id){
+	$.ajax({
+		type: "POST",
+		url: "/api/audio/ab-channel/" + channel_id + "/mute/",
+		data: "mute=toggle",
+		success: function(msg){
+			//console.log("Mute received: " + msg);
+		}
+	});
+}
+
+/*
 function changeMasterGain(gain){
 	console.log('Changing master gain: ' + gain);
 	$.ajax({
@@ -47,15 +68,15 @@ function changeMasterGain(gain){
 		}
 	});
 }
+*/
 
 function changeChannelGain(channel_id, gain){
-	console.log('Changing ' + channel_id + ': ' + gain);
 	$.ajax({
 		type: "POST",
 		url: "/api/audio/ab-channel/" + channel_id + "/gain/",
 		data: "gain=" + gain,
 		success: function(msg){
-			console.log("Gain received: " + msg);
+			//console.log("Gain received: " + msg);
 		}
 	});
 }
@@ -78,8 +99,8 @@ function changeChannelGain(channel_id, gain){
 {% endblock %}
 
 {% block content%}
-<h1>{{ channel_group.name|safe }}:</h1>
-
+<h1>{{ channel_group.name|safe }}: <input type="submit" value="toggle mute" id="toggle-mute-button" /></h1>
+<!--
 <div id="left-column">
 	<div id="master-output-div">
 		<label for="master-output-amount">Master Output Gain:</label>
@@ -87,7 +108,7 @@ function changeChannelGain(channel_id, gain){
 		<span class="channel-amount" id="master-output-amount"></span>
 	</div>
 </div>
-
+-->
 <div id="right-column">
 	<div style="margin: 0px 0px 10px 0;">Channel gains:</div>
 	{% for channel in channel_group.channels %}

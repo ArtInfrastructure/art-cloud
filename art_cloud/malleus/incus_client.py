@@ -125,6 +125,13 @@ class IncusClient(object):
 			traceback.print_exc()
 			return None
 	
+	def toggle_mute(self, channel_id):
+		try:
+			return post_resource(self.ab_channel_mute_url(channel_id), {'mute':'toggle'})
+		except:
+			traceback.print_exc()
+			return None
+	
 	def activate_emergency_mute(self, code):
 		try:
 			return post_resource(self.emergency_mute_url(), {'code':code}) == 'Activated'
@@ -146,5 +153,7 @@ class IncusClient(object):
 	def ab_group_gain_url(self, id): return '%sgain/' % (self.ab_group_url(id))
 
 	def ab_channel_gain_url(self, id): return '%sab-channel/%s/gain/' % (self.api_url(), id)
+
+	def ab_channel_mute_url(self, id): return '%sab-channel/%s/mute/' % (self.api_url(), id)
 
 
