@@ -1,6 +1,6 @@
 {% extends "wiki/base.html" %}
 {% load wikitags %}
-{% block sub-title %}Wiki | {% endblock %}
+{% block sub-title %}Notes | {% endblock %}
 
 {% block sub-style %}
 #left-column { 
@@ -15,7 +15,7 @@
 {% endblock %}
 
 {% block content %}
-<h1>Wiki:</h1>
+<h1>Notes:</h1>
 <div id="main-column">
 	{% with "true" as hide_title %}{% with "true" as hide_public %}{% include "wiki/wiki_render.frag" %}{% endwith %}{% endwith %}
 </div>
@@ -33,7 +33,7 @@
 	   <ul>
 	      <li><a href="{% url wiki.views.wiki_print_all %}">printable all-in-one</a></li>
 	      {% if request.user.is_staff %}
-	         <li><a href="{% url admin:app_list 'wiki' %}">wiki admin</a></li>
+	         <li><a href="{% url admin:app_list 'wiki' %}">notes admin</a></li>
 	      {% endif %}
 	   </ul>
 	{% endif %}

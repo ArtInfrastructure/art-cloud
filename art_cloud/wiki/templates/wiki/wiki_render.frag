@@ -26,7 +26,7 @@ function togglePublic(){
 			{% if request.user.is_staff %}public: <form action="." method="post" onsubmit="return false;"><input onclick="togglePublic();" type="checkbox" {% if page.public %}checked="checked"{% endif %} name="public"/>{% csrf_token %}</form>{% endif %}
 		{% endif %}
 	</div>
-	{% if not hide_title %}<h1><a href="{% url wiki.views.index %}">Wiki</a>: {{ page.name }} </h1>{% endif %}
+	{% if not hide_title %}<h1><a href="{% url wiki.views.index %}">Notes</a>: {{ page.name }} </h1>{% endif %}
 
 	{% if page.rendered %}
 		<div class="rendered-page">{{ page.rendered|include_constants|safe }}</div>

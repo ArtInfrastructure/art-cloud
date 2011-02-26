@@ -4,7 +4,7 @@
 
 {% load imagetags %}
 {% block content %}
-<h1>Wiki File on <a href="{{ file.wiki_page.get_absolute_url }}">{{ file.wiki_page.name }}</a>: {{ file.display_name }}</h1>
+<h1>File on <a href="{{ file.wiki_page.get_absolute_url }}">{{ file.wiki_page.name }}</a>: {{ file.display_name }}</h1>
 
 <table>
 	{% if file.description %}
