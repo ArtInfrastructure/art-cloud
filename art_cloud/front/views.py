@@ -36,6 +36,9 @@ CLEAN_HEARTBEATS_PARAMETER = 'clean_heartbeats'
 CHECK_HEARTBEATS_PARAMETER = 'check_heartbeats'
 
 @login_required
+def index(request): return common_slice(request, 'front/help_slice.html')
+
+@login_required
 def installation_slice(request): return common_slice(request, 'front/installation_slice.html')
 
 @login_required
@@ -43,9 +46,6 @@ def artist_slice(request): return common_slice(request, 'front/artist_slice.html
 
 @login_required
 def site_slice(request): return common_slice(request, 'front/site_slice.html')
-
-@login_required
-def help_slice(request): return common_slice(request, 'front/help_slice.html')
 
 def common_slice(request, template):
 	return render_to_response(template, { 'profiles':UserProfile.objects.filter(user__groups__name="artists"), 

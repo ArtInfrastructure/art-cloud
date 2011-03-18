@@ -33,6 +33,7 @@ EMAIL_PORT = 587
 EMAIL_SUBJECT_PREFIX = "[Art Cloud] "
 
 WEBMAIL_URL = "https://mail.google.com/a/example.org/" # or None if you don't want this linked from the UI
+EXTERNAL_WIKI_URL = None # or a URL to an external wiki
 
 ART_SERVER_HOST = '127.0.0.1'
 ART_SERVER_PORT = 8000

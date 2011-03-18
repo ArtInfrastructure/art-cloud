@@ -39,6 +39,7 @@
 			<a href="{% url datonomy.views.calendar %}">calendar</a> |
 			<a href="{% url front.views.tags %}">tags</a> |
 			<a href="{% url wiki.views.index %}">notes</a> |
+			{% if EXTERNAL_WIKI_URL %}<a href="{{ EXTERNAL_WIKI_URL|safe }}">wiki</a> |{% endif %}
 			<a href="." onclick="$('#search-form').toggle(); return false;">search</a> |
 			<a href="{% url django.contrib.auth.views.logout_then_login %}">logout</a>
 		{% endif %}

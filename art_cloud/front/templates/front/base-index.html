@@ -25,9 +25,10 @@
 {% block content%}
 
 <div id="slice-tabs"><ul>
+	<li id="help-tab"><a href="{% url front.views.index %}" >home</a></li>
 	<li id="site-tab"><a href="{% url front.views.site_slice %}" >locations</a></li>
 	<li id="artist-tab"><a href="{% url front.views.artist_slice %}" >artists</a></li>
-	<li id="help-tab"><a href="{% url front.views.help_slice %}" >help</a></li>
+	<li id="installation-tab"><a href="{% url front.views.installation_slice %}" >artworks</a></li>
 </ul></div>
 
 <div id="slice">{% block slice %}{% endblock %}</div>
