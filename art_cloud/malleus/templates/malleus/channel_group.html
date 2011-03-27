@@ -35,7 +35,8 @@ $(document).ready(function() {
 			orientation: "vertical",
 			range: "min",
 			min: 0,
-			max: 10,
+			max: 1,
+			step: 0.1,
 			value: {{ channel.gain }},
 			slide: function(event, ui) { $("#channel-amount-{{channel.id}}").html(ui.value); },
 			change: function(event, ui) { changeChannelGain({{channel.id}}, ui.value); }
