@@ -181,6 +181,12 @@ def installation_site_detail(request, id):
 	if request.method == 'POST':
 		photo_form = PhotoForm(request.POST, request.FILES)
 		if photo_form.is_valid():
+
+			raw_photo = request.FILES.get('image', None)
+			if raw_photo:
+				raw_photo.name = raw_photo.name.encode('ascii', 'ignore')
+				photo_form = PhotoForm(request.POST, request.FILES)
+
 			try:
 				photo = photo_form.save()
 				site.photos.add(photo)
@@ -216,6 +222,12 @@ def common_installation_detail(request, installation):
 		document_form = DocumentForm(request.POST, request.FILES)
 		toggle_installation_open_form = ToggleInstallationOpenForm(request.POST)
 		if request.POST.get('photo-form', None):
+
+			raw_photo = request.FILES.get('image', None)
+			if raw_photo:
+				raw_photo.name = raw_photo.name.encode('ascii', 'ignore')
+				photo_form = PhotoForm(request.POST, request.FILES)
+
 			tags_form = TagsForm(tag_default_data)
 			named_date_form = NamedDateForm()
 			document_form = DocumentForm()
@@ -289,21 +301,22 @@ def common_installation_detail(request, installation):
 				installation.save()
 				tag_form = TagsForm({'tags': installation.tag_names })
 		elif request.POST.get('document-form', None):
-			print 'got doc form', document_form
 			tags_form = TagsForm(tag_default_data)
 			named_date_form = NamedDateForm()
 			installation_notes_form = NotesForm(notes_default_data)
 			photo_form = PhotoForm()
 			toggle_installation_open_form = ToggleInstallationOpenForm(initial={'installation_id':installation.id, 'opened':not installation.is_opened()})
 			if document_form.is_valid():
-				print 'is valid'
+				# remove any non-unicode file name characters
+				raw = request.FILES.get('doc', None)
+				if raw: raw.name = raw.name.encode('ascii', 'ignore')
+				document_form = DocumentForm(request.POST, request.FILES)
+
 				document = document_form.save()
 				installation.documents.add(document)
 				installation.save()
-				print 'saved'
 				document_form = DocumentForm()
-			else:
-				print 'not valid'
+
 		elif toggle_installation_open_form.is_valid():
 			tags_form = TagsForm(tag_default_data)
 			named_date_form = NamedDateForm()

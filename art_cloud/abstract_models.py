@@ -15,6 +15,7 @@ import pprint
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.db import models
+from django.conf import settings
 
 class ThumbnailedModel(models.Model):
 	"""An abstract base class for models with an ImageField named "image" """

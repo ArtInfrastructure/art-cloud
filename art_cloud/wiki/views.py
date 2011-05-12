@@ -82,7 +82,12 @@ def wiki_add(request, name):
 		wiki_photo_form = WikiPhotoForm(request.POST, request.FILES)
 		wiki_file_form = WikiFileForm(request.POST, request.FILES)
 		if request.POST.get('photo-form', None):
-			wiki_file_form = WikiFileForm()
+			# remove any non-unicode file name characters
+			raw_photo = request.FILES.get('image', None)
+			if raw_photo:
+				raw_photo.name = raw_photo.name.encode('ascii', 'ignore')
+				wiki_photo_form = WikiPhotoForm(request.POST, request.FILES)
+
 			if wiki_photo_form.is_valid():
 				photo = wiki_photo_form.save(commit=False)
 				if not page.id: page.save()
@@ -91,14 +96,21 @@ def wiki_add(request, name):
 				page.content = "%s\n\nPhoto%s" % (page.content, photo.id)
 				page.save()
 				return HttpResponseRedirect(page.get_edit_url())
+			wiki_file_form = WikiFileForm()
+
 		elif request.POST.get('file-form', None):
-			wiki_photo_form = WikiPhotoForm()
+			# remove any non-unicode file name characters
+			raw = request.FILES.get('file', None)
+			if raw: raw.name = raw.name.encode('ascii', 'ignore')
+			wiki_file_form = WikiFileForm(request.POST, request.FILES)
+
 			if wiki_file_form.is_valid():
 				file = wiki_file_form.save(commit=False)
 				if not page.id: page.save()
 				file.wiki_page = page
 				file.save()
 				return HttpResponseRedirect(page.get_edit_url())
+			wiki_photo_form = WikiPhotoForm()
 		else:
 			print request.POST
 	else:
