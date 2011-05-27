@@ -37,6 +37,7 @@ EXTERNAL_WIKI_URL = None # or a URL to an external wiki
 
 ART_SERVER_HOST = '127.0.0.1'
 ART_SERVER_PORT = 8000
+ART_SERVER_EPOXY_URL = 'http://%s:%s/epoxy' % (ART_SERVER_HOST, ART_SERVER_PORT)
 
 HEARTBEAT_TIMEOUT = 500 # in seconds
 

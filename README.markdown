@@ -27,32 +27,6 @@ If you don't already have pip, go get and install it: http://pypi.python.org/pyp
 
 I also recommend virtualenv, but YMMV: http://pypi.python.org/pypi/virtualenv
 
-Run these pip commands to install the requisite software packages:
+This is the pip magic:
 
-pip install django
-
-pip install markdown
-
-pip install south
-
-pip install django-piston
-
-pip install boto
-
-pip install django-pagination
-
-pip install BeautifulSoup
-
-pip install pil
-
-pip install feedparser
-
-pip install lxml
-
-pip install psycopg2
-
-pip install simplejson
-
-pip install tagging
-
-pip install vobject
+pip install django httplib2 markdown south django-piston boto django-pagination pil BeautifulSoup feedparser lxml psycopg2 simplejson tagging vobject
